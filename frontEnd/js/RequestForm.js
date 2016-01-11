@@ -97,22 +97,6 @@ function RequestForm() {
     this.requestEdit = function () {
 
         $('#addForm').attr('hidden', 'hidden');
-        //$('#treeEditDialog').dialog({
-        //    title: 'requestEdit',
-        //    width: 400,
-        //    minHeight: 500 ,
-        //    modal: false,
-        //    buttons: [
-        //        {
-        //            text: 'save',
-        //            click: function () {
-        //                requestTreeDownload();
-        //            }
-        //        }
-        //    ]
-        //
-        //
-        //});
         commandSet() ;          // командные кнопки
         requestTreeInit() ;     // инициализация дерева
     };
@@ -184,7 +168,8 @@ function RequestForm() {
                             return false ;
                         }
                     }
-                    if (operation  ==='copy_node') {        // не допускаю копирование
+                    if (['move_node','copy_node','delete_node'].indexOf(operation) >= 0) {// пока не допускаю
+                        alert('in construction') ;
                         return false ;
                     }
                     if (node.type === 'root' && ['move_node','copy_node','delete_node'].indexOf(operation) >= 0) {

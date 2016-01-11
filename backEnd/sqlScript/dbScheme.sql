@@ -1,9 +1,7 @@
 -- Создание схемы БД elize
 -- --------------------------------------
 -- CREATE DATABASE IF NOT EXISTS elize ;
-
--- request_path - структура запроса вида: request/part_i/part_i1/.......
-drop table request_tree ;
+--drop table request_tree ;
 CREATE TABLE IF NOT EXISTS request_tree (
   nodeid   INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
   parentid INTEGER DEFAULT 0,
