@@ -9,7 +9,7 @@ $dirStyle = './frontEnd/styles';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>jstree basic demos</title>
+    <title>req-edit</title>
     <style>
         html {
             margin: 0;
@@ -26,6 +26,11 @@ $dirStyle = './frontEnd/styles';
         }
         .jstree-default-contextmenu {
             z-index: 110;
+        }
+        .dialogPane {
+            min-height: 400px;
+            min-width: 550px ;
+            width:550px;
         }
     </style>
 
@@ -46,6 +51,7 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 
@@ -55,13 +61,13 @@ $dirStyle = './frontEnd/styles';
 <div id="inviteInfo">
     <strong>Вы можете редактировать структуру запроса и проверять его на примерах </strong>
 </div>
-<div id="tabs">
+<div id="tabs" class="dialogPane">
     <ul>
-        <li><a href="#treeeEditDialog">edit</a></li>
+        <li><a href="#treeEditDialog">edit</a></li>
         <li><a href="#requestGoDialog">GO</a></li>
         <li><a href="#requestEditAbout">about</a></li>
     </ul>
-    <div id="treeeEditDialog" style="min-height:400px">
+    <div id="treeEditDialog" class="dialogPane">
         <div id="commandSet">
             <button id="treeSave" title="сохранить дерево в БД">save</button>
         </div> <br>
@@ -105,15 +111,19 @@ $dirStyle = './frontEnd/styles';
     </div>
 
 
-    <div id="requestGoDialog">
-        <label><span id="textGoLabel"> <strong> request </strong> </span>
-            <input type="text" style="width:400px" id="requestText" placeholder="текст запроса">
+    <div id="requestGoDialog" >
+
+        <label><span id="textGoLabel" > <strong>request</strong> </span>
+            <textarea  id="requestText" name="requestText" placeholder="текст запроса"rows="3" cols="60">
+            </textarea>
+
         </label>
-        <button id="requestGoBt">go</button>
+        <button id="requestGoBt" >go</button>
+
     </div>
 
 
-    <div id="requestEditAbout">
+    <div id="requestEditAbout" class="dialogPane">
         <strong>Описание работы</strong>
     </div>
 

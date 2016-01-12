@@ -14,6 +14,7 @@ function ParamSet() {
     this.ajaxExecute ;   // исполнитель запросов к БД
     //-------------формы----------------------------- //
      this.requestForm ;        // редактирование запроса
+     this.requestGoForm ;
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -58,6 +59,7 @@ function ParamSet() {
         _this.ajaxExecute = new AjaxExecutor(url) ;
 //       ---Формы ---------
         _this.requestForm = new RequestForm()  ;
+        _this.requestGoForm = new RequestGoForm() ;
 //
 
     } ;

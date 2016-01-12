@@ -7,21 +7,17 @@ function RequestForm() {
     var typesNames = {};       // имена типов
     var conceptSet = {} ;     // возможные значения узла типа concept
     var treeData = [] ;       // построенное дерево
-    var treeNodes = [] ;       // список узлов дерева
-    var dbNodes = [] ;         // список узлов в формате обмена
     var nodeEditForm = new NodeEditForm() ;         // объект-редактирование узла
     var currentTree ;          // текущее дерево
     var autoTreeBuild = false ;    // построение дерева из БД
     var $myTree = $('#mytree') ;
     var $treeSaveBt = $('#treeSave') ;   // кнопка сохранения
     var nodeRootDefaultName = 'requestRoot' ;   // имя по умолчанию корневого узла дерева
-    var sendPockets = [] ;         // пакеты узлов при передаче в БД
     var POCKET_SIZE = 20 ;         // размер пакета (узлов)
-    var pocketsNumber = 0 ;        // количество пакетов для пересылки
     /**
      * загрузка описания
      */
-    this.init = function () {       // Загрузка описания
+    this.init = function() {       // Загрузка описания
         conceptSet = {
             'question_concept' : ['why','where','when'],
             'subject_concept'  : ['user']
@@ -85,11 +81,6 @@ function RequestForm() {
 
         };
         nodeEditForm.init(nodeTypes,typesNames) ;     // форма редактирования узла
-
-
-
-
-
     };
     /**
      * редактировать описание
@@ -97,6 +88,22 @@ function RequestForm() {
     this.requestEdit = function () {
 
         $('#addForm').attr('hidden', 'hidden');
+        //$('#treeEditDialog').dialog({
+        //    title: 'requestEdit',
+        //    width: 400,
+        //    minHeight: 500 ,
+        //    modal: false,
+        //    buttons: [
+        //        {
+        //            text: 'save',
+        //            click: function () {
+        //                requestTreeDownload();
+        //            }
+        //        }
+        //    ]
+        //
+        //
+        //});
         commandSet() ;          // командные кнопки
         requestTreeInit() ;     // инициализация дерева
     };
@@ -105,8 +112,6 @@ function RequestForm() {
         $treeSaveBt.off('click') ;
         $treeSaveBt.on('click',function(){
             sendNodePockets() ;
-            //requestTreeDownload('1') ;
-            //requestTreeDownload('2') ;
         }) ;
        } ;
     var sendNodePockets = function() {
@@ -196,13 +201,38 @@ function RequestForm() {
 
         $('#mytree').on("open_node.jstree", function (e,data) {
 //            alert('node: is opened') ;       // поставить счётчик видимых узлов
+            paneHeightChange() ;
         }) ;
         $('#mytree').on("close_node.jstree", function (e,data) {
 //            alert('node:is closed') ;       // поставить счётчик видимых узлов
+            paneHeightChange() ;
         }) ;
 
         nodeEditForm.setCurrentTree(currentTree) ;  //  передать дерево в форму редавктиования узлов
         requestTreeUpload() ;
+    } ;
+    var paneHeightChange = function() {
+       var minHeightPx = $('#treeEditDialog').css('min-height') ;
+       var minHeight = minHeightPx.split('px')[0] ;
+       var minNodes = 12 ;
+       var nodeCount = heightPanelCalculate() ;
+       var height = minHeight/minNodes * nodeCount ;
+       var realHeight = Math.max(height,minHeight) ;
+       $('#treeEditDialog').css('height',realHeight) ;
+       // $('#tabs').css('height',realHeight) ;
+    } ;
+    var heightPanelCalculate = function() {
+        var treeNodes = nodeEditForm.getTreeNodes() ;
+        var countOpenedNodes = 0 ;
+        for (var nodeId in treeNodes) {
+            var node = treeNodes[nodeId] ;
+            var parentId = node['parent'] ;
+            var parentIsOpen = (parentId === '#') ? false : treeNodes[parentId]['state']['opened'] ;
+            var parentIsClosed = (parentId === '#') ? false : !treeNodes[parentId]['state']['opened'] ;
+            var isOpen = node['state']['opened'] ;
+            countOpenedNodes += (!parentIsClosed && (isOpen || parentIsOpen)) ? 1 : 0 ;
+        }
+        return countOpenedNodes ;
     } ;
     /**
      * Загрузить описание
@@ -225,9 +255,6 @@ function RequestForm() {
             } else {
                 clearInterval(tmpTimer);
                 var message = answ['message'];
-
-
-
                 if (answ['successful'] == true) {
                     uploadVect['successful'] = true;
                     message = answ['message'];
@@ -237,10 +264,7 @@ function RequestForm() {
                     message = answ['message'];
                 }
                 treeBuild(answ['nodes']);
-
             }
-
-
         }, 300);
 
     } ;
@@ -272,9 +296,6 @@ function RequestForm() {
         nodeEditForm.setOperationIsComplete(true) ;
     } ;
     var childNodeAdd = function(parentNode,dbChildId,nodes) {
-        if (parentNode['data']['dbId'] == 5) {
-            var aa = 5 ;
-        }
         for (var i = 0; i < dbChildId.length; i++) {
             var dbId = dbChildId[i] ;
             var dbNode = nodes[dbId] ;
@@ -329,8 +350,7 @@ function RequestForm() {
                     message = answ['message'];
                     // загрузка в БД прошла успешно -> убрать флаги 'new' и поставить dbId
                     if (answ['pocketEnd' == true]) {     // последний пакет
-                        var downloadNodes = answ['downloadNodes'];
-                        nodeEditForm.clearNewNode(downloadNodes)
+                        nodeEditForm.clearNewNode(answ['downloadNodes'])
                     }
 
                     ready = true;

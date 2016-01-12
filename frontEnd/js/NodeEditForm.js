@@ -128,6 +128,7 @@ function NodeEditForm() {
         selectMenuPrepare() ;
         $operation.val(operation) ;
         $nodeEditForm.removeAttr('hidden') ;
+        $nodeCurrent.focus() ;
     } ;
     this.operationIsComplete = function() {
        return opIsCompleted ;

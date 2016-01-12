@@ -2,7 +2,8 @@
  * Created by mnudelman@yandex.ru on 22.11.15.
  */
 function MainScript() {
-    var requestForm = paramSet.requestForm ; //   new TopMenu() ;
+    var requestForm = paramSet.requestForm ; //
+    var requestGoForm = paramSet.requestGoForm ;
     var _this = this;
     //---------------------------------------------//
     this.init = function () {
@@ -14,6 +15,7 @@ function MainScript() {
         });
         $tabs.animate({height: "show"}, 1000);
         requestForm.init() ;       // нач установка
+        requestGoForm.init() ;
         requestForm.requestEdit() ;
     };
 
