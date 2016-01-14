@@ -9,6 +9,7 @@ session_start() ;
 ini_set('display_errors', 1);
 error_reporting(E_ALL ^ E_NOTICE);
 header('Content-type: text/html; charset=utf-8');
+mb_internal_encoding("UTF-8");
 include_once __DIR__ . '/local.php';
 // загружаем параметры---//
 $taskPar = TaskParameters::getInstance() ;
@@ -19,6 +20,7 @@ $answ = [
     'successful' => false,
     'message' => 'ERROR:тип запроса не распознан "'.$operation.'"'
 ] ;
+
 switch($operation) {
     case 'requestUpload' : {                // получить узды дерева
         $nodeRootName = $taskPar->getParameter('nodeRoot') ;
@@ -50,8 +52,6 @@ switch($operation) {
             $answ = ['pocketN' => $pocketN,
                 'pocketBegin'=> $pocketBegin,
                 'pocketEnd' => $pocketEnd,
-//                'sessionData' => $sendPocket,
-//                'result' => $result
             ] ;
         }
 
@@ -59,6 +59,31 @@ switch($operation) {
         break ;
     }
     case 'requestGo' : {
+//        var goVect = {
+//            'operation' : 'requestGo',
+//                'nodeRoot' : 'requestRoot',
+//                'nodeType' : 'root',
+//                'successful' : false,
+//                'requestText' : $requestText.val(),
+//                'nodes' : []
+//            } ;
+        $phrase = $taskPar->getParameter('requestText')  ;
+        $rootName = $taskPar->getParameter('nodeRoot')  ;
+        $reqGo = new RequestGo($rootName) ;
+        $nodes = $reqGo->getRequestTree() ;
+        $reqGo->parseDo($phrase) ;
+        $answ = $reqGo->getResult() ;
+//        $answ = [
+//            'successful' => false,
+//            'message' => 'ERROR___:тип запроса не распознан "'.$operation.'"',
+//            'requestText' => $phrase,
+//            'rootName' => $rootName,
+//            'requestTree' => $nodes
+//        ] ;
+
+
+
+
         break ;
     }
     default : {    // весь $_GET отправиить обратно

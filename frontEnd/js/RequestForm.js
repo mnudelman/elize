@@ -88,31 +88,13 @@ function RequestForm() {
     this.requestEdit = function () {
 
         $('#addForm').attr('hidden', 'hidden');
-        //$('#treeEditDialog').dialog({
-        //    title: 'requestEdit',
-        //    width: 400,
-        //    minHeight: 500 ,
-        //    modal: false,
-        //    buttons: [
-        //        {
-        //            text: 'save',
-        //            click: function () {
-        //                requestTreeDownload();
-        //            }
-        //        }
-        //    ]
-        //
-        //
-        //});
         commandSet() ;          // командные кнопки
         requestTreeInit() ;     // инициализация дерева
     };
     var  commandSet = function() {
         $treeSaveBt.button() ;
         $treeSaveBt.off('click') ;
-        $treeSaveBt.on('click',function(){
-            sendNodePockets() ;
-        }) ;
+        $treeSaveBt.on('click',sendNodePockets) ;
        } ;
     var sendNodePockets = function() {
         var sendPockets = sendPocketsPrepare() ;

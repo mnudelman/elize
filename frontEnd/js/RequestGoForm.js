@@ -2,6 +2,7 @@
  * форма исполнения запроса
  */
 function RequestGoForm() {
+    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
     var $textLabel = $('#textGoLabel') ;
     var $requestText = $('#requestText') ;
     var $buttonGo = $('#requestGoBt') ;
@@ -17,6 +18,7 @@ function RequestGoForm() {
             at : "right-10 top+80",
             of : "#requestGoDialog"
         }) ;
+        $buttonGo.on('click',requestGo) ;
         $textLabel.css('position','absolute') ;
         $textLabel.position({
             my : "left top",
@@ -32,5 +34,38 @@ function RequestGoForm() {
             of : "#requestGoDialog"
 
         }) ;
-    }
+    } ;
+    /**
+     * Отправить запрос на выполнение
+     */
+    var requestGo = function() {    // отправить запрос на исполнение
+            var goVect = {
+                'operation' : 'requestGo',
+                'nodeRoot' : 'requestRoot',
+                'nodeType' : 'root',
+                'successful' : false,
+                'requestText' : $requestText.val(),
+                'nodes' : []
+            } ;
+
+            ajaxExecute.postData(goVect, true);
+            var tmpTimer = setInterval(function () {
+                var answ = ajaxExecute.getRequestResult();
+                if (false == answ || undefined == answ) {
+                    var mess = 'Нет соединения с БД....' ;
+
+                } else {
+                    clearInterval(tmpTimer);
+                    if (answ['successful'] == true) {
+                        goVect['successful'] = true;
+                        message = answ['message'];
+                        ready = true;
+                    } else {
+                        ready = false;
+                        message = answ['message'];
+                    }
+                }
+            }, 300);
+
+        } ;
 }

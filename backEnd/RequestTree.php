@@ -136,7 +136,7 @@ class RequestTree
     public function downloadTree($dlNodes) {
         $this->downloadNodes = $dlNodes ;
         $this->addNewNodes() ;              // добавить новые узлы
-//        $this->deleteNodes() ;              // убрать удалённые
+        $this->deleteNodes() ;              // убрать удалённые
         $this->updateNodes() ;              // внести изменения
         // ошибки обмена с БД
         $errors = $this->db->getErrors() ;

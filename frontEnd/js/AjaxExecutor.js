@@ -5,7 +5,7 @@
 function AjaxExecutor(ajaxUrl) {
    var requestData = false ;                 // результат запроса
    var ajaxComplete = false ;
-   var debugFlag =  false ; // true ;                   // отладка запроса
+   var debugFlag =  true ; // true ;                   // отладка запроса
 
     var successDefault = function(data,textStatus) {
         alert('successDefault:status-'+textStatus+' ; hostAnswer:'+data) ;
@@ -35,6 +35,8 @@ function AjaxExecutor(ajaxUrl) {
             .complete(completeDefault);
     } ;
     this.postData = function(sendData,ownMessage) {
+        ajaxComplete = false ;
+        requestData = false ;
         $.post(
             ajaxUrl + '/index.php',
             sendData,
