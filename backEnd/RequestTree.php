@@ -122,6 +122,9 @@ class RequestTree
         $uploadNode['data']['dbId'] = $recNode['nodeid'] ;
         $uploadNode['data']['parentDbId'] = $recNode['parentid'] ;
         $uploadNode['data']['comment'] = $recNode['comment'] ;
+        $uploadNode['data']['valid'] = ( $recNode['node_valid'] > 0) ;
+
+
         return $uploadNode ;
 
     }
@@ -245,12 +248,14 @@ class RequestTree
      */
     private function notEqualNodes($treeNode,$recNode) {
         $comment = (is_null($recNode['comment'])) ? '' : $recNode['comment'] ;
+        $valid = ($treeNode['data']['valid'] === 'true') ? 1 : 0 ;
         $equalFlag = (
         $treeNode['text'] === $recNode['node_name'] &&
         $treeNode['type'] === $recNode['node_type'] &&
         $treeNode['data']['dbId'] === $recNode['nodeid'] &&
         $treeNode['data']['parentDbId'] === $recNode['parentid'] &&
-        $treeNode['data']['comment'] === $comment
+        $treeNode['data']['comment'] === $comment &&
+        $valid === $recNode['node_valid']
         );
         return !$equalFlag ;
     }
@@ -261,7 +266,7 @@ class RequestTree
      * @param $treeNode
      */
     private function createRecNode($treeNode) {
-        $valid = ($treeNode['data']['valid'] === 'true') ? true : false ;
+        $valid = ($treeNode['data']['valid'] === 'true') ? 1 : 0 ;
         $default = ($treeNode['data']['default'] === 'true') ? true : false ;
         return [
             'nodeid' => $treeNode['data']['dbId'],

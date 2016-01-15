@@ -112,14 +112,15 @@ $dirStyle = './frontEnd/styles';
 
 
     <div id="requestGoDialog" >
-
+        <div id="goBlock">
         <label><span id="textGoLabel" > <strong>request</strong> </span>
             <textarea  id="requestText" name="requestText" placeholder="текст запроса"rows="3" cols="60">
             </textarea>
 
         </label>
         <button id="requestGoBt" >go</button>
-
+        </div><br>
+        <div id="treeResult"> </div>
     </div>
 
 

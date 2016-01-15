@@ -88,6 +88,7 @@ function NodeEditForm() {
         }
         opIsCompleted = false ;
         var nodeData = node['data'] ;
+
         if (typeof(nodeData) !== 'object' || nodeData === null) {  // для нового добавляем 'data'
             node['data'] = this.newDataForNode() ;
             nodeData = node['data'] ;

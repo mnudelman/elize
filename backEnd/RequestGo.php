@@ -75,7 +75,7 @@ class RequestGo {
         while (mb_strpos($phrase,'  ')) {
             $phrase = str_replace('  ', ' ', $phrase);
         }
-        $phrase = mb_strtolower($phrase) ;
+//        $phrase = mb_strtolower($phrase) ;
         $phrase = strtolower($phrase) ;
         $this->phraseWords = explode(' ',$phrase) ;
     }
@@ -108,6 +108,7 @@ class RequestGo {
     }
     public function getResult() {
         return [
+            'successful' => true,
             'requestText' =>  $this->sourcePhrase,
             'result' => $this->resultRequest,                                 ///true
             'phraseWords' => $this->phraseWords
@@ -169,6 +170,7 @@ class RequestGo {
                     $concept['conceptPath'] = $path ;
                     $concept['concept'] = $childNode['text'] ;
                     $concept['synonym'] = $findRes['synonym'] ;
+                    $concept['valid'] = $childNode['data']['valid'] ;
  //                   $concept['words'] = $findRes['words'] ;
                     $this->currentConcepts[] = $concept ;
                 }
