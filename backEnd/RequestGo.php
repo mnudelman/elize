@@ -5,7 +5,9 @@
 
 class RequestGo {
     private $sourcePhrase = '' ;          // исходная фраза
+
     private $phraseWords = [] ;           // разбитая на слова фраза
+    private $clearPhrase = '' ;           // исходная фраза без лишних символов
     private $resultRequest = [] ;         // результат разбора
     //-------------------------------------------//
     private $msg ;                        // формирование списка сообщений
@@ -13,6 +15,8 @@ class RequestGo {
     private $NODE_CONCEPT = 'concept' ;   // тип узла - понятие
     private $currentConcepts = [] ;       // список определённых понятий раздела запроса
     //-------------------------------//
+    private $REGULAR_EXPRESSION_BRACKET = '/' ;  // скобка регулярного выражения
+    private $conceptFunction ;                   // объект выполнения функций, определяющих понятие
     public function __construct($nodeRootName) {
         $this->msg = Message::getInstace() ;
         $taskPar = TaskParameters::getInstance() ;
@@ -22,6 +26,8 @@ class RequestGo {
         $requestTree->setNodeRoot($nodeRootName) ;      // имя корня
         $answ = $requestTree->uploadTree() ;
         $this->requestTree = $answ['nodes'] ;
+        $this->conceptFunction = new ConceptFunction() ;
+
     }
     public  function getRequestTree() {
         return $this->requestTree ;
@@ -62,21 +68,18 @@ class RequestGo {
     /**
      * Задать текст запроса
      * Убрать лишние прбелы, знаки припинания
+     *  использование \W - убирает и русские буквы
      * @param $phrase
      */
     private function phraseWords() {
-        $phrase = $this->sourcePhrase   ;
-        $phrase = str_replace('.', ' ', $phrase);
-        $phrase = str_replace(',', ' ', $phrase);
-        $phrase = str_replace('?', ' ', $phrase);
-        $phrase = str_replace('!', ' ', $phrase);
-        $phrase = str_replace('-', ' ', $phrase);
+        $arr = [] ;
+        $phrase = trim($this->sourcePhrase)   ;
+        $phrase = preg_replace("/[\.,!?-]/",' ',$phrase) ;    //знаки припинания, -
         $phrase = trim($phrase) ;
-        while (mb_strpos($phrase,'  ')) {
-            $phrase = str_replace('  ', ' ', $phrase);
-        }
-//        $phrase = mb_strtolower($phrase) ;
-        $phrase = strtolower($phrase) ;
+        $phrase = preg_replace("/\s{1,}/",' ',$phrase) ;      // лишние пробелы
+        $phrase = mb_strtolower($phrase) ;
+        $phrase = trim($phrase) ;
+        $this->clearPhrase = ' '.$phrase.' ' ;
         $this->phraseWords = explode(' ',$phrase) ;
     }
 
@@ -97,14 +100,6 @@ class RequestGo {
             $this->parsePart($subTreeRootId, []);
             $this->resultRequest[$partName]['concepts'] = $this->currentConcepts;
         }
-
-        //       $this->defaultParts() ;        // для пустых установить умолчание
-//        return [
-//            'successful' => true,
-//            'requestText' => $this->sourcePhrase,
-//            'result' => true                //     $this->resultRequest
-//        ];
-//        return ['result' => $this->resultRequest];
     }
     public function getResult() {
         return [
@@ -148,8 +143,8 @@ class RequestGo {
     }
     /**
      * Разбор составной части запроса(субъект, действие, объект)
-     * @param $partDescript
-     * @param array $path
+     * @param $nodeId - ид текущего узла
+     * @param array $path - путь от корня дерева до текущего узла
      */
     private function parsePart($nodeId,$path) {
         $currentNode = $this->requestTree[$nodeId] ;
@@ -192,21 +187,70 @@ class RequestGo {
         $findFlag = false ;
         foreach ($synonymIdList as $key=> $synonymId) {
             $synonymNode = $this->requestTree[$synonymId] ;
+
+
             $synonymWord = $synonymNode['text'] ;
-            if  (mb_strpos($synonymWord,',') > 0) {        // альтернативные значения
-                $findFlag = $this->alternativeWordsFind($synonymWord) ;
-            } else if (mb_strpos($synonymWord,' ') > 0) {     // несколько слов вместе
-                $findFlag = $this->sequenceWordsFind($synonymWord) ;
-            } else {                                    // единственное слово
-                $findFlag = $this->simpleWordFind($synonymWord) ;
-                $findFlag = (false === $findFlag ) ? false : true ;
+            $type = $synonymNode['type'] ;
+            $firstSymb = $synonymWord[0] ;
+            $lastSymb = $synonymWord[sizeof($synonymWord)] ;
+            if ($firstSymb === $this->REGULAR_EXPRESSION_BRACKET &&
+                $lastSymb == $this->REGULAR_EXPRESSION_BRACKET) {
+                $type = 'regularExpression' ;
             }
-            if ($findFlag) {                 // поиск закончен
-                $findWord = $synonymWord ;
-                break ;
+
+
+
+
+
+
+
+            $result = ['find' => false,'synonym' => $synonymWord] ;
+
+            $type = $synonymNode['type'] ;
+            switch ($type) {
+                case 'synonym' : {
+                    $findFlag = $this->synonymFind($synonymWord) ;
+                    $findWord = $synonymWord ;
+                    break ;
+                }
+                case 'function' : {
+                    $result = $this->conceptFunction->
+                                   functionExecute($functName = $synonymWord,$this->phraseWords) ;
+                    $findFlag = $result['find'] ;
+                    $findWord = $result['word'] ;
+                    break ;
+                }
+                case 'regularExpression' : {
+                    $findFlag = $this->regularExpressionFind($regExp = $synonymWord) ;
+                    $findWord = $synonymWord ;
+                    break ;
+                }
             }
         }
         return ['find' => $findFlag, 'synonym' => $findWord] ;
+    }
+    private function regularExpressionFind($regExp) {
+        $arr = [] ;
+        $result = preg_match($regExp,$this->clearPhrase,$arr) ;
+        return $result > 0 ;
+    }
+
+    /**
+     * Ищет конкретное слово
+     * @param $synonymWord
+     * @return array
+     */
+    private function synonymFind($synonymWord) {
+        $findFlag = false ;
+        if  (mb_strpos($synonymWord,',') > 0) {        // альтернативные значения
+            $findFlag = $this->alternativeWordsFind($synonymWord) ;
+        } else if (mb_strpos($synonymWord,' ') > 0) {     // несколько слов вместе
+            $findFlag = $this->sequenceWordsFind($synonymWord) ;
+        } else {                                    // единственное слово
+            $findFlag = $this->simpleWordFind($synonymWord) ;
+            $findFlag = (false === $findFlag ) ? false : true ;
+        }
+        return $findFlag ;
     }
     /**
      * поиск конкретного слова в запросе

@@ -219,4 +219,45 @@ class RequestTree_db  extends Db_base {
         return $rows[0] ;
 
     }
+    public function findRuName($ruName) {
+        $sql = 'SELECT * FROM ru_names WHERE name_text = :ruName' ;
+        $subst = [
+            'ruName' => $ruName] ;
+        $rows = $this->sqlExecute($sql, $subst, __METHOD__);
+        if (false === $rows) {
+            $this->errors[] = [
+                'successful' => false,
+                'sql' => $sql,
+                'subst' => $subst,
+                'message' => $this->msg->getMessages()];
+            return false;
+        }
+        return count($rows) == 1 ;
+    }
+    public function findRuNameSynonym($ruNameSynonym) {
+        $sql = 'SELECT * FROM ru_names WHERE nameid IN
+               (SELECT nameid FROM ru_name_synonyms WHERE synonym = :ruNameSynonym )' ;
+        $subst = [
+            'ruNameSynonym' => $ruNameSynonym] ;
+        $rows = $this->sqlExecute($sql, $subst, __METHOD__);
+        if (false === $rows) {
+            $this->errors[] = [
+                'successful' => false,
+                'sql' => $sql,
+                'subst' => $subst,
+                'message' => $this->msg->getMessages()];
+            return false;
+        }
+        $result = [
+            'find' => false,
+             'Word' =>  ''] ;
+        if (count($rows) > 0 ) {
+            $row = $rows[0] ;
+            $result = [
+                'find' => true,
+                'Word' =>  $row['name_text']] ;
+        }
+        return $result ;
+
+    }
 }

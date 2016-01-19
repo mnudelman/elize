@@ -19,5 +19,17 @@ CREATE TABLE IF NOT EXISTS node_types (
   type_name  VARCHAR (50),
   comment VARCHAR (100)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
-
+-- таблица имён собственных
+CREATE TABLE IF NOT EXISTS ru_names (
+ nameid INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+ name_text VARCHAR (100) NOT NULL DEFAULT '',
+ KEY index_name (name_text)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+-- таблица склонений по падежам имён собственных
+CREATE TABLE IF NOT EXISTS ru_name_synonyms (
+ id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+ nameid INTEGER REFERENCES ru_names(nameid),
+ synonym VARCHAR (100) NOT NULL DEFAULT '',
+ KEY index_synonym (synonym)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 

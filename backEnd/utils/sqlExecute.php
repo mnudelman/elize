@@ -80,7 +80,12 @@ class SqlExecute extends Db_base {
         $sqlLines[] = [
             'text'   => 'SELECT * FROM request_tree',
             'name'   => 'SELECT']   ;
-
+        $sqlLines[] = [
+            'text'   => 'SELECT * FROM ru_names',
+            'name'   => 'SELECT']   ;
+        $sqlLines[] = [
+            'text'   => 'SELECT * FROM ru_name_synonyms',
+            'name'   => 'SELECT']   ;
         $this->sqlLines = $sqlLines ;
         $this->storeParameters() ;
 

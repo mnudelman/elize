@@ -46,7 +46,7 @@ function RequestForm() {
             'question': {                       // раздел - ВОПРОС
                 'max_children': -1,
                 'max_depth': 2,
-                'valid_children': ['concept']
+                'valid_children': ['sub_question','concept']
             },
             'subject': {                       // раздел - СУБЪЕКТ - 'user' only
                 'max_children': 1,
@@ -71,8 +71,13 @@ function RequestForm() {
             'concept': {                          // ПОНЯТИЕ
                 'max_children': -1,
                 'max_depth': 1,
-                'valid_children': ['synonym']
+                'valid_children': ['function','synonym']
             },
+            'function' : {                    // функция, определяющая понятие
+                'max_children': 0,
+                'max_depth': 1,
+                'valid_children': []
+            } ,
             'synonym': {                          // синонимы - слова, определяющие понятие
                 'max_children': 0,
                 'max_depth': 1,

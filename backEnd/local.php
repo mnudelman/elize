@@ -21,6 +21,7 @@ include_once $dirService . '/TaskStore.php' ;
 include_once $dirService . '/DbConnector.php' ;
 include_once $dirService . '/Message.php' ;
 include_once $dirService . '/TaskParameters.php' ;
+include_once __DIR__.'/setUp.php' ;
 //------ подключение БД -------------//
 $pdo = DbConnector::getConnect() ;
 if (!DbConnector::$isSuccessful) {
