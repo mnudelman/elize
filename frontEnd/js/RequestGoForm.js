@@ -102,19 +102,21 @@ function RequestGoForm() {
         clearTree(currentRootNode) ;                 // чистить старые узлы
         for (var nodeKey in resultNodes) {
             var resultNode = resultNodes[nodeKey] ;
-            var concepts = resultNode['concepts'] ;
-            var treeNodeId = currentTreeResult.create_node(currentRootNode,nodeKey) ;
-            var pNode = currentTreeResult.get_node(treeNodeId) ;
-            var conceptsId = currentTreeResult.create_node(pNode,'concepts') ;
-            var conceptsNode = currentTreeResult.get_node(conceptsId) ;
-            for (var i = 0; i < concepts.length; i++) {
-                var concept = concepts[i] ;
+     //       var concepts = resultNode['concepts'] ;      // убрал из результата
+            var treeNodeId = currentTreeResult.create_node(currentRootNode,nodeKey) ; // разделы запроса
+    //            var pNode = currentTreeResult.get_node(treeNodeId) ;
+    //        var conceptsId = currentTreeResult.create_node(pNode,'concepts') ;
+    //        var conceptsNode = currentTreeResult.get_node(conceptsId) ;
+          //  for (var i = 0; i < concepts.length; i++) {
+            for (var i = 0; i < resultNode.length; i++) {
+                var concept = resultNode[i] ;      //    concepts[i] ;
                 var conceptName = 'concept: '+concept['concept'] ;
                 var path = (concept['conceptPath']).toString() ;
                 var conceptPath = 'path: '+ path.replace(/,/g,'/') ;
                 var synonym = 'synonym: '+concept['synonym'] ;
                 var valid = 'valid: '+concept['valid'] ;
-                var conceptId = currentTreeResult.create_node(conceptsNode,conceptName) ;
+             //   var conceptId = currentTreeResult.create_node(conceptsNode,conceptName) ;
+                var conceptId = currentTreeResult.create_node(treeNodeId,conceptName) ;
                 var conceptNode = currentTreeResult.get_node(conceptId) ;
                 currentTreeResult.create_node(conceptNode,conceptPath) ;
                 currentTreeResult.create_node(conceptNode,synonym) ;

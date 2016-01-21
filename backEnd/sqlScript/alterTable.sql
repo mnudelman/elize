@@ -1,0 +1,1 @@
+ALTER TABLE request_tree CHANGE node_name node_name VARCHAR (255) ;

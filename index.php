@@ -82,7 +82,7 @@ $dirStyle = './frontEnd/styles';
                 <input type="text" class="field" id="nodeParent" readonly="readonly">
             </label> <br><br>
             <label><span class="label" id="nodeLabel"> <strong> current node </strong> </span>
-                <input type="text" class="field" id="nodeCurrent" placeholder="имя узла">
+                <input type="text" class="field1" id="nodeCurrent" placeholder="имя узла">
             </label> <br>
             <label><span class="label" id="nodeCommentLabel"> <strong> comment</strong> </span>
                 <input type="text" class="field1" id="nodeComment" placeholder="произвольный текст">
@@ -120,6 +120,7 @@ $dirStyle = './frontEnd/styles';
         </label>
         <button id="requestGoBt" >go</button>
         </div><br>
+        <div id="requestTypes"></div>
         <div id="treeResult"> </div>
     </div>
 

@@ -38,18 +38,10 @@ class RequestGo {
      */
     private function getEmptyResult() {
         return [
-            'question' => [          // раздел запроса - ВОПРОС
-                'concepts' => []
-            ],
-            'subject'  => [          // раздел запроса - СУБЪЕКТ
-                'concepts' => []
-            ],
-            'action' => [          // раздел запроса - ДЕЙСТВИЕ
-                'concepts' => []
-            ],
-            'object' => [         // раздел запроса - ОБЪЕКТ
-                'concepts' => []
-            ]
+            'question' => [],          // раздел запроса - ВОПРОС
+            'subject'  => [],          // раздел запроса - СУБЪЕКТ
+            'action' => [],          // раздел запроса - ДЕЙСТВИЕ
+            'object' => []         // раздел запроса - ОБЪЕКТ
         ] ;
     }
 
@@ -98,7 +90,11 @@ class RequestGo {
             $subTreeRootId = $this->getSubTreeRootId($partName);
             $this->currentConcepts = [];
             $this->parsePart($subTreeRootId, []);
-            $this->resultRequest[$partName]['concepts'] = $this->currentConcepts;
+        //    $this->resultRequest[$partName]['concepts'] = $this->currentConcepts;
+            // переносим concept напрямую в раздел запроса
+            for ($i=0; $i < count($this->currentConcepts); $i++) {
+                $this->resultRequest[$partName][] = $this->currentConcepts[$i] ;
+            }
         }
     }
     public function getResult() {
@@ -191,22 +187,17 @@ class RequestGo {
 
             $synonymWord = $synonymNode['text'] ;
             $type = $synonymNode['type'] ;
-            $firstSymb = $synonymWord[0] ;
-            $lastSymb = $synonymWord[sizeof($synonymWord)] ;
+            $firstSymb = mb_substr($synonymWord,0,1) ;
+            $lastSymb = mb_substr($synonymWord,mb_strlen($synonymWord)-1,1) ;
+
             if ($firstSymb === $this->REGULAR_EXPRESSION_BRACKET &&
                 $lastSymb == $this->REGULAR_EXPRESSION_BRACKET) {
                 $type = 'regularExpression' ;
             }
 
-
-
-
-
-
-
             $result = ['find' => false,'synonym' => $synonymWord] ;
 
-            $type = $synonymNode['type'] ;
+
             switch ($type) {
                 case 'synonym' : {
                     $findFlag = $this->synonymFind($synonymWord) ;
@@ -225,6 +216,9 @@ class RequestGo {
                     $findWord = $synonymWord ;
                     break ;
                 }
+            }
+            if ($findFlag) {     // слово  найдено
+                break ;
             }
         }
         return ['find' => $findFlag, 'synonym' => $findWord] ;

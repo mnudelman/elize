@@ -60,27 +60,19 @@ switch($operation) {
         break ;
     }
     case 'requestGo' : {
-//        var goVect = {
-//            'operation' : 'requestGo',
-//                'nodeRoot' : 'requestRoot',
-//                'nodeType' : 'root',
-//                'successful' : false,
-//                'requestText' : $requestText.val(),
-//                'nodes' : []
-//            } ;
         $phrase = $taskPar->getParameter('requestText')  ;
         $rootName = $taskPar->getParameter('nodeRoot')  ;
         $reqGo = new RequestGo($rootName) ;
         $nodes = $reqGo->getRequestTree() ;
         $reqGo->parseDo($phrase) ;
         $answ = $reqGo->getResult() ;
-//        $answ = [
-//            'successful' => false,
-//            'message' => 'ERROR___:тип запроса не распознан "'.$operation.'"',
-//            'requestText' => $phrase,
-//            'rootName' => $rootName,
-//            'requestTree' => $nodes
-//        ] ;
+        //-----------------------------------
+        $requestResult = $answ['result'] ;
+        $rType = new RequestType() ;
+        $rType->init() ;
+        $rType->setResultRequest($requestResult) ;
+        $rType->typeRulesClc() ;
+        $answ['requestTypes'] = $rType->getRequestTypes() ;
 
 
 

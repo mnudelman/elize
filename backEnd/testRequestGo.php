@@ -21,15 +21,24 @@ $answ = [
     'message' => 'ERROR:тип запроса не распознан "'.$operation.'"'
 ] ;
 //$phrase = 'я хочу купить холодильник цена' ;
-$phrase ='Хочу
- купить     холодильник-стиральную машину..... !- , ???  ' ;
+//$phrase ='Хочу
+// купить     холодильник-стиральную машину..... !- , ???  ' ;
 //$phrase = 'я хочу купить стиральную машину цена' ;
 //$phrase = 'мне хотелось бы ознакомиться с ценами на компьютеры в челябинске' ;
 //$phrase = 'срочно нужен мастер по ремонту телевизоров в городе Сочи' ;
 //$phrase = 'нужен мастер-сантехник в москве срочно !!!!' ;
 //$phrase = 'Где купить телевизор?' ;
+//$phrase = 'почему я хочу купить холодильник по низкой цене в оренбурге' ;
+$phrase = 'помогите стать миллионером' ;
 
 $reqGo = new RequestGo('requestRoot') ;
 $reqGo->parseDo($phrase) ;
 $answ = $reqGo->getResult() ;
-var_dump($answ) ;
+
+//----------------------------------///
+$requestResult = $answ['result'] ;
+$rType = new RequestType() ;
+$rType->init() ;
+$rType->setResultRequest($requestResult) ;
+$rType->typeRulesClc() ;
+//var_dump($answ) ;

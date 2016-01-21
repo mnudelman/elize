@@ -5,7 +5,7 @@
 CREATE TABLE IF NOT EXISTS request_tree (
   nodeid   INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
   parentid INTEGER DEFAULT 0,
-  node_name    VARCHAR(100) ,
+  node_name    VARCHAR(255) ,
   typeid INTEGER REFERENCES node_types(typeid),
   node_valid INTEGER DEFAULT 1,
   node_default INTEGER DEFAULT 0,           // ветка по умолчанию

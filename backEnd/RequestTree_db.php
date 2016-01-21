@@ -255,7 +255,7 @@ class RequestTree_db  extends Db_base {
             $row = $rows[0] ;
             $result = [
                 'find' => true,
-                'Word' =>  $row['name_text']] ;
+                'word' =>  $row['name_text']] ;
         }
         return $result ;
 

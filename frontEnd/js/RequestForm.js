@@ -24,12 +24,14 @@ function RequestForm() {
         } ;
         typesNames = {       // имена типов
             'question' : 'вопросы - раздел запроса',
+            'sub_question' : 'подраздел вопроса',
             'subject'  : 'субъект - раздел запроса',
             'action'   : 'действие - раздел запроса',
             'object'   : 'объект - раздел запроса',
-            'subObject': 'подраздел запроса',
+            'sub_object': 'подраздел запроса',
             'concept'  : 'понятие',
-            'synonym'  : 'слово, определяющее понятие'
+            'synonym'  : 'слово, определяющее понятие',
+            'function' : 'функция, определяющая понятие'
         };
 
         nodeTypes = {                       // типы узлов дерева запросов
@@ -44,6 +46,11 @@ function RequestForm() {
                 'valid_children': ['question', 'subject', 'action', 'object']
             },
             'question': {                       // раздел - ВОПРОС
+                'max_children': -1,
+                'max_depth': 2,
+                'valid_children': ['sub_question','concept']
+            },
+            'sub_question': {                       // раздел - ВОПРОС
                 'max_children': -1,
                 'max_depth': 2,
                 'valid_children': ['sub_question','concept']
