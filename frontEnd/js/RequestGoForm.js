@@ -7,10 +7,10 @@ function RequestGoForm() {
     var $requestText = $('#requestText') ;
     var $buttonGo = $('#requestGoBt') ;
     var $treeResult = $('#treeResult') ;
+    var $requestTypes = $('#requestTypes') ;
     var resultNodes ;         // список узлов, полученный от разбора запроса
     var currentTreeResult  ;
     var currentRootId ;       // корневой результата
-
     var _this = this ;
     //-----------------------------//
     this.init = function() {
@@ -32,20 +32,49 @@ function RequestGoForm() {
         $requestText.css('position','absolute') ;
         $requestText.css('max-width',400) ;
         $requestText.css('max-height',100) ;
+        $requestText.css('height',100) ;
         $requestText.position({
             my : "left top",
             at : "left+80 top+60",
             of : "#requestGoDialog"
 
         }) ;
-        $treeResult.css('position','absolute') ;
-        $treeResult.position({
+        $requestTypes.css('position','absolute') ;
+        $requestTypes.position({
             my : "left top",
             at : "left+10 top+170",
             of : "#requestGoDialog"
 
         }) ;
+        $treeResult.css('position','absolute') ;
+        $treeResult.position({
+            my : "left top",
+            at : "left+10 top+300",
+            of : "#requestGoDialog"
+
+        }) ;
+        $('#searchSystemBt').on('click',queryGo) ;
+        $('#mainProjectsBt').on('click',mainProjectsGo) ;
+        $('#philosophyBt').on('click',philosophyGo) ;
+        $('#searchSystemBt').button() ;
+        $('#mainProjectsBt').button() ;
+        $('#philosophyBt').button() ;
         treeInit() ;
+    } ;
+    var queryGo = function() {
+       var responseForm = paramSet.responseForm ;
+       responseForm.setQuery($requestText.val()) ;
+       responseForm.queryGo() ;
+    } ;
+    var mainProjectsGo = function() {
+        var mainProjectsForm = paramSet.mainProjectsForm ;
+        mainProjectsForm.setQuery($requestText.val()) ;
+        mainProjectsForm.queryGo() ;
+
+    } ;
+    var philosophyGo = function() {
+        var philosophyForm = paramSet.philosophyForm ;
+        philosophyForm.queryGo() ;
     } ;
     /**
      * Отправить запрос на выполнение
@@ -74,6 +103,7 @@ function RequestGoForm() {
 
                         resultNodes = answ['result'] ;
                         treeBuild() ;
+                        requestTypeShow(answ['requestTypes']) ;  // таблица типов
                     } else {
                         ready = false;
                         message = answ['message'];
@@ -176,11 +206,11 @@ function RequestGoForm() {
      * обработка изменения видимой части дерева
      */
     var paneHeightChange = function() {
-        var heightOffset = 170;
+        var heightOffset = 300;
         var minHeightPx = $('#treeEditDialog').css('min-height');
         var minHeight_0 = minHeightPx.split('px')[0];
         var minHeight = minHeight_0 - heightOffset;
-        var minNodes = 10;
+        var minNodes = 5;
         var nodeCount = heightPanelCalculate();
         var height = minHeight / minNodes * nodeCount;
         var realHeight = Math.max(height + heightOffset, minHeight_0);
@@ -204,4 +234,38 @@ function RequestGoForm() {
         }
         return countOpenedNodes;
     } ;
+    var requestTypeShow = function(requestTypes) {
+        //var $types = [$('#mainProjectsType'),$('#searchSystemType'),$('#philosophyType')] ;
+        var $types = [
+            {
+                'type' : 'mainProjects',
+                'inputField': 'mainProjectsType',
+                'goButton' : 'mainProjectsBt'
+            },
+            {
+                'type' : 'searchSystem',
+                'inputField': 'searchSystemType',
+                'goButton' : 'searchSystemBt'
+            },
+            {
+                'type' : 'philosophy' ,
+                'inputField': 'philosophyType',
+                'goButton' : 'philosophyBt'
+            }
+        ] ;
+        for (var i = 0; i < $types.length; i++ ) {
+           var type = $types[i]['type'] ;
+           var result =   requestTypes[type]['result'] ;
+            $('#'+$types[i]['inputField']).val(result) ;
+            var bt = $types[i]['goButton'] ;
+            $('#'+bt).button( "option", "disabled", !result );
+           // if (result === true ) {
+           //    $('#'+bt).removeAttr('disabled') ;
+           //     $('#'+bt).button( "option", "disabled", false );
+           //} else {
+           //     $('#'+bt).attr('disabled','disabled') ;
+           // }
+
+        }
+    };
 }

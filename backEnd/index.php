@@ -73,10 +73,24 @@ switch($operation) {
         $rType->setResultRequest($requestResult) ;
         $rType->typeRulesClc() ;
         $answ['requestTypes'] = $rType->getRequestTypes() ;
-
-
-
-
+        break ;
+    }
+    case 'yandex' : {
+        $query = $taskPar->getParameter('query') ;
+        $page = $taskPar->getParameter('page') ;
+        $yandex = new YandexController() ;
+        $yandex->setQuery($query) ;
+        $yandex->setPage($page) ;
+        $yandex->queryGo() ;
+        $answ = $yandex->getResultsForShow() ;
+        break ;
+    }
+    case 'mainProjects' : {
+        $query = $taskPar->getParameter('query') ;
+        $mp = new MainProjects() ;
+        $mp->setQuery($query) ;
+        $mp->queryGo() ;
+        $answ = $mp->getResult() ;
         break ;
     }
     default : {    // весь $_GET отправиить обратно

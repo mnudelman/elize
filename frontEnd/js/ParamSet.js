@@ -15,6 +15,9 @@ function ParamSet() {
     //-------------формы----------------------------- //
      this.requestForm ;        // редактирование запроса
      this.requestGoForm ;
+     this.responseForm ;
+     this.mainProjectsForm ;
+    this.philosophyForm ;
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -53,13 +56,16 @@ function ParamSet() {
         str = str.replace('/#','') ;
         str = str.replace('#','') ;
         str = str.replace('/index.php','') ;
-        str = str.replace('/frontEnd','') ;
+     //   str = str.replace('/frontEnd','') ;
         _this.windowLocationHost = str ;     //     str.replace('/index.html','') ;
         var url = _this.windowLocationHost+'/backEnd' ;
         _this.ajaxExecute = new AjaxExecutor(url) ;
 //       ---Формы ---------
         _this.requestForm = new RequestForm()  ;
         _this.requestGoForm = new RequestGoForm() ;
+        _this.responseForm = new ResponseForm() ;
+        _this.mainProjectsForm = new MainProjectsForm() ;
+        _this.philosophyForm = new PhilosophyForm() ;
 //
 
     } ;

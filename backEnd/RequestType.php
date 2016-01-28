@@ -73,7 +73,7 @@ class RequestType {
                'operation' => ['OR'],
                'concepts' => [
                    'questionToSearchSystem' => ['question','questionToSearchSystem'],
-                   'price' => ['object','price']
+                   'ru_name' => ['object','ru_name']
                ]
            ] ,
            // запрос философский, если не определён никакой другой тип

@@ -33,7 +33,8 @@ class TaskStore {
     {
         return [
             self::$dirService,
-            self::$dirTop
+            self::$dirTop,
+            self::$dirTop.'/xmlYandex',
         ];
     }
 

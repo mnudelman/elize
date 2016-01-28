@@ -4,6 +4,7 @@
 function MainScript() {
     var requestForm = paramSet.requestForm ; //
     var requestGoForm = paramSet.requestGoForm ;
+    var mainProjectsForm = paramSet.mainProjectsForm ;
     var _this = this;
     //---------------------------------------------//
     this.init = function () {

@@ -5,8 +5,8 @@
 function AjaxExecutor(ajaxUrl) {
    var requestData = false ;                 // результат запроса
    var ajaxComplete = false ;
-   var debugFlag =  true ; //false ;                   // отладка запроса
-
+   var debugFlag =  false ;                   // отладка запроса
+    var currentUrl = ajaxUrl ;
     var successDefault = function(data,textStatus) {
         alert('successDefault:status-'+textStatus+' ; hostAnswer:'+data) ;
    } ;
@@ -34,11 +34,15 @@ function AjaxExecutor(ajaxUrl) {
         ).error(errorDefault)
             .complete(completeDefault);
     } ;
+    this.setUrl = function(url) {
+        currentUrl = url ;
+    } ;
     this.postData = function(sendData,ownMessage) {
         ajaxComplete = false ;
         requestData = false ;
         $.post(
-            ajaxUrl + '/index.php',
+       //     ajaxUrl + '/index.php',
+            currentUrl + '/index.php',
             sendData,
             function(data) {
                 if (debugFlag) {
@@ -62,7 +66,7 @@ function AjaxExecutor(ajaxUrl) {
        ajaxComplete = false ;
         requestData = false ;
         ownMessage = (ownMessage == undefined) ? false : ownMessage ;
-       $.getJSON(ajaxUrl+'/index.php',
+       $.getJSON(currentUrl ,           //     +'/index.php',
            sendData,
             function(data) {
                 if (debugFlag) {

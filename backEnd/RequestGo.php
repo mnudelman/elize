@@ -223,10 +223,23 @@ class RequestGo {
         }
         return ['find' => $findFlag, 'synonym' => $findWord] ;
     }
+
+    /**
+     * поиск по регулярному выражению
+     * при использовании функций mb_... обрамляющие символы из regExp надо убрать
+     * @param $regExp
+     * @return bool
+     */
     private function regularExpressionFind($regExp) {
-        $arr = [] ;
-        $result = preg_match($regExp,$this->clearPhrase,$arr) ;
-        return $result > 0 ;
+        $firstSymb = mb_substr($regExp,0,1) ;
+        $lastSymb = mb_substr($regExp,mb_strlen($regExp)-1,1) ;
+        if ($firstSymb === $this->REGULAR_EXPRESSION_BRACKET &&
+            $lastSymb == $this->REGULAR_EXPRESSION_BRACKET) {
+            $regExp = mb_substr($regExp,1,mb_strlen($regExp)-2) ;
+        }
+     //   $result = preg_match($regExp,$this->clearPhrase,$arr) ;
+        $result = mb_ereg_match($regExp,$this->clearPhrase) ;
+        return $result  ;
     }
 
     /**

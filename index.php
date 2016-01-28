@@ -16,6 +16,7 @@ $dirStyle = './frontEnd/styles';
             padding: 0;
             font-size: 62.5%;
         }
+
         body {
             max-width: 800px;
             min-width: 300px;
@@ -24,13 +25,15 @@ $dirStyle = './frontEnd/styles';
             font-size: 14px;
             font-size: 1.4em;
         }
+
         .jstree-default-contextmenu {
             z-index: 110;
         }
+
         .dialogPane {
             min-height: 400px;
-            min-width: 550px ;
-            width:550px;
+            min-width: 650px;
+            width: 650px;
         }
     </style>
 
@@ -42,6 +45,7 @@ $dirStyle = './frontEnd/styles';
     <link rel="stylesheet" href="<?= $dirJstree; ?>/themes/default/style.min.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/formStyle.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/style.css"/>
+    <link rel="stylesheet" href="<?= $dirStyle; ?>/yandexStyles.css"/>
 
     <script language="javascript" src="<?= $dirLib; ?>/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="<?= $dirJquery_ui; ?>/jquery-ui.js"></script>
@@ -52,6 +56,9 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/ResponseForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/MainProjectsForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 
@@ -70,11 +77,12 @@ $dirStyle = './frontEnd/styles';
     <div id="treeEditDialog" class="dialogPane">
         <div id="commandSet">
             <button id="treeSave" title="сохранить дерево в БД">save</button>
-        </div> <br>
+        </div>
+        <br>
 
-        <div id="mytree"> </div>
+        <div id="mytree"></div>
 
-        <div id="nodeEditForm"  style="border: 2px solid;border-radius:5px;background-color: #feeebd;">
+        <div id="nodeEditForm" style="border: 2px solid;border-radius:5px;background-color: #feeebd;">
             <label> <span class="label" id="nodeOperationLabel"> <strong> operation: </strong> </span>
                 <input type="text" class="field" id="nodeOperation" readonly="readonly">
             </label> <br>
@@ -111,17 +119,36 @@ $dirStyle = './frontEnd/styles';
     </div>
 
 
-    <div id="requestGoDialog" >
+    <div id="requestGoDialog">
         <div id="goBlock">
-        <label><span id="textGoLabel" > <strong>request</strong> </span>
-            <textarea  id="requestText" name="requestText" placeholder="текст запроса"rows="3" cols="60">
+            <label><span id="textGoLabel"> <strong>request</strong> </span>
+            <textarea id="requestText" name="requestText" placeholder="текст запроса" rows="3" cols="60">
             </textarea>
 
-        </label>
-        <button id="requestGoBt" >go</button>
-        </div><br>
-        <div id="requestTypes"></div>
-        <div id="treeResult"> </div>
+            </label>
+            <button id="requestGoBt">go</button>
+        </div>
+        <br>
+
+        <div id="requestTypes">
+            <label> <span class="label" id="mainProjectsTypeLabel"> <strong> Основные проекты </strong> </span>
+                <input type="text" class="field" id="mainProjectsType" readonly="readonly">
+            </label>
+            <button id="mainProjectsBt" disabled="disabled">go</button>
+            <br><br>
+            <label> <span class="label" id="searchSystemTypeLabel"> <strong> Поисковые системы </strong> </span>
+                <input type="text" class="field" id="searchSystemType" readonly="readonly">
+            </label>
+            <button id="searchSystemBt" disabled="disabled">go</button>
+            <br><br>
+            <label> <span class="label" id="philosophyTypeLabel"> <strong> Философия </strong> </span>
+                <input type="text" class="field" id="philosophyType" readonly="readonly">
+            </label>
+            <button id="philosophyBt" disabled="disabled">go</button>
+            <br><br>
+
+        </div>
+        <div id="treeResult"></div>
     </div>
 
 
@@ -129,6 +156,21 @@ $dirStyle = './frontEnd/styles';
         <strong>Описание работы</strong>
     </div>
 
+</div>
+<div>
+    <div id="resultBlock" class="data">
+        <p id="resultBoxError"></p>
+
+        <p id="totalHuman"></p>
+        <ol start="1" id="resultBoxDocs">
+
+        </ol>
+    </div>
+</div>
+
+<div>
+    <div id="resultBlockPhilosophy" class="data">
+    </div>
 </div>
 
 </body>
