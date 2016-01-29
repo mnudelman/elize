@@ -658,6 +658,8 @@ class Yandex
         curl_setopt($ch, CURLOPT_POST, true);
         $data = curl_exec($ch);
 
+     //   var_dump($data) ;
+
         $this->response = new SimpleXMLElement($data);
         $this->response = $this->response->response;
         if ($this->_checkErrors()) {

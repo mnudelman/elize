@@ -8,7 +8,8 @@ function PhilosophyForm() {
     var currentBlockSize = {'W' : 160, 'H': 100} ;
     var currentDw = 20 ;
     var dirImages = paramSet.windowLocationHost+'/images/zodiak' ;
-    var zodiaks  = [
+    var currentImagesSetName = 'zodiak' ;
+    var currentPictures  = [
         'kartinki24_ru_signs_of_the_zodiac_37.jpg',
         'kartinki24_ru_signs_of_the_zodiac_38.jpg',
         'kartinki24_ru_signs_of_the_zodiac_39.jpg',
@@ -86,7 +87,7 @@ function PhilosophyForm() {
         block.css('background-color','blue') ;
         block.css('color','red') ;
         block.css('font-size','20px') ;
-        var url = 'url(' + dirImages + '/' + zodiaks[i] +')' ;
+        var url = 'url(' + dirImages + '/' + currentPictures[i] +')' ;
         block.css('background-image',url) ;
         $resultBlock.append(block) ;
         var sign = (x >= 0) ? '+' : '-' ;
@@ -106,7 +107,7 @@ function PhilosophyForm() {
 
     } ;
     var definePosition = function(at) {
-        return {my: "center top", at: at, of: '#resultBlockPhilosophy'} ;
+        return {my: "center top", at: at, of: '#resultBlockPhilosophy',collision:'none'} ;
     } ;
     var defineBlockItem = function(id,index) {
         return {'id' :id, 'index' : index } ;
@@ -130,6 +131,7 @@ function PhilosophyForm() {
             beforeClose: function (event, ui) {
             }
         });
+        $resultBlock.css('overflow','auto') ;
         pictureBlocksInit() ;
         ideaDefine() ;
         commandSet();
