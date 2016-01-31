@@ -34,6 +34,8 @@ $dirStyle = './frontEnd/styles';
             min-height: 400px;
             min-width: 650px;
             width: 650px;
+            overflow-x: auto ;
+            /*overflow-y: visible ;*/
         }
     </style>
 
@@ -59,6 +61,7 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/ResponseForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/MainProjectsForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/PhilosophyFormAttr.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 
@@ -68,7 +71,7 @@ $dirStyle = './frontEnd/styles';
 <div id="inviteInfo">
     <strong>Вы можете редактировать структуру запроса и проверять его на примерах </strong>
 </div>
-<div id="tabs" class="dialogPane">
+<div id="tabs" >
     <ul>
         <li><a href="#treeEditDialog">edit</a></li>
         <li><a href="#requestGoDialog">GO</a></li>
@@ -119,7 +122,7 @@ $dirStyle = './frontEnd/styles';
     </div>
 
 
-    <div id="requestGoDialog">
+    <div id="requestGoDialog" class="dialogPane">
         <div id="goBlock">
             <label><span id="textGoLabel"> <strong>request</strong> </span>
             <textarea id="requestText" name="requestText" placeholder="текст запроса" rows="3" cols="60">
@@ -170,6 +173,7 @@ $dirStyle = './frontEnd/styles';
 
 <div>
     <div id="resultBlockPhilosophy" class="data">
+
     </div>
 </div>
 

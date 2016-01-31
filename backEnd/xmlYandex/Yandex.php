@@ -87,8 +87,8 @@ class Yandex
      *
      * @var string
      */
-    protected $site;
-    
+    //protected $site;
+    protected $site ;
     /**
      * Domain
      *

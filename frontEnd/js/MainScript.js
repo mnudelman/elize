@@ -5,6 +5,7 @@ function MainScript() {
     var requestForm = paramSet.requestForm ; //
     var requestGoForm = paramSet.requestGoForm ;
     var mainProjectsForm = paramSet.mainProjectsForm ;
+    var philosophyForm = paramSet.philosophyForm ;
     var _this = this;
     //---------------------------------------------//
     this.init = function () {
@@ -18,6 +19,7 @@ function MainScript() {
         requestForm.init() ;       // нач установка
         requestGoForm.init() ;
         requestForm.requestEdit() ;
+        philosophyForm.init() ;
     };
 
 }
