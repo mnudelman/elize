@@ -18,8 +18,9 @@ function MainScript() {
         $tabs.animate({height: "show"}, 1000);
         requestForm.init() ;       // нач установка
         requestGoForm.init() ;
-        requestForm.requestEdit() ;
         philosophyForm.init() ;
+        requestForm.requestEdit() ;
+
     };
 
 }
