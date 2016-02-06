@@ -1,5 +1,12 @@
 /**
  * Клыбы дыма - объект управления анимацией
+ * Модель представалят собой совокупность объектов smokeBlocks,
+ * каждый элемент - это объект <div> с запущенной внутри картинкой - облачком дыма,
+ * с каждым блоком запускается таймер. С интервалом времени, задаваемом таймером, облачко
+ * движется внутри блока, имитируя клубы дыма.
+ * При изменении размера экрана запускается метод smokeResize, который останавливает движение.
+ * Если в течении некоторого промежутка времени(2sec) нет сигналов об изменении размера, то
+ * движение облаков запускается вновь.
  */
 function SmokeClouds() {
     var smokeBlocks = {} ;
@@ -7,6 +14,10 @@ function SmokeClouds() {
     var stopAnimation = false ;     // остановить анимацию
     var leftSpiral = {} ;
     var rightSpiral = {} ;
+    var resizeGo = false ;
+    var resizeFlag = false ;
+    var resizeSteps = 0 ;
+    var RESIZE_STEPS_MAX = 2 ;
     var _this = this ;
     //-------------------------------//
     this.init = function() {
@@ -27,7 +38,8 @@ function SmokeClouds() {
                 id: 'smokeBlk1_1' ,               // ид блока
                 img : {                         // картинка для анимации
                      file:'smoke_left2.png',
-                     size: {w:200,h:75}
+                     sizePx: {w:200,h:75},
+                    size: {w:60,h:100,u: '%'}
                 },
                 border: false,
                 pathWay : 'rectangle',
@@ -44,12 +56,13 @@ function SmokeClouds() {
                 id: 'smokeBlk1_2' ,               // ид блока
                 img : {                         // картинка для анимации
                     file:'smoke_left2.png',
-                    size: {w:150,h:75}
+                    sizePx: {w:150,h:75},
+                    size: {w:111.1,h:102.7,u: '%'}
                 },
                 border: false,
                 pathWay : 'rectangle',
                 direction: 'left',           // направление обхода(против часовой)
-                delay: 600,                  // задержка mSec
+                delay: 500,                  // задержка mSec
                 currentState: {              // текущее состояние
                     startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
                     twistingSpiral : true,   // направление спирали - закручивание
@@ -61,7 +74,8 @@ function SmokeClouds() {
                 id: 'smokeBlk2_1' ,               // ид блока
                 img : {                         // картинка для анимации
                     file:'smoke_center1.png',
-                    size: {w:150,h:100}
+                    sizePx: {w:150,h:100},
+                    size: {w:90.9,h:105,u: '%'}
                 },
                 border: false,
                 pathWay : 'rectangle',
@@ -81,7 +95,7 @@ function SmokeClouds() {
                     size: {w:150,h:100}
                 },
                 pathWay : 'rectangle',
-                border: false,
+                border: true,
                 direction: 'left',           // направление обхода(против часовой)
                 delay: 300,                  // задержка mSec
                 currentState: {              // текущее состояние
@@ -95,7 +109,8 @@ function SmokeClouds() {
                 id: 'smokeBlk3_1' ,               // ид блока
                 img : {                         // картинка для анимации
                     file:'smoke_center2_1.png',
-                    size: {w:200,h:120}
+                    sizePx: {w:200,h:120},
+                    size: {w:80.6,h:77.4,u: '%'}
                 },
                 pathWay : 'rectangle',
                 border: false,
@@ -112,7 +127,8 @@ function SmokeClouds() {
                 id: 'smokeBlk4_1' ,               // ид блока
                 img : {                         // картинка для анимации
                     file:'smoke_center1.png',
-                    size: {w:150,h:100}
+                    sizePx: {w:150,h:100},
+                    size: {w:90.9,h:105,u: '%'}
                 },
                 pathWay : 'rectangle',
                 border: false,
@@ -133,7 +149,7 @@ function SmokeClouds() {
                     size: {w:150,h:100}
                 },
                 pathWay : 'rectangle',
-                border: false,
+                border: true,
                 direction: 'right',           // направление обхода(против часовой)
                 delay: 300,                  // задержка mSec
                 currentState: {              // текущее состояние
@@ -150,7 +166,8 @@ function SmokeClouds() {
                 id: 'smokeBlk5_1' ,               // ид блока
                 img : {                         // картинка для анимации
                     file:'smoke_left2.png',
-                    size: {w:150,h:75}
+                    sizePx: {w:150,h:75},
+                    size: {w:111.1,h:102.7,u: '%'}
                 },
                 border: false,
                 pathWay : 'rectangle',
@@ -167,12 +184,13 @@ function SmokeClouds() {
                 id: 'smokeBlk5_2' ,               // ид блока
                 img : {                         // картинка для анимации
                     file:'smoke_left2.png',
-                    size: {w:200,h:75}
+                    sizePx: {w:150,h:75},
+                    size: {w:60,h:100,u: '%'}
                 },
                 border: false,
                 pathWay : 'rectangle',
                 direction: 'right',           // направление обхода(против часовой)
-                delay: 500,                  // задержка mSec
+                delay: 600,                  // задержка mSec
                 currentState: {              // текущее состояние
                     startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
                     twistingSpiral : true,   // направление спирали - закручивание
@@ -184,7 +202,38 @@ function SmokeClouds() {
         $('#smokeBlk3').css('vertical-align','bottom') ;
         $('#smokeBlk5').css('vertical-align','top') ;
     } ;
+    /**
+     * запускает процесс изменения размеров
+     */
+    this.smokeResize = function() {
+        resizeFlag =true ;
+        if (!resizeGo) {    // запустить таймер
+            stopAnimation = true ;
+            var timeDelay = 1000 ;
+            resizeGo = true ;
+            var tmpTimer = setInterval(function () {
+               if (resizeFlag) {
+                   resizeFlag = false ;
+                   resizeSteps = 0 ;
+               }else {
+                   if (++resizeSteps >= RESIZE_STEPS_MAX) {    // конец изменения размера
+                       clearInterval(tmpTimer);
+                       resizeGo = false ;
+                       resizeSteps = 0 ;
+                       alert('resize OVER') ;
+                       _this.smokeGo() ;
+                   }
+               }
+
+            }, timeDelay);
+        }
+    } ;
+    /**
+     * Запуск прцесса дымления
+     */
     this.smokeGo = function() {
+        stopAnimation = false ;
+        mainSmokeBlockDefine() ;
         blockGo((smokeBlocks['b1_1'])) ;
         blockGo((smokeBlocks['b1_2'])) ;
         blockGo((smokeBlocks['b3_1'])) ;
@@ -196,14 +245,25 @@ function SmokeClouds() {
         blockGo((smokeBlocks['b5_2'])) ;
     } ;
     /**
+     * Область дыма - главный блок
+     */
+    var mainSmokeBlockDefine = function() {
+        var Xmax = $(document).width();
+        var H = Xmax * 0.535 ;
+        var top = 0.6345 * H ;
+        var height = 0.299 * H ;
+        var $totalBlock = $('#mainBlock') ;
+        $totalBlock.css('margin-top',top) ;
+        $totalBlock.css('height',height) ;
+    } ;
+    /**
      *  запустить анимацию в блоке
+     *  В блоке запускается таймер.Остановка по флагу stopAnimation
      */
     var blockGo = function(smokeBlock) {
         var timeDelay = smokeBlock.delay ;
         defineBlockImage(smokeBlock) ;                  // картинка для блока
-        startPosition(smokeBlock) ;
-
-        var tmpTimer = setInterval(function () {
+        var tmpTimer = setInterval(function () {        // процесс анимации в блоке
             nextPosition(smokeBlock) ;
             if (stopAnimation) {
                 clearInterval(tmpTimer);
@@ -211,6 +271,21 @@ function SmokeClouds() {
         }, timeDelay);
 
     } ;
+    /**
+     * преобразовать строку вида 230px в число 230
+     * @param strPixel
+     * @returns {number}
+     */
+    var pixelToNumber = function(strPixel) {
+        var n = strPixel.replace('px','') ;
+        return n - 0 ;
+    } ;
+    /**
+     * настройка изображения внутри блока
+     * для размера картинки задаётся единица измерения(px | %)
+     * Если в %, то это по отношению к размеру блока
+     * @param block
+     */
     var defineBlockImage = function(block) {
         var blockId = block['id'] ;
         var $block = $('#' + blockId) ;
@@ -218,52 +293,78 @@ function SmokeClouds() {
         var pictFile = imgPart['file'] ;
         var wSize = imgPart['size']['w'] ;
         var hSize = imgPart['size']['h'] ;
+        var sizeUnit = imgPart['size']['u'] ;
+        sizeUnit = (sizeUnit === undefined) ? 'px' : sizeUnit ;  // удиница измерения
         var blkId = block['id'] ;
         var $img = $('<img/>') ;
         $img.attr('src',pictFile) ;
-        $img.css('width',wSize) ;
-        $img.css('height',hSize) ;
-        $img.attr('id','imgBlk1') ;
+        if (sizeUnit === '%') {
+            wSize = Math.min(wSize,95) ;
+            hSize = Math.min(hSize,95) ;
+        }
+        $img.css('width',wSize + sizeUnit) ;
+        $img.css('height',hSize + sizeUnit) ;
+        $img.attr('id','img' + blockId) ;
         $block.empty() ;
         $block.append($img) ;
-        $('#'+ blockId+' img').css('margin-top',0) ;
+        $('#'+ blockId+' img').css('margin-top',0) ;     // начальное положение картинки
         $('#'+ blockId+' img').css('margin-left',0) ;
+        $img.click(function() {
+            imgInfoShow(this) ;
+        }) ;
 
     } ;
-    var startPosition = function(block) {
-
+    /**
+     * показать информацию о картинке( может быть для отладки)
+     */
+    var imgInfoShow = function($img) {
+        var imjWidth = $($img).css('width') ;
+        var imjHeight = $($img).css('height') ;
+        imjWidth = pixelToNumber(imjWidth) ;
+        imjHeight = pixelToNumber(imjHeight) ;
+        var blk = $($img).parent() ;
+        var blkWidth = $(blk).css('width') ;
+        blkWidth = pixelToNumber(blkWidth) ;
+        var blkHeight = $(blk).css('height') ;
+        blkHeight = pixelToNumber(blkHeight) ;
+        var blkId = $(blk).attr('id') ;
+        alert('INFO:'+'\n'+
+        'imgW: ' + imjWidth+' imjHeight: ' + imjHeight +'\n' +
+        'blkId: ' + blkId+' blkW: ' +blkWidth+' blkH: '+blkHeight+ '\n' +
+        'imjW/blkW: ' + imjWidth/blkWidth + '\n' +
+        'imjH/blkH: ' + imjHeight/blkHeight ) ;
     } ;
+    /**
+     * следующая позиция "облачка" - основной метод имитации движения.
+     * @param block - это объект типа smokeBlock
+     */
     var nextPosition = function(block) {
+
         var blockId = block['id'] ;
-        var blkHeight = $('#'+blockId).css('height') ;
-        if (block['border'] === true) {
+        if (block['border'] === true) {              // рамка блока(при отладке)
             $('#'+blockId).css('border','1px solid green') ;
         }
-        blkHeight = blkHeight.replace('px','') ;
-        blkHeight = (blkHeight-1) + 1 ;
+        var blkHeight = $('#'+blockId).css('height') ;
         var blkWidth = $('#'+blockId).css('width') ;
-        blkWidth = blkWidth.replace('px','') ;
-        blkWidth = (blkWidth-1) + 1 ;
-        var $img = $('#' + blockId + ' img') ;
+        blkHeight = pixelToNumber(blkHeight) ;
+        blkWidth = pixelToNumber(blkWidth) ;
 
+        var $img = $('#' + blockId + ' img') ;
+//      -- шаг внутри блока
         var dY = 0.1 * blkHeight ;
         var dX =  0.1 * blkWidth ;
         var state = block['currentState'] ;
         var pathOffset = state['pathOffset'] ; // смещение текущего витка
-
+       // -- координаты картинки внутри блока
         var x = $img.css('margin-left') ;
-        x = x.replace('px','') ;
-        x = (x-1) + 1 ;
+        x = pixelToNumber(x) ;
         var y = $img.css('margin-top') ;
-        y = y.replace('px','') ;
-        y = (y-1) + 1 ;
-
-        var imgPart = block['img'] ;
-        var imgWidth = imgPart['size']['w'] ;
-        var imgHeight = imgPart['size']['h'] ;
-
-//        alert('x='+x+'\n'+'y='+y + '\n'+'dx='+dX+'\n'+'dy='+dY) ;
-
+        y = pixelToNumber(y) ;
+        //--- размер картинку
+        var imgWidth = $img.css('width')  ; //  imgPart['size']['w'] ;
+        var imgHeight = $img.css('height') ; // imgPart['size']['h'] ;
+        imgWidth = pixelToNumber(imgWidth) ;
+        imgHeight = pixelToNumber(imgHeight) ;
 
         var direction = block['direction'] ;
         var spiral = (direction === 'left') ? leftSpiral : rightSpiral ;
@@ -275,9 +376,6 @@ function SmokeClouds() {
 
         var x1 = x + kDx * dX ;
         var y1 = y + kDy * dY ;
-
- //       alert('x1='+x1+'\n'+'y1='+y1) ;
-
 
         var offset = state['pathOffset'] ;
         var xMin = offset/100 * blkWidth  ;
@@ -323,6 +421,7 @@ function SmokeClouds() {
         newOffset =  (newLine && lineNumber == 3) ;
         if (newOffset) {
            var offset1 = offset + ((twistingSpiral) ? 10 : -10) ;
+// offset сбя не оправдал (!!)
             offset = 0 ;
             newSpiral = (offset1 < 0 || offset1 > 40) ;
             if (!newSpiral) {
@@ -351,8 +450,6 @@ function SmokeClouds() {
 
         }
 
-
-//        alert('x:'+x+ '\n'+'y:'+y) ;
         $img.css('margin-top',y) ;
         $img.css('margin-left',x) ;
         state['pathLine'] =  lineNumber   ;

@@ -24,7 +24,8 @@ $dirStyle = './../frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJquery_ui; ?>/jquery-ui.js"></script>
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
     <script type="text/javascript" src="SmokeClouds.js"></script>
-  <style>
+    <script type="text/javascript" src="ResultShow.js"></script>
+    <style>
         html {
             margin: 0;
             padding: 0;
@@ -52,62 +53,21 @@ $dirStyle = './../frontEnd/styles';
             max-width: 210px;
             max-height: 100px;
             background-color: transparent;
-            border-color: rgba(0,0,0,0);
-            color: white ;
+            border-color: rgba(0, 0, 0, 0);
+            color: white;
         }
-        .dim {
-        /*    background-image: url("dim.png");
-        /*   margin-bottom: 20px; */
-           background-color: transparent;
-            /*border: 1px solid #ff8a3d;*/
-            height: 147px;
-            width: 588px;
-            margin-top: 410px;
-            margin-left: 350px;
-        }
-        .dim1 {
-            /*    background-image: url("dim.png");
-            /*   margin-bottom: 20px; */
-            background-color: transparent;
-            /*border: 1px solid #ff8a3d;*/
-            /*height: 50px;*/
-            /*width: 50px;*/
-            margin-top: 470px;
-            margin-left: 570px;
-        }
-        .dim2 {
-            /*    background-image: url("dim.png");
-            /*   margin-bottom: 20px; */
-            background-color: transparent;
-            /*border: 1px solid #ff8a3d;*/
-            height: 50px;
-            width: 50px;
-            margin-top: 475px;
-            margin-left: 575px;
+        .result {
+            background-image: url("table1.png") ;
+            background-size: auto 100%;
+            background-repeat: no-repeat;
         }
     </style>
     <script>
-        $(document).ready(function(){
-            var stop = false ;
-            /// блок
-            var Xmax = $(document).width();
-            var H = Xmax * 0.535 ;
-            var top = 0.6345 * H ;
-            var height = 0.299 * H ;
-            var $totalBlock = $('#mainBlock') ;
-            $totalBlock.css('margin-top',top) ;
-            $totalBlock.css('height',height) ;
-            top = $totalBlock.css('margin-top') ;
-            height = $totalBlock.css('height') ;
-//            alert('documentWidth:' + Xmax+'\n'+
-//            'main-top:' + top+'\n'+'main-height:'+height );
-
-
+        $(document).ready(function () {
+            var smoke = new SmokeClouds();
+            var result = new ResultShow();
+            result.init();
             $(document).click(function (e) {
-
-
-
-
                 var Ymax = $(document).height();
                 var Xmax = $(document).width();
                 var d = 0.17 * Xmax;
@@ -118,19 +78,14 @@ $dirStyle = './../frontEnd/styles';
                 var x = e.pageX;
                 var y = e.pageY;
                 var s = (x - x0) * (x - x0) + (y - y0) * (y - y0);
-
-
-
-
-
                 if (s <= r2) {
-                    alert('INside in textarea'+'\n'+'documentWidth:' + Xmax);
-                    var $totalBlock = $('#mainBlock') ;
-                    var top = $totalBlock.css('margin-top') ;
-                    var height = $totalBlock.css('height') ;
-                    alert('INside in textarea'+'\n'+'documentWidth:' + Xmax+'\n'+
-                          'main-top:' + top+'\n'+'main-height:'+height );
-                    stop = true ;
+                    alert('INside in textarea' + '\n' + 'documentWidth:' + Xmax);
+                    var $totalBlock = $('#mainBlock');
+                    var top = $totalBlock.css('margin-top');
+                    var height = $totalBlock.css('height');
+                    alert('INside in textarea' + '\n' + 'documentWidth:' + Xmax + '\n' +
+                    'main-top:' + top + '\n' + 'main-height:' + height);
+                    stop = true;
                 } else {
                     var aDoc = 0.535;   // Ymax/Xmax
                     var Ymax = Xmax * aDoc;
@@ -141,16 +96,22 @@ $dirStyle = './../frontEnd/styles';
                     var btHeight = btWidth * 0.23;
                     var btYBottom = btYTop + btHeight;
                     if (x >= btXLeft && x <= btXRight && y >= btYTop && y <= btYBottom) {
-                        alert('Button CLICK');
+
+                        result.showGo();
+                        //alert('Button CLICK');
                     }
 
                 }
-            }) ;
-            var smoke = new SmokeClouds() ;
-            smoke.init() ;
-            smoke.smokeGo() ;
-        } ) ;
-     </script>
+            });
+
+
+            smoke.init();
+            smoke.smokeGo();
+            $(window).on('resize', function () {
+                smoke.smokeResize();
+            });
+        });
+    </script>
 
 
 </head>
@@ -158,83 +119,72 @@ $dirStyle = './../frontEnd/styles';
 <div id="total">
     <h2>Настрока формы области ввода</h2>
 
-<!--    <div class="roundInput">
-          <textarea id="requestText" class="text" name="requestText" placeholder="текст запроса">
-            </textarea>
-    </div>
--->
-<!--    <div id="dim" class="dim1" >-->
-<!--        <img src="dim1.png"  id="imgDim1" style="width:50px; height:50px" >-->
-<!--        <img src="dim1.png"  id="imgDim2" style="width:25px; height:25px" >-->
-<!--        <img src="dim1.png"  id="imgDim3" style="width:25px; height:25px" >-->
-<!--    </div>-->
-<!--    <div id="dim" class="dim2" >-->
-<!--        <img src="dim1.png"  id="imgDim2" style="width=25px; height=25px" >-->
-<!--    </div>-->
-<div id="mainBlock" style="width:100%;height:165px; margin-top:350px;border:0px solid red">
-    <div id="smokeBlk1" style="display:inline-block;border:0px solid green;width:30%;height:30%;vertical-align:top">
+    <div id="mainBlock" style="width:100%;height:165px; margin-top:350px;border:0px solid red">
+        <div id="smokeBlk1" style="display:inline-block;border:0px solid green;width:30%;height:50%;vertical-align:top">
 
 
-        <div id="smokeBlk1_1" style="display:inline-block;border:0px solid green;width:68%;height:100%;">
-            <img src="dim1.png"  id="imgDim1" style="width:50px; height:50px" >       </div>
-        <div id="smokeBlk1_2" style="display:inline-block;border:0px solid green;width:30%;height:100%;">
-            <img src="dim1.png"  id="imgDim1" style="width:50px; height:50px" >
+            <div id="smokeBlk1_1" style="display:inline-block;border:0px solid green;width:68%;height:100%;">
+                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px"></div>
+            <div id="smokeBlk1_2" style="display:inline-block;border:0px solid green;width:30%;height:100%;">
+                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px">
+            </div>
+
         </div>
-
-    </div>
-    <div id="smokeBlk2" style="display:inline-block;border:0px solid green;width:11%;height:98%;vertical-align:top">
-        <div id="smokeBlk2_1" style="border:0px solid green;width:100%;height:40%;">
-            <img src="dim1.png"  id="imgDim2_1" style="width:25px; height:25px" >
+        <div id="smokeBlk2" style="display:inline-block;border:0px solid green;width:11%;height:98%;vertical-align:top">
+            <div id="smokeBlk2_1" style="border:0px solid green;width:100%;height:40%;">
+                <img src="dim1.png" id="imgDim2_1" style="width:25px; height:25px">
+            </div>
+            <div id="smokeBlk2_2" style="border:0px solid green;width:100%;height:55%;">
+                <!--            <img src="dim1.png"  id="imgDim2_2" style="width:25px; height:25px" >-->
+            </div>
         </div>
-        <div id="smokeBlk2_2" style="border:0px solid green;width:100%;height:55%;">
-            <img src="dim1.png"  id="imgDim2_2" style="width:25px; height:25px" >
-        </div>
-    </div>
-    <div id="smokeBlk3" style="display:inline-block;border:0px solid green;width:16.5%;height:75%;vertical-align: top">
+        <div id="smokeBlk3"
+             style="display:inline-block;border:0px solid green;width:16.5%;height:75%;vertical-align: top">
 
 
-             <div id="smokeBlk3_1" style="border:0px solid green;
+            <div id="smokeBlk3_1" style="border:0px solid green;
                width:100%;height:85%;vertical-align: top">
-                 <img src="dim1.png"  id="imgDim3" style="width:50px; height:50px;margin-left:50%" >
-             </div>
+                <img src="dim1.png" id="imgDim3" style="width:50px; height:50px;margin-left:50%">
+            </div>
             <div id="smokeBlk3_2" style="border:0px solid green;
                                   width:100%;height:12%;vertical-align: top">
             </div>
 
 
+        </div>
+
+        <div id="smokeBlk4" style="display:inline-block;border:0px solid green;width:11%;height:98%;vertical-align:top">
+            <div id="smokeBlk4_1" style="border:0px solid green;width:100%;height:40%;">
+                <img src="dim1.png" id="imgDim4_1" style="width:25px; height:25px">
+            </div>
+            <div id="smokeBlk4_2" style="border:0px solid green;width:100%;height:55%;">
+                <!--            <img src="dim1.png"  id="imgDim4_2" style="width:25px; height:25px" >-->
+            </div>
+        </div>
+
+        <div id="smokeBlk5" style="display:inline-block;border:0px solid green;
+                                    width:30%;height:50%;vertical-align:top">
+
+
+            <div id="smokeBlk5_1" style="display:inline-block;border:0px solid green;width:30%;height:100%;">
+                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px">
+            </div>
+            <div id="smokeBlk5_2" style="display:inline-block;border:0px solid green;width:68%;height:100%;">
+                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px">
+            </div>
+
+
+        </div>
+
 
     </div>
-
-    <div id="smokeBlk4" style="display:inline-block;border:0px solid green;width:11%;height:98%;vertical-align:top">
-        <div id="smokeBlk4_1" style="border:0px solid green;width:100%;height:40%;">
-            <img src="dim1.png"  id="imgDim4_1" style="width:25px; height:25px" >
-        </div>
-        <div id="smokeBlk4_2" style="border:0px solid green;width:100%;height:55%;">
-            <img src="dim1.png"  id="imgDim4_2" style="width:25px; height:25px" >
-        </div>
-    </div>
-
-    <div id="smokeBlk5" style="display:inline-block;border:0px solid green;
-                                    width:30%;height:28%;vertical-align:top">
-
-
-        <div id="smokeBlk5_1" style="display:inline-block;border:0px solid green;width:30%;height:100%;">
-            <img src="dim1.png"  id="imgDim1" style="width:50px; height:50px" >
-        </div>
-        <div id="smokeBlk5_2" style="display:inline-block;border:0px solid green;width:68%;height:100%;">
-            <img src="dim1.png"  id="imgDim1" style="width:50px; height:50px" >
-        </div>
-
-
-    </div>
-
-
-
-
-
-
 </div>
+<div>
+    <div id="resultBlock" class="result" >
+
+    </div>
 </div>
+
 </body>
 
 </html>
