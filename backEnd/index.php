@@ -87,6 +87,9 @@ switch($operation) {
     }
     case 'mainProjects' : {
         $query = $taskPar->getParameter('query') ;
+
+        $query = 'test' ;
+
         $mp = new MainProjects() ;
         $mp->setQuery($query) ;
         $mp->queryGo() ;

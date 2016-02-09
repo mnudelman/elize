@@ -96,9 +96,7 @@ $dirStyle = './../frontEnd/styles';
                     var btHeight = btWidth * 0.23;
                     var btYBottom = btYTop + btHeight;
                     if (x >= btXLeft && x <= btXRight && y >= btYTop && y <= btYBottom) {
-
-                        result.showGo();
-                        //alert('Button CLICK');
+                       result.showGo();
                     }
 
                 }
@@ -107,7 +105,7 @@ $dirStyle = './../frontEnd/styles';
 
             smoke.init();
             smoke.smokeGo();
-            $(window).on('resize', function () {
+            $(window).on('resize', function() {
                 smoke.smokeResize();
             });
         });
@@ -116,6 +114,7 @@ $dirStyle = './../frontEnd/styles';
 
 </head>
 <body>
+<div id="'userInterface"></div>
 <div id="total">
     <h2>Настрока формы области ввода</h2>
 

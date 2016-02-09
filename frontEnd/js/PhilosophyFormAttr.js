@@ -42,29 +42,29 @@ function PhilosophyFormAttr() {
         } ;
 
         picturesSets = {
-            'zodiac': {
-                size:  {'w' : 120, 'h': 100} ,
-                topology: [] ,
-                pictures :
-                    [
-                        'kartinki24_ru_signs_of_the_zodiac_37.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_38.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_39.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_40.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_41.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_42.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_43.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_44.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_45.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_46.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_47.jpg',
-                        'kartinki24_ru_signs_of_the_zodiac_48.jpg'
-                    ]
-
-            },
+            //'zodiac': {
+            //    size:  {'w' : 120, 'h': 100} ,
+            //    topology: ['4-2-4'] ,
+            //    pictures :
+            //        [
+            //            'kartinki24_ru_signs_of_the_zodiac_37.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_38.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_39.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_40.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_41.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_42.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_43.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_44.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_45.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_46.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_47.jpg',
+            //            'kartinki24_ru_signs_of_the_zodiac_48.jpg'
+            //        ]
+            //
+            //},
             'tarot': {
                 size:  {'w' : 120, 'h': 150} , //{'w' : 140, 'h': 280} ,
-                topology: ['4-2-4','watch'] ,
+                topology: ['4-2-4'] ,
                 pictures :
                     [
                         '38075740.jpg',
@@ -240,6 +240,7 @@ function PhilosophyFormAttr() {
         var n = sets.length;
         var find_i = randomSelect(n-1);
         currentSetName = (find_i === undefined) ? sets[0] : sets[find_i];
+
 
     };
     var randomSelect = function (n) {

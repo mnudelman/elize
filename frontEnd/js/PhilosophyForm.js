@@ -11,6 +11,7 @@ function PhilosophyForm() {
     var currentPictureSet = {} ;             // объект - набор картинок
     var currentPictures  = [] ;       // набор картинок - атрибут pictureSet
     var currentPhrase = '' ;          // текущая фраза
+    var animateStop = false ;         //  остановить цикл анимации
     //----------------------------------//
     this.init = function() {
         formAttr = new PhilosophyFormAttr() ;        // объект - атрибуты формы
@@ -43,23 +44,78 @@ function PhilosophyForm() {
         var resultHeight = 600 ; //currentBlockSize['H'] * 8 ;
 
 
-        $resultBlock.dialog({
+  //      $resultBlock.dialog({
+  //
+  //          title: 'Результат запроса',
+  //          maxWidth: resultWidth,
+  //          width: 1000 ,
+  ////          maxHeight : resultHeight,
+  //          modal: true,
+  //          position: {
+  //              my: "center top", at: "center top+10", of: window
+  //          },
+  //          beforeClose: function (event, ui) {
+  //          }
+  //      });
 
-            title: 'Результат запроса',
-            maxWidth: resultWidth,
-            width: 1000 ,
-  //          maxHeight : resultHeight,
-            modal: true,
-            position: {
-                my: "center top", at: "center top+10", of: window
+        var windowHeight = $(window).height() ;
+        var windowWidth = $(window).width() ;
+        var w = 1.203*windowHeight ;
+        $resultBlock.dialog({
+            autoOpen: false,
+            width: w,
+            height: windowHeight,
+            minHeight: 400,
+            minWidth: 500,
+            maxWidth: 1500,
+            dialogClass: "result" ,
+            show: { effect: "blind", duration: 1000 },
+            hide: {
+                effect: "explode",
+                duration: 1000
             },
-            beforeClose: function (event, ui) {
+            beforeClose:function (event, ui) {
+                animateStop = true ;         //  остановить цикл анимации
             }
         });
+
+
+
+
+
+
+
         $resultBlock.css('overflow','auto') ;
 
         topologyBuild() ;     // построить топологию изображения
-        commandSet();
+   //     commandSet();
+        $('#'+phraseBlockId).click(function() {
+        // animateStop = true ;
+            phraseChange() ;
+        }) ;
+        $resultBlock.dialog('open') ;
+        cycleShow() ;
+    } ;
+    var cycleShow = function() {
+        animateStop = false ;
+        var timeDelay = 1500;
+        var textTimeSteps = 6;
+        var timeStep = 0;
+        var moveSign = 1 ;
+        var tmpTimer = setInterval(function () {
+            if (animateStop) {        //  остановить цикл анимации)
+                clearInterval(tmpTimer);
+            }
+            if (timeStep >= textTimeSteps) {
+                phraseChange() ;
+                moveSign = (Math.random() > 0.5 ) ? +1 : -1 ;
+                timeStep = 0 ;
+            }
+            timeStep++ ;
+            pictureMove(moveSign) ;
+        }, timeDelay);
+
+
     } ;
     /**
      * currentPictures = {pictures: [картинки],
@@ -82,8 +138,15 @@ function PhilosophyForm() {
         $tableShow.attr('id','tableShow') ;
         $tableShow.attr('cols',tableCols) ;
         $tableShow.attr('cellpadding',2) ;
-        $tableShow.attr('cellspacing',2) ;
-        $tableShow.attr('border',1) ;
+        $tableShow.attr('cellspacing',0) ;
+        $tableShow.attr('border',0) ;
+        $tableShow.css('background-color','rgba(217,189,143,0.7)') ;
+        $tableShow.css('height','70%') ;
+        $tableShow.css('width','70%') ;
+        $tableShow.css('margin-left','6%') ;
+        $tableShow.css('margin-top','6%') ;
+
+
         var pict_i = 0 ;
         for (var i = 1 ; i <= tableRows; i++) {
             var tr = $('<tr/>') ;
@@ -105,6 +168,9 @@ function PhilosophyForm() {
 
 
                     td.append(img) ;
+                    td.css('width','24%') ;
+                    td.css('height','32%') ;
+
                 }
                 if (textPlace['row'] == i && textPlace['col'] == j) {
                     if (textPlace['rowspan'] !== undefined && textPlace['rowspan'] > 0) {
@@ -121,6 +187,8 @@ function PhilosophyForm() {
                     td.css('font-size','20px') ;
                     td.css('text-align','center') ;
                     td.append('<strong>' + currentPhrase +'</strong>') ;
+                    td.css('width','50%') ;
+                    td.css('height','50%') ;
                 }
 
             }

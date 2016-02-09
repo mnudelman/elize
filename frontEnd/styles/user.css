@@ -1,0 +1,31 @@
+/**--- фоновая картинка --**/
+body {
+    background-image: url("../../images/userInterface/1.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+/**--- представление результата --**/
+.result {
+    background-image: url("../../images/userInterface/table1.png") ;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+}
+/*- ввод в круге **/
+.roundInput {
+    width: 250px;
+    height: 250px;
+    border: 2px solid green;
+    border-radius: 250px;
+}
+
+.text {
+    margin-top: 70px;
+    margin-left: 20px;
+    width: 210px;
+    height: 100px;
+    max-width: 210px;
+    max-height: 100px;
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0);
+    color: white;
+}

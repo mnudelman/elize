@@ -18,7 +18,8 @@ img {border:0}
 p {margin:16px}
 form {margin:0;padding:0;display:inline}
 .box {
-    background:#fff;
+    /*background:#fff;*/
+    background-color: rgba(217,189,143,1) ;
     border:1px solid #ccc;
     border-radius: 4px;
     -moz-border-radius: 4px;
@@ -76,10 +77,11 @@ fieldset img{
 }
 .data ol li{
     font-size:20px;
-    color:#999;
+    color:#000; /*#999;*/
     padding:8px;
     margin-bottom: 6px;
-    margin-left: 50px;
+    margin-left: 7% ; /*40px; */
+    margin-right: 27%
 }
 .data ol li * {
     font-size:14px !important;
@@ -89,7 +91,7 @@ fieldset img{
     font-size:14px !important;
 }
 .data ol li:hover{
-    background-color:#FFFFDD;
+    /*background-color:#FFFFDD;*/
 }
 .data ol li a{
     display:block;

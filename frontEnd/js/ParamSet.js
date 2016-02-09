@@ -7,7 +7,6 @@ function ParamSet() {
     this.winLocation ;           // относительный адрес директории запуска
     this.windowLocationHost ;    // http - адрес для доступа к php-модулям БД
     this.dirImages ;
-    this.dirHtmlFotos ;              //
     this.windowLocationHref ;
     //-------------------------------------------------------------------------------------//
 
@@ -18,6 +17,8 @@ function ParamSet() {
      this.responseForm ;
      this.mainProjectsForm ;
     this.philosophyForm ;
+    this.userInterface ;
+    this.requestGo ;
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -60,12 +61,17 @@ function ParamSet() {
         _this.windowLocationHost = str ;     //     str.replace('/index.html','') ;
         var url = _this.windowLocationHost+'/backEnd' ;
         _this.ajaxExecute = new AjaxExecutor(url) ;
-//       ---Формы ---------
+
+        _this.dirImages =  _this.windowLocationHost+'/images' ;
+// ---Формы ---------
+
         _this.requestForm = new RequestForm()  ;
         _this.requestGoForm = new RequestGoForm() ;
         _this.responseForm = new ResponseForm() ;
         _this.mainProjectsForm = new MainProjectsForm() ;
         _this.philosophyForm = new PhilosophyForm() ;
+        _this.userInterface = new UserInterface() ;
+        _this.requestGo = new RequestGo() ;
 //
 
     } ;

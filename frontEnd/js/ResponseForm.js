@@ -7,6 +7,7 @@ function ResponseForm() {
     var currentPage = 0;        //  текущая страница результата
     var $resultBlock = $('#resultBlock');
     var yandexResult = {};    // результат поиска yandex
+    var dirImages = paramSet.dirImages+'/cards' ;
     var _this = this ;
     //--------------------------------------//
     this.init = function() {
@@ -83,16 +84,51 @@ function ResponseForm() {
      */
     var responseShow = function() {
 
-        $resultBlock.dialog({
+        //$resultBlock.dialog({
+        //
+        //    title: 'Результат запроса',
+        //    width: 600,
+        //    modal: true,
+        //    dialogClass: "result" ,
+        //    position: {
+        //        my: "center top", at: "center top", of: window },
+        //    beforeClose: function (event, ui) {
+        //    }
+        //});
 
-            title: 'Результат запроса',
-            width: 600,
-            modal: true,
-            position: {
-                my: "center top", at: "center top", of: window },
-            beforeClose: function (event, ui) {
-            }
+        var windowHeight = $(window).height() ;
+        var windowWidth = $(window).width() ;
+        var w = 1.203*windowHeight ;
+        $resultBlock.dialog({
+            autoOpen: false,
+            width: w,
+            height: windowHeight,
+            minHeight: 400,
+            minWidth: 500,
+            maxWidth: 1500,
+            dialogClass: "result" ,
+            show: { effect: "blind", duration: 1000 },
+            hide: {
+                effect: "explode",
+                duration: 1000
+            },
+            buttons: [
+                {
+                    text: "Ok",
+                    icons: {
+                        primary: "ui-icon-heart"
+                    },
+                    click: function() {
+                        $( this ).dialog( "close" );
+                    }
+
+                    // Uncommenting the following line would hide the text,
+                    // resulting in the label being used as a tooltip
+                    //showText: false
+                }
+            ]
         });
+
         commandSet() ;
 
         var totalHuman  = yandexResult['totalHuman'] ;
@@ -108,13 +144,16 @@ function ResponseForm() {
 
         var data_ol = $('#resultBoxDocs') ;
         data_ol.empty() ;
-    //    $resultBlock.append(data_ol) ;
+
+   //     $resultBlock.append(data_ol) ;
+
         data_ol.attr('start',pageStart) ;
         for (var i = 0; i < results.length; i++) {
             var result = results[i] ;
             var li = liCreate(result) ;
             data_ol.append(li) ;
         }
+        $resultBlock.dialog('open') ;
     } ;
     var liCreate = function(result) {
         var url = result['url'] ;
@@ -157,8 +196,10 @@ function ResponseForm() {
 
     } ;
     var newCmd_i = function(i) {
+        var j = i+1 ;
         return {
             text: i + 1,                                        // "guest",
+    //      icons : {primary: dirImages+'/'+j+'.png'},
             click: function () {
                 _this.queryGo(i);
             }
@@ -167,6 +208,7 @@ function ResponseForm() {
 
 
 
+    
 
 
 

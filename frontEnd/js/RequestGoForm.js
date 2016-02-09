@@ -80,7 +80,7 @@ function RequestGoForm() {
      * Отправить запрос на выполнение
      */
     var requestGo = function() {    // отправить запрос на исполнение
-        $resultNodes = {} ;
+        resultNodes = {} ;
         var goVect = {
                 'operation' : 'requestGo',
                 'nodeRoot' : 'requestRoot',

@@ -63,6 +63,10 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyFormAttr.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/UserInterface.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/SmokeClouds.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/ResultShow.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/RequestGo.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 
 </head>
