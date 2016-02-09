@@ -14,6 +14,7 @@ function SmokeClouds() {
     var leftSpiral = {} ;
     var rightSpiral = {} ;
     var dirSmokeImages = paramSet.dirImages+'/smoke' ;
+    var borderShowTotal = true ;     // показать все рамки
     var _this = this ;
     //-------------------------------//
     this.init = function() {
@@ -317,7 +318,7 @@ function SmokeClouds() {
     var nextPosition = function(block) {
 
         var blockId = block['id'] ;
-        if (block['border'] === true) {              // рамка блока(при отладке)
+        if (block['border'] === true || borderShowTotal )  {              // рамка блока(при отладке)
             $('#'+blockId).css('border','1px solid green') ;
         }
         var blkHeight = $('#'+blockId).css('height') ;

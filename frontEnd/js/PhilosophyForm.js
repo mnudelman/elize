@@ -99,7 +99,7 @@ function PhilosophyForm() {
     var cycleShow = function() {
         animateStop = false ;
         var timeDelay = 1500;
-        var textTimeSteps = 6;
+        var textTimeSteps = 4;
         var timeStep = 0;
         var moveSign = 1 ;
         var tmpTimer = setInterval(function () {
