@@ -3,7 +3,6 @@
  */
 function UserInterface() {
     var smoke = new SmokeClouds();      // движение облаков
-    var result = new ResultShow();      // вывод результата
     var centralCircle = {} ;            // центральный круг
     var stamp = {} ;                    // печать
     var screenClosed = false ;
@@ -19,7 +18,6 @@ function UserInterface() {
         stampDefine() ;              // объект stamp   - печать
         centralCircleDefine() ;      // объект centralCircle - ценральный круг
 
-        result.init();
         $(document).click(function (e) {
             if (centralCyrcleClick(e)) {
                 queryTextArea() ;
@@ -30,7 +28,6 @@ function UserInterface() {
                 requestGo.setRequestText(query) ;
                 var auto = true ;
                 requestGo.requestExecute(auto) ;
-     //           result.showGo();
             }
         });
         $(window).on('resize', function() {

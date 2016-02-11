@@ -19,7 +19,7 @@ p {margin:16px}
 form {margin:0;padding:0;display:inline}
 .box {
     /*background:#fff;*/
-    background-color: rgba(217,189,143,1) ;
+    background-color: transparent; /*rgba(217,189,143,1) ;*/
     border:1px solid #ccc;
     border-radius: 4px;
     -moz-border-radius: 4px;
@@ -80,8 +80,8 @@ fieldset img{
     color:#000; /*#999;*/
     padding:8px;
     margin-bottom: 6px;
-    margin-left: 7% ; /*40px; */
-    margin-right: 27%
+    margin-left: 10% ; /*40px; */
+    margin-right: 10%
 }
 .data ol li * {
     font-size:14px !important;

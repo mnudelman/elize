@@ -8,145 +8,520 @@
  * для восстановления движения перезапускается smokeGo
  */
 function SmokeClouds() {
+    var $mainBlock = $('#mainBlock') ;
     var smokeBlocks = {} ;
     var currentBlock = {} ;
     var stopAnimation = false ;     // остановить анимацию
     var leftSpiral = {} ;
     var rightSpiral = {} ;
     var dirSmokeImages = paramSet.dirImages+'/smoke' ;
-    var borderShowTotal = true ;     // показать все рамки
+    var borderShowTotal = false ; //true ;     // показать все рамки
     var _this = this ;
     //-------------------------------//
     this.init = function() {
-        leftSpiral = [
-            {x: 0, dx:0, y:'', dy:1},
-            {x: '', dx:1, y:1, dy:0},
-            {x: 1, dx:0, y:'', dy:-1},
-            {x: '', dx:-1, y:0, dy:0}
-        ];
-        rightSpiral = [
-            {x: '', dx:1, y:0, dy:0},
-            {x: 1, dx:0, y:'', dy:1},
-            {x: '', dx:-1, y:1, dy:0},
-            {x: 0, dx:0, y:'', dy:-1}
-        ];
+
         smokeBlocks = {
             b1_1 : {
                 id: 'smokeBlk1_1' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:0 ,
+                    width: 21,
+                    height: 70,
+                    shadow: {
+                        r: 30                  // тень справа 10%
+                    }
+                } ,
                 img : {                         // картинка для анимации
-                     file:'smoke_left2.png',
-                     sizePx: {w:200,h:75},
-                    size: {w:60,h:100,u: '%'}
+                     file:'smoke_left_new_1.png',   //   'smoke_left2.png',
+                    size: {w:90,h:60,u: '%'}
                 },
                 border: false,
-                pathWay : 'rectangle',
-                  direction: 'left',           // направление обхода(против часовой)
-                delay: 600,                  // задержка mSec
-                currentState: {              // текущее состояние
-                    startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
-                    twistingSpiral : true,   // направление спирали - закручивание
-                    pathOffset : 0 ,           // смещение траектории от края в долях(0 - 0.5)
-                    pathLine : 0               // движение вдоль n линии
+                  direction: -1,           //
+                delay: 300,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'x',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: 1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'right',
+                    radius: 15,          // %
+                    deltaPhi: 20        // число тактов-шагов для одного оборота
+                }
+              },
+
+            b1_1_c : {
+                id: 'smokeBlk1_1_c' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:10 ,
+                    width: 21,
+                    height: 70,
+                    shadow: {
+                        r: 0                  // тень справа 10%
+                    }
+                } ,
+                img : {                         // картинка для анимации
+                    file:'smoke_left_new_1.png',   //   'smoke_left2.png',
+                    size: {w:90,h:60,u: '%'}
+                },
+                border: false,
+                direction: -1,           //
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'x',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'left',
+                    radius: 15,          // %
+                    deltaPhi: 20        // число тактов-шагов для одного оборота
                 }
             },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             b1_2 : {
                 id: 'smokeBlk1_2' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:21 ,
+                    width: 9,
+                    height: 70,
+                    shadow: {
+                        l: 50,                  // тень сслева 20%
+                        r: 50
+                    }
+                } ,
+
                 img : {                         // картинка для анимации
-                    file:'smoke_left2.png',
-                    sizePx: {w:150,h:75},
-                    size: {w:111.1,h:102.7,u: '%'}
+                    file: 'smoke_left_new_1_2.png',                 //'smoke_left2.png',
+                   size: {w:90,h:70,u: '%'}
                 },
                 border: false,
-                pathWay : 'rectangle',
-                direction: 'left',           // направление обхода(против часовой)
-                delay: 500,                  // задержка mSec
-                currentState: {              // текущее состояние
-                    startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
-                    twistingSpiral : true,   // направление спирали - закручивание
-                    pathOffset : 0 ,           // смещение траектории от края в долях(0 - 0.5)
-                    pathLine : 0               // движение вдоль n линии
+                direction: 1,           //
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'x',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 5,         // %
+                    rotationDirection: 'right',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
                 }
             },
+
+
+
+            b1_2_c : {
+                id: 'smokeBlk1_2_c' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:23 ,
+                    width: 9,
+                    height: 70,
+                    shadow: {
+                        l: 50,                  // тень сслева 20%
+                        r:50
+                    }
+                } ,
+
+                img : {                         // картинка для анимации
+                    file: 'smoke_left_new_1_2.png',                 //'smoke_left2.png',
+                    size: {w:90,h:70,u: '%'}
+                },
+                border: false,
+                direction: 1,           //
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'x',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 5,         // %
+                    rotationDirection: 'left',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+                }
+            },
+
+
+
+
+
+
+
             b2_1 : {
                 id: 'smokeBlk2_1' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 10 ,
+                    left:27 ,
+                    width: 11,
+                    height: 40,
+                    shadow: {
+                        l: 20,                  // тень сслева 20%
+                        r: 20,
+                        d: 30
+                    }
+                } ,
                 img : {                         // картинка для анимации
-                    file:'smoke_center1.png',
-                    sizePx: {w:150,h:100},
-                    size: {w:90.9,h:105,u: '%'}
+                    file:'smoke_center_new_1.png',
+                    size: {w:90,h:90,u: '%'}
                 },
                 border: false,
                 pathWay : 'rectangle',
                 direction: 'left',           // направление обхода(против часовой)
                 delay: 300,                  // задержка mSec
-                currentState: {              // текущее состояние
-                    startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
-                    twistingSpiral : true,   // направление спирали - закручивание
-                    pathOffset : 0 ,           // смещение траектории от края в долях(0 - 0.5)
-                    pathLine : 0               // движение вдоль n линии
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'left',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
                 }
             },
+
+            b2_1_c : {
+                id: 'smokeBlk2_1_c' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 10 ,
+                    left:25 ,
+                    width: 11,
+                    height: 40,
+                    shadow: {
+                        l: 20,                  // тень сслева 20%
+                        r: 20,
+                        d: 30
+                    }
+                } ,
+                img : {                         // картинка для анимации
+                    file:'smoke_center_new_1.png',
+                    size: {w:90,h:90,u: '%'}
+                },
+                border: false,
+                pathWay : 'rectangle',
+                direction: 'left',           // направление обхода(против часовой)
+                delay: 300,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: 1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'right',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+                }
+            },
+
+
+
+
             b2_2 : {
                 id: 'smokeBlk2_2' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 35 ,
+                    left:33 ,
+                    width: 28,
+                    height: 50,
+                    shadow: {
+                        l: 10,                  // тень сслева 20%
+                        r: 10,
+                        t: 10
+                    }
+                } ,
+
                 img : {                         // картинка для анимации
-                    file:'smoke_center1_1.png',
-                    size: {w:150,h:100}
+                    file:'smoke_center_new_2.png',
+                    size: {w:90,h:90,u: '%'}
                 },
-                pathWay : 'rectangle',
-                border: true,
-                direction: 'left',           // направление обхода(против часовой)
-                delay: 300,                  // задержка mSec
-                currentState: {              // текущее состояние
-                    startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
-                    twistingSpiral : true,   // направление спирали - закручивание
-                    pathOffset : 0 ,           // смещение траектории от края в долях(0 - 0.5)
-                    pathLine : 0               // движение вдоль n линии
+                border: false,
+                direction: 1,           // направление обхода(против часовой)
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'left',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
                 }
+
+
+
             },
+
+            b2_2_c : {
+                id: 'smokeBlk2_2_c' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 35 ,
+                    left:35 ,
+                    width: 28,
+                    height: 50,
+                    shadow: {
+                        l: 10,                  // тень сслева 20%
+                        r: 10,
+                        t: 10
+                    }
+                } ,
+
+                img : {                         // картинка для анимации
+                    file:'smoke_center_new_2.png',
+                    size: {w:90,h:90,u: '%'}
+                },
+                border: false,
+                direction: 1,           // направление обхода(против часовой)
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: 1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'right',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+                }
+
+
+
+            },
+
+
+
+
+
+
+
+
+
             b3_1 : {
                 id: 'smokeBlk3_1' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 35 ,
+                    left:35 ,
+                    width: 28,
+                    height: 60,
+                    shadow: {
+                        l: 10,                  // тень сслева 20%
+                        r: 10,
+                        d: 10,
+                        t:10
+                    }
+                } ,
+
                 img : {                         // картинка для анимации
-                    file:'smoke_center2_1.png',
-                    sizePx: {w:200,h:120},
-                    size: {w:80.6,h:77.4,u: '%'}
+                    file:'smoke_center_right_new_1.png',
+                    size: {w:80.6,h:80,u: '%'}
                 },
                 pathWay : 'rectangle',
                 border: false,
-                direction: 'left',           // направление обхода(против часовой)
-                delay: 500,                  // задержка mSec
-                currentState: {              // текущее состояние
-                    startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
-                    twistingSpiral : true,   // направление спирали - закручивание
-                    pathOffset : 0 ,           // смещение траектории от края в долях(0 - 0.5)
-                    pathLine : 0               // движение вдоль n линии
-                }
-            },
-            b4_1 : {
-                id: 'smokeBlk4_1' ,               // ид блока
-                img : {                         // картинка для анимации
-                    file:'smoke_center1.png',
-                    sizePx: {w:150,h:100},
-                    size: {w:90.9,h:105,u: '%'}
-                },
-                pathWay : 'rectangle',
-                border: false,
-                direction: 'right',           // направление обхода(против часовой)
-                delay: 300,                  // задержка mSec
-                currentState: {              // текущее состояние
-                    startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
-                    twistingSpiral : true,   // направление спирали - закручивание
-                    pathOffset : 0 ,           // смещение траектории от края в долях(0 - 0.5)
-                    pathLine : 0               // движение вдоль n линии
+                direction: 1,           // направление обхода(против часовой)
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'left',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
                 }
 
             },
+            b3_1_c : {
+                id: 'smokeBlk3_1_c' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 35 ,
+                    left:40 ,
+                    width: 28,
+                    height: 60,
+                    shadow: {
+                        l: 10,                  // тень сслева 20%
+                        r: 10,
+                        d: 10,
+                        t:10
+                    }
+                } ,
+
+                img : {                         // картинка для анимации
+                    file:'smoke_center_right_new_1.png',
+                    size: {w:80.6,h:80,u: '%'}
+                },
+                pathWay : 'rectangle',
+                border: false,
+                direction: 1,           // направление обхода(против часовой)
+                delay: 150,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: 1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'right',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+                }
+
+            },
+
+            b3_2 : {
+                id: 'smokeBlk3_2' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 35 ,
+                    left:35 ,
+                    width: 28,
+                    height: 60,
+                    shadow: {
+                        l: 10,                  // тень сслева 20%
+                        r: 10,
+                        d: 10,
+                        t:10
+                    }
+                } ,
+
+                img : {                         // картинка для анимации
+                    file:'smoke_center_new.png',
+                    size: {w:80.6,h:80,u: '%'}
+                },
+                pathWay : 'rectangle',
+                border: false,
+                direction: 1,           // направление обхода(против часовой)
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'left',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+                }
+
+            },
+
+            b4_1 : {
+                id: 'smokeBlk4_1' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:60 ,
+                    width: 15,
+                    height: 40,
+                    shadow: {
+                        l: 20,                  // тень сслева 20%
+                        r: 20,
+                        d: 15
+                    }
+                } ,
+
+                img : {                         // картинка для анимации
+                    file:'smoke_center_right_new_2.png',
+                    size: {w:80,h:80,u: '%'}
+                },
+                border: false,
+                direction: 1,           // направление обхода(против часовой)
+                delay: 300,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: 1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'right',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+
+                }
+
+            },
+
+            b4_1_c : {
+                id: 'smokeBlk4_1_c' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:63 ,
+                    width: 15,
+                    height: 40,
+                    shadow: {
+                        l: 20,                  // тень сслева 20%
+                        r: 20,
+                        d: 15
+                    }
+                } ,
+
+                img : {                         // картинка для анимации
+                    file:'smoke_center_right_new_2.png',
+                    size: {w:80,h:80,u: '%'}
+                },
+                border: false,
+                direction: 1,           // направление обхода(против часовой)
+                delay: 200,                  // задержка mSec
+                circleMove: {
+                    mainAxis: 'y',
+                    axisMin : 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax : 100,      // %
+                    direction: -1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'left',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+
+                }
+
+            },
+
+
+
+
+
             b4_2 : {
                 id: 'smokeBlk4_2' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:57 ,
+                    width: 11,
+                    height: 60,
+                    shadow: {
+                        l: 20,                  // тень сслева 20%
+                        r: 20,
+                        t: 15
+                    }
+                } ,
+
                 img : {                         // картинка для анимации
                     file:'smoke_center1_1.png',
                     size: {w:150,h:100}
                 },
                 pathWay : 'rectangle',
-                border: true,
+                border: false,
                 direction: 'right',           // направление обхода(против часовой)
                 delay: 300,                  // задержка mSec
                 currentState: {              // текущее состояние
@@ -160,25 +535,85 @@ function SmokeClouds() {
             },
 
             b5_1 : {
-                id: 'smokeBlk5_1' ,               // ид блока
-                img : {                         // картинка для анимации
-                    file:'smoke_left2.png',
-                    sizePx: {w:150,h:75},
-                    size: {w:111.1,h:102.7,u: '%'}
+                id: 'smokeBlk5_1',               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 10,
+                    left: 68,
+                    width: 25,
+                    height: 50,
+                    shadow: {
+                        l: 20,                  // тень сслева 20%
+                        r: 20
+                    }
+                },
+
+                img: {                         // картинка для анимации
+                    file: 'smoke_center_right_new_4.png',
+                    size: {w: 70, h: 60, u: '%'}
                 },
                 border: false,
-                pathWay : 'rectangle',
-                direction: 'right',           // направление обхода(против часовой)
-                delay: 500,                  // задержка mSec
-                currentState: {              // текущее состояние
-                    startPosition : {x:0,y:0},  // начальная позиция на текущем витке(pathOffset)
-                    twistingSpiral : true,   // направление спирали - закручивание
-                    pathOffset : 0 ,           // смещение траектории от края в долях(0 - 0.5)
-                    pathLine : 0               // движение вдоль n линии
+                direction: 1,           // направление обхода(против часовой)
+                delay: 200,   // задержка mSec
+                circleMove: {
+                    mainAxis: 'x',
+                    axisMin: 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax: 100,      // %
+                    direction: -1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'left',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+
                 }
             },
+
+            b5_1_c : {
+                id: 'smokeBlk5_1_c',               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 10,
+                    left: 70,
+                    width: 25,
+                    height: 50,
+                    shadow: {
+                        l: 20,                  // тень сслева 20%
+                        r: 20
+                    }
+                },
+
+                img: {                         // картинка для анимации
+                    file: 'smoke_center_right_new_4.png',
+                    size: {w: 70, h: 60, u: '%'}
+                },
+                border: false,
+                direction: 1,           // направление обхода(против часовой)
+                delay: 200,   // задержка mSec
+                circleMove: {
+                    mainAxis: 'x',
+                    axisMin: 0,     // %  ограничение перемещения по оси mainAxis
+                    axisMax: 100,      // %
+                    direction: 1,
+                    deltaMove: 10,         // %
+                    rotationDirection: 'right',
+                    radius: 10,          // %
+                    deltaPhi: 20       // число тактов-шагов для одного оборота
+
+                }
+            },
+
+
+
             b5_2 : {
                 id: 'smokeBlk5_2' ,               // ид блока
+                place: {                          // расположение по отношению к $mainBlock 'у
+                    top: 0 ,
+                    left:77 ,
+                    width: 21,
+                    height: 50,
+                    shadow: {
+                        l: 20                  // тень сслева 20%
+                    }
+                } ,
+
                 img : {                         // картинка для анимации
                     file:'smoke_left2.png',
                     sizePx: {w:150,h:75},
@@ -196,8 +631,6 @@ function SmokeClouds() {
                 }
             }
         } ;
-        $('#smokeBlk3').css('vertical-align','bottom') ;
-        $('#smokeBlk5').css('vertical-align','top') ;
     } ;
     /**
      * запускает процесс изменения размеров
@@ -212,14 +645,23 @@ function SmokeClouds() {
         stopAnimation = false ;
         mainSmokeBlockDefine() ;
         blockGo((smokeBlocks['b1_1'])) ;
+        blockGo((smokeBlocks['b1_1_c'])) ;
         blockGo((smokeBlocks['b1_2'])) ;
-        blockGo((smokeBlocks['b3_1'])) ;
+        blockGo((smokeBlocks['b1_2_c'])) ;
         blockGo((smokeBlocks['b2_1'])) ;
+        blockGo((smokeBlocks['b2_1_c'])) ;
+        blockGo((smokeBlocks['b2_2'])) ;
+        blockGo((smokeBlocks['b2_2_c'])) ;
+    //   blockGo((smokeBlocks['b3_1'])) ;
+        blockGo((smokeBlocks['b3_2'])) ;
+    //    blockGo((smokeBlocks['b3_1_c'])) ;
         //blockGo((smokeBlocks['b2_2'])) ;
         blockGo((smokeBlocks['b4_1'])) ;
+        blockGo((smokeBlocks['b4_1_c'])) ;
         //blockGo((smokeBlocks['b4_2'])) ;
         blockGo((smokeBlocks['b5_1'])) ;
-        blockGo((smokeBlocks['b5_2'])) ;
+        blockGo((smokeBlocks['b5_1_c'])) ;
+    //    blockGo((smokeBlocks['b5_2'])) ;
     } ;
     /**
      * Область дыма - главный блок
@@ -234,15 +676,54 @@ function SmokeClouds() {
         $totalBlock.css('height',height) ;
     } ;
     /**
+     * простой блок по отношению к главному блоку
+     * @param blockId
+     * @param place
+     */
+    var ordinarySmokeBlockDefine = function(blockId,place) {
+        var top = place['top'];
+        var left = place['left'];
+        var width = place['width'];
+        var height = place['height'];
+        var shadow = place['shadow'];
+        var shadowL = (shadow['l'] === undefined) ? 0 : shadow['l'];   // тень слева
+        var shadowR = (shadow['r'] === undefined) ? 0 : shadow['r'];   // тень справа
+        var shadowT = (shadow['t'] === undefined) ? 0 : shadow['t'];   // тень сверху
+        var shadowD = (shadow['d'] === undefined) ? 0 : shadow['d'];   // тень снизу
+        top -= shadowT/100 * height;
+        height += (shadowT + shadowD)/100 * height;
+        left -= shadowL/100 * width;
+        width += (shadowL + shadowR)/100 * width;
+        var $block = $('<div/>');
+        $block.attr('id', blockId);
+        $mainBlock.append($block);
+        $block.css('position', 'absolute');
+        $block.css('top', top + '%');
+        $block.css('left', left + '%');
+        $block.css('width', width + '%');
+        $block.css('height', height + '%');
+    } ;
+    /**
      *  запустить анимацию в блоке
      *  В блоке запускается таймер.Остановка по флагу stopAnimation
      */
     var blockGo = function(smokeBlock) {
+        var blockId = smokeBlock['id'] ;
+        var place = smokeBlock['place'] ;     // расположение блока
+        ordinarySmokeBlockDefine(blockId,place) ;
         var timeDelay = smokeBlock.delay ;
+        if (smokeBlock['border'] === true || borderShowTotal )  {              // рамка блока(при отладке)
+            $('#'+blockId).css('border','1px solid green') ;
+        }
         defineBlockImage(smokeBlock) ;                  // картинка для блока
+        var $img = $('#' + blockId + ' img') ;
+        var motion = new CircularMotion() ;     // управдение движением
+        motion.init(smokeBlock) ;
         var tmpTimer = setInterval(function () {        // процесс анимации в блоке
-            nextPosition(smokeBlock) ;
-            if (stopAnimation) {
+            var imjCoord = motion.getImjPosition() ;
+            $img.css('margin-top',imjCoord['y']) ;
+            $img.css('margin-left',imjCoord['x']) ;
+          if (stopAnimation) {
                 clearInterval(tmpTimer);
             }
         }, timeDelay);
@@ -311,126 +792,4 @@ function SmokeClouds() {
         'imjW/blkW: ' + imjWidth/blkWidth + '\n' +
         'imjH/blkH: ' + imjHeight/blkHeight ) ;
     } ;
-    /**
-     * следующая позиция "облачка" - основной метод имитации движения.
-     * @param block - это объект типа smokeBlock
-     */
-    var nextPosition = function(block) {
-
-        var blockId = block['id'] ;
-        if (block['border'] === true || borderShowTotal )  {              // рамка блока(при отладке)
-            $('#'+blockId).css('border','1px solid green') ;
-        }
-        var blkHeight = $('#'+blockId).css('height') ;
-        var blkWidth = $('#'+blockId).css('width') ;
-        blkHeight = pixelToNumber(blkHeight) ;
-        blkWidth = pixelToNumber(blkWidth) ;
-
-        var $img = $('#' + blockId + ' img') ;
-//      -- шаг внутри блока
-        var dY = 0.1 * blkHeight ;
-        var dX =  0.1 * blkWidth ;
-        var state = block['currentState'] ;
-        var pathOffset = state['pathOffset'] ; // смещение текущего витка
-       // -- координаты картинки внутри блока
-        var x = $img.css('margin-left') ;
-        x = pixelToNumber(x) ;
-        var y = $img.css('margin-top') ;
-        y = pixelToNumber(y) ;
-        //--- размер картинку
-        var imgWidth = $img.css('width')  ; //  imgPart['size']['w'] ;
-        var imgHeight = $img.css('height') ; // imgPart['size']['h'] ;
-        imgWidth = pixelToNumber(imgWidth) ;
-        imgHeight = pixelToNumber(imgHeight) ;
-
-        var direction = block['direction'] ;
-        var spiral = (direction === 'left') ? leftSpiral : rightSpiral ;
-        var lineNumber = state['pathLine'] ;
-        var twistingSpiral = state['twistingSpiral'] ;   // закручивание спирали
-        var currentLine = spiral[lineNumber] ;
-        var kDx = (currentLine['x'] === '') ? currentLine['dx'] : 0 ;
-        var kDy = (currentLine['y'] === '') ? currentLine['dy'] : 0 ;
-
-        var x1 = x + kDx * dX ;
-        var y1 = y + kDy * dY ;
-
-        var offset = state['pathOffset'] ;
-        var xMin = offset/100 * blkWidth  ;
-        var yMin = offset/100 * blkHeight  ;
-        var xMax = (100 - 2*offset)/100 * blkWidth  - imgWidth ;
-        var yMax = (100 - 2*offset)/100 * blkHeight  - imgHeight;
-
-        if (xMin + imgWidth > xMax ) {
-            xMax = xMin + imgWidth ;
-        }
-        if (xMax > blkWidth - imgWidth) {
-            xMax = blkWidth - imgWidth ;
-            if (xMin + imgWidth > xMax ) {
-                xMin = xMax - imgWidth ;
-            }
-            if (xMin < 0) {
-                xMin = 0 ;
-                xMax = blkWidth - imgWidth ;
-            }
-        }
-        if (yMin + imgHeight > yMax ) {
-            yMax = yMin + imgHeight ;
-        }
-        if (yMax > blkHeight - imgHeight) {
-            yMax = blkHeight - imgHeight ;
-            if (yMin + imgHeight > yMax ) {
-                yMin = yMax - imgHeight ;
-            }
-            if (yMin < 0) {
-                yMin = 0 ;
-                yMax = blkHeight - imgHeight ;
-            }
-        }
-
-        var newLine = true ;
-        if (x1 >= xMin && x1 <= xMax &&  y1 >= yMin && y1 <= yMax) {
-            x = x1;
-            y = y1;
-            newLine = false;
-        }
-        var newOffset = false ;
-        var newSpiral = false ;
-        newOffset =  (newLine && lineNumber == 3) ;
-        if (newOffset) {
-           var offset1 = offset + ((twistingSpiral) ? 10 : -10) ;
-// offset сбя не оправдал (!!)
-            offset = 0 ;
-            newSpiral = (offset1 < 0 || offset1 > 40) ;
-            if (!newSpiral) {
-                offset = Math.max(offset1, 0);
-                offset = Math.min(offset, 40);
-                x = offset / 100 * blkWidth;
-                y = offset / 100 * blkHeight;
-                lineNumber = 0;
-            }
-            newLine = false ;
-        }
-        if (newSpiral) {
-            twistingSpiral = !twistingSpiral ;
-            offset += (twistingSpiral) ? 10 : -10 ;
-            x = offset/100 * blkWidth  ;
-            y = offset/100 * blkHeight  ;
-            lineNumber = 0 ;
-            newLine = false ;
-        }
-        if (newLine) {
-            lineNumber++;
-            x = Math.max(x1,xMin) ;
-            x = Math.min(x,xMax) ;
-            y = Math.max(y1,yMin) ;
-            y = Math.min(y,yMax) ;
-
-        }
-
-        $img.css('margin-top',y) ;
-        $img.css('margin-left',x) ;
-        state['pathLine'] =  lineNumber   ;
-        state['twistingSpiral'] =  twistingSpiral   ;   // закручивание спирали
-        state['pathOffset'] = offset ;
-    }
 }

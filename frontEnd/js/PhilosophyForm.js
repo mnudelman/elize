@@ -58,34 +58,51 @@ function PhilosophyForm() {
   //          }
   //      });
 
+        //var windowHeight = $(window).height() ;
+        //var windowWidth = $(window).width() ;
+        //var w = 1.203*windowHeight ;
+        //$resultBlock.dialog({
+        //    autoOpen: false,
+        //    width: w,
+        //    height: windowHeight,
+        //    minHeight: 400,
+        //    minWidth: 500,
+        //    maxWidth: 1500,
+        //    dialogClass: "result" ,
+        //    show: { effect: "blind", duration: 1000 },
+        //    hide: {
+        //        effect: "explode",
+        //        duration: 1000
+        //    },
+        //    beforeClose:function (event, ui) {
+        //        animateStop = true ;         //  остановить цикл анимации
+        //    }
+        //});
+
         var windowHeight = $(window).height() ;
         var windowWidth = $(window).width() ;
-        var w = 1.203*windowHeight ;
-        $resultBlock.dialog({
-            autoOpen: false,
-            width: w,
-            height: windowHeight,
-            minHeight: 400,
-            minWidth: 500,
-            maxWidth: 1500,
-            dialogClass: "result" ,
-            show: { effect: "blind", duration: 1000 },
-            hide: {
-                effect: "explode",
-                duration: 1000
-            },
-            beforeClose:function (event, ui) {
-                animateStop = true ;         //  остановить цикл анимации
-            }
-        });
-
-
-
-
-
-
-
+        var w = 1.184*windowHeight ;
+        var left = (windowWidth - w)/2 ;
+        $resultBlock.css('width',w) ;
+        $resultBlock.css('height',windowHeight) ;
         $resultBlock.css('overflow','auto') ;
+        $resultBlock.css('position','absolute') ;
+        $resultBlock.css('top',10) ;
+        $resultBlock.css('left',left) ;
+        $resultBlock.css('padding-left','10%') ;
+        $resultBlock.css('padding-right','10%') ;
+        $resultBlock.removeAttr('hidden') ;
+        $resultBlock.on('click',function(e) {     // закрыть по click
+            var x = e.pageX;
+            var y = e.pageY;
+            var windowHeight = $(window).height() ;
+            var windowWidth = $(window).width() ;
+            if (x/windowWidth >= 0.8 && y/windowHeight <= 0.1) {
+                animateStop = true ;         //  остановить цикл анимации
+                $resultBlock.attr('hidden','hidden') ;
+            }
+        }) ;
+
 
         topologyBuild() ;     // построить топологию изображения
    //     commandSet();
@@ -93,7 +110,6 @@ function PhilosophyForm() {
         // animateStop = true ;
             phraseChange() ;
         }) ;
-        $resultBlock.dialog('open') ;
         cycleShow() ;
     } ;
     var cycleShow = function() {

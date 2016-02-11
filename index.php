@@ -47,6 +47,7 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
 
     <script type="text/javascript" src="<?= $dirJs; ?>/SmokeClouds.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/CircularMotion.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/ResultShow.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/UserInterface.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/RequestGo.js"></script>
@@ -74,78 +75,27 @@ $dirStyle = './frontEnd/styles';
 <div id="total">
 
 
-    <div id="mainBlock" style="width:100%;height:165px; margin-top:350px;border:0px solid red">
-        <div id="smokeBlk1" style="display:inline-block;border:0px solid green;width:30%;height:50%;vertical-align:top">
-
-
-            <div id="smokeBlk1_1" style="display:inline-block;border:0px solid green;width:68%;height:100%;">
-                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px"></div>
-            <div id="smokeBlk1_2" style="display:inline-block;border:0px solid green;width:30%;height:100%;">
-                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px">
-            </div>
-
-        </div>
-        <div id="smokeBlk2" style="display:inline-block;border:0px solid green;width:11%;height:98%;vertical-align:top">
-            <div id="smokeBlk2_1" style="border:0px solid green;width:100%;height:40%;">
-                <img src="dim1.png" id="imgDim2_1" style="width:25px; height:25px">
-            </div>
-            <div id="smokeBlk2_2" style="border:0px solid green;width:100%;height:55%;">
-            </div>
-        </div>
-        <div id="smokeBlk3"
-             style="display:inline-block;border:0px solid green;width:16.5%;height:75%;vertical-align: top">
-
-
-            <div id="smokeBlk3_1" style="border:0px solid green;
-               width:100%;height:85%;vertical-align: top">
-                <img src="dim1.png" id="imgDim3" style="width:50px; height:50px;margin-left:50%">
-            </div>
-            <div id="smokeBlk3_2" style="border:0px solid green;
-                                  width:100%;height:12%;vertical-align: top">
-            </div>
-
-
-        </div>
-
-        <div id="smokeBlk4" style="display:inline-block;border:0px solid green;width:11%;height:98%;vertical-align:top">
-            <div id="smokeBlk4_1" style="border:0px solid green;width:100%;height:40%;">
-                <img src="dim1.png" id="imgDim4_1" style="width:25px; height:25px">
-            </div>
-            <div id="smokeBlk4_2" style="border:0px solid green;width:100%;height:55%;">
-            </div>
-        </div>
-
-        <div id="smokeBlk5" style="display:inline-block;border:0px solid green;
-                                    width:30%;height:50%;vertical-align:top">
-
-
-            <div id="smokeBlk5_1" style="display:inline-block;border:0px solid green;width:30%;height:100%;">
-<!--                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px">-->
-            </div>
-            <div id="smokeBlk5_2" style="display:inline-block;border:0px solid green;width:68%;height:100%;">
-<!--                <img src="dim1.png" id="imgDim1" style="width:50px; height:50px">-->
-            </div>
-
-
-        </div>
-
-
+    <div id="mainBlock"
+         style="position:relative;width:100%;height:165px; margin-top:350px;border:0px solid red">
     </div>
 </div>
 
 <div>
-    <div id="resultBlock" class="data">
+    <div id="resultBlock" class="data result" hidden="hidden">
         <p id="resultBoxError"></p>
 
-        <p id="totalHuman"></p>
+        <p id="totalHuman" style="height:10%"></p>
         <ol start="1" id="resultBoxDocs">
 
         </ol>
+        <div id="resultCommands">
+<!--            <img src="images/cards/1.png" style="width:7%">-->
+        </div>
     </div>
 </div>
 
 <div>
-    <div id="resultBlockPhilosophy" class="data">
+    <div id="resultBlockPhilosophy" class="data result">
 
     </div>
 </div>

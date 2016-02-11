@@ -83,53 +83,30 @@ function ResponseForm() {
      * Показать ответ
      */
     var responseShow = function() {
-
-        //$resultBlock.dialog({
-        //
-        //    title: 'Результат запроса',
-        //    width: 600,
-        //    modal: true,
-        //    dialogClass: "result" ,
-        //    position: {
-        //        my: "center top", at: "center top", of: window },
-        //    beforeClose: function (event, ui) {
-        //    }
-        //});
-
         var windowHeight = $(window).height() ;
         var windowWidth = $(window).width() ;
-        var w = 1.203*windowHeight ;
-        $resultBlock.dialog({
-            autoOpen: false,
-            width: w,
-            height: windowHeight,
-            minHeight: 400,
-            minWidth: 500,
-            maxWidth: 1500,
-            dialogClass: "result" ,
-            show: { effect: "blind", duration: 1000 },
-            hide: {
-                effect: "explode",
-                duration: 1000
-            },
-            buttons: [
-                {
-                    text: "Ok",
-                    icons: {
-                        primary: "ui-icon-heart"
-                    },
-                    click: function() {
-                        $( this ).dialog( "close" );
-                    }
+        var w = 1.184*windowHeight ;
+        var left = (windowWidth - w)/2 ;
+        $resultBlock.css('width',w) ;
+        $resultBlock.css('height',windowHeight) ;
+        $resultBlock.css('overflow','auto') ;
+        $resultBlock.css('position','absolute') ;
+        $resultBlock.css('top',10) ;
+        $resultBlock.css('left',left) ;
+        $resultBlock.removeAttr('hidden') ;
+        $resultBlock.on('click',function(e) {     // закрыть по click
+            var x = e.pageX;
+            var y = e.pageY;
+            var windowHeight = $(window).height() ;
+            var windowWidth = $(window).width() ;
+            if (x/windowWidth >= 0.8 && y/windowHeight <= 0.1) {
+                $('#resultBoxDocs').empty() ;
+                $('#totalHuman').empty() ;
+                $resultBlock.attr('hidden','hidden') ;
+            }
+        }) ;
 
-                    // Uncommenting the following line would hide the text,
-                    // resulting in the label being used as a tooltip
-                    //showText: false
-                }
-            ]
-        });
-
-        commandSet() ;
+        cardCommands() ;
 
         var totalHuman  = yandexResult['totalHuman'] ;
         var pageStart =  yandexResult['pageStart'] ;
@@ -153,7 +130,7 @@ function ResponseForm() {
             var li = liCreate(result) ;
             data_ol.append(li) ;
         }
-        $resultBlock.dialog('open') ;
+  //     $resultBlock.dialog('open') ;
     } ;
     var liCreate = function(result) {
         var url = result['url'] ;
@@ -204,16 +181,31 @@ function ResponseForm() {
                 _this.queryGo(i);
             }
         } ;
-    }
+    } ;
+    var cardCommands = function() {
+        $('#resultCommands').empty() ;
+        $('#resultCommands').css('margin-left','15%') ;
+        $('#resultCommands').css('padding-bottom','20px') ;
+
+        for (var i = 1; i <= 10; i++) {
+            var $img = $('<img/>') ;
+            $img.attr('src',dirImages+'/' + i +'.png') ;
+            $img.css('width','7%') ;
+            $img.css('margin-left','1%') ;
+            $img.attr('id','card'+i) ;
+            $('#resultCommands').append($img) ;
+            newCardClick(i) ;
+
+        }
 
 
 
-
-
-
-
-
-
+    } ;
+    newCardClick = function(i) {
+        $('#card'+i).on('click',function(){
+            _this.queryGo(i-1);
+        }) ;
+    } ;
 
 
 }
