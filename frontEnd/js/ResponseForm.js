@@ -86,6 +86,7 @@ function ResponseForm() {
         var windowHeight = $(window).height() ;
         var windowWidth = $(window).width() ;
         var w = 1.184*windowHeight ;
+        w = Math.min(w,0.8 * windowWidth) ;
         var left = (windowWidth - w)/2 ;
         $resultBlock.css('width',w) ;
         $resultBlock.css('height',windowHeight) ;
@@ -93,16 +94,32 @@ function ResponseForm() {
         $resultBlock.css('position','absolute') ;
         $resultBlock.css('top',10) ;
         $resultBlock.css('left',left) ;
-        $resultBlock.removeAttr('hidden') ;
+        $resultBlock.show( "blind", 1000);
+      //  $resultBlock.removeAttr('hidden') ;
         $resultBlock.on('click',function(e) {     // закрыть по click
             var x = e.pageX;
             var y = e.pageY;
             var windowHeight = $(window).height() ;
             var windowWidth = $(window).width() ;
-            if (x/windowWidth >= 0.8 && y/windowHeight <= 0.1) {
+
+            //alert('x%: ' + x/windowWidth+ '\n' + 'y%: ' + y/windowHeight + '\n'+
+            //'winW:' + windowWidth+'\n' + 'winH:' + windowHeight + '\n' +
+            //'x: '+x + '  y:' + y) ;
+
+            //    show: { effect: "blind", duration: 1000 },
+            //    hide: {
+            //        effect: "explode",
+            //        duration: 1000
+            //    },
+            if (x/windowWidth >= 0.7 && y/windowHeight <= 0.1) {
                 $('#resultBoxDocs').empty() ;
                 $('#totalHuman').empty() ;
-                $resultBlock.attr('hidden','hidden') ;
+                //$resultBlock.hide( "drop", { direction: "down" }, "slow" );
+                $resultBlock.hide( "explode", 1000);
+
+
+
+             //   $resultBlock.attr('hidden','hidden') ;
             }
         }) ;
 
@@ -186,14 +203,20 @@ function ResponseForm() {
         $('#resultCommands').empty() ;
         $('#resultCommands').css('margin-left','15%') ;
         $('#resultCommands').css('padding-bottom','20px') ;
-
+        var blockWidth = $('#resultCommands').width() ;
         for (var i = 1; i <= 10; i++) {
             var $img = $('<img/>') ;
             $img.attr('src',dirImages+'/' + i +'.png') ;
-            $img.css('width','7%') ;
-            $img.css('margin-left','1%') ;
+
+            $img.css('width',0.07 * blockWidth) ;
+            //$img.css('margin-left','1%') ;
             $img.attr('id','card'+i) ;
-            $('#resultCommands').append($img) ;
+            var $button = $('<button/>') ;
+            $button.css('width','8%') ;
+            $button.css('height',50) ;
+        //    $button.css('padding',1) ;
+            $button.append($img) ;
+            $('#resultCommands').append($button) ;
             newCardClick(i) ;
 
         }

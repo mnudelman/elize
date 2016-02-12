@@ -84,10 +84,11 @@ function MainProjectsForm() {
                 var y = e.pageY;
                 var windowHeight = $(window).height() ;
                 var windowWidth = $(window).width() ;
-                if (x/windowWidth >= 0.8 && y/windowHeight <= 0.1) {
+                if (x/windowWidth >= 0.7 && y/windowHeight <= 0.1) {
                     $('#resultBoxDocs').empty() ;
                     $('#totalHuman').empty() ;
-                    $resultBlock.attr('hidden','hidden') ;
+                    $resultBlock.hide( "drop", { direction: "down" }, "slow" );
+             //       $resultBlock.attr('hidden','hidden') ;
                 }
             }) ;
 

@@ -87,19 +87,24 @@ function PhilosophyForm() {
         $resultBlock.css('height',windowHeight) ;
         $resultBlock.css('overflow','auto') ;
         $resultBlock.css('position','absolute') ;
-        $resultBlock.css('top',10) ;
+        $resultBlock.css('top',0) ;
         $resultBlock.css('left',left) ;
         $resultBlock.css('padding-left','10%') ;
         $resultBlock.css('padding-right','10%') ;
+        $resultBlock.show( "blind", 1000);
+
         $resultBlock.removeAttr('hidden') ;
         $resultBlock.on('click',function(e) {     // закрыть по click
             var x = e.pageX;
             var y = e.pageY;
             var windowHeight = $(window).height() ;
             var windowWidth = $(window).width() ;
-            if (x/windowWidth >= 0.8 && y/windowHeight <= 0.1) {
+            if (x/windowWidth >= 0.7 && y/windowHeight <= 0.1) {
                 animateStop = true ;         //  остановить цикл анимации
-                $resultBlock.attr('hidden','hidden') ;
+                $resultBlock.hide( "explode", 1000);
+                //$resultBlock.hide( "drop", { direction: "down" }, "slow" );
+
+//                $resultBlock.attr('hidden','hidden') ;
             }
         }) ;
 
