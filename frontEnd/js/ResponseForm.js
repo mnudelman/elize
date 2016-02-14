@@ -106,11 +106,6 @@ function ResponseForm() {
             //'winW:' + windowWidth+'\n' + 'winH:' + windowHeight + '\n' +
             //'x: '+x + '  y:' + y) ;
 
-            //    show: { effect: "blind", duration: 1000 },
-            //    hide: {
-            //        effect: "explode",
-            //        duration: 1000
-            //    },
             if (x/windowWidth >= 0.7 && y/windowHeight <= 0.1) {
                 $('#resultBoxDocs').empty() ;
                 $('#totalHuman').empty() ;

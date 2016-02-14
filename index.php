@@ -45,6 +45,7 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyFormAttr.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/BackgroundImg.js"></script>
 
     <script type="text/javascript" src="<?= $dirJs; ?>/SmokeClouds.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CircularMotion.js"></script>
@@ -95,9 +96,13 @@ $dirStyle = './frontEnd/styles';
 </div>
 
 <div>
-    <div id="resultBlockPhilosophy" class="data result">
+    <div id="resultBlockPhilosophy" >
 
     </div>
+    <div id="centralCircle">
+
+    </div>
+    <div id="centralCircleText"></div>
 </div>
 
 </body>

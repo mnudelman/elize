@@ -3,7 +3,6 @@
  */
 function UserInterface() {
     var smoke = new SmokeClouds();      // движение облаков
-    var backgroundImg  ; // объект - элементы изображения
     var centralCircle = {} ;            // центральный круг
     var stamp = {} ;                    // печать
     var screenClosed = false ;
@@ -16,26 +15,19 @@ function UserInterface() {
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
-        backgroundImg = paramSet.backgroundImage ; // объект - элементы изображения
-        backgroundImg.init() ;
-         stampDefine() ;              // объект stamp   - печать
+        stampDefine() ;              // объект stamp   - печать
         centralCircleDefine() ;      // объект centralCircle - ценральный круг
 
         $(document).click(function (e) {
-            if (isCentralCircleClick(e)) {
+            if (centralCyrcleClick(e)) {
                 queryTextArea() ;
             }
-            if (isStampClick(e)) {
+            if (stampClick(e)) {
                 var query = $queryArea.val() ;
                 var requestGo = paramSet.requestGo ;
                 requestGo.setRequestText(query) ;
                 var auto = true ;
-                //  сначала тип, потом Go -  по типу меняем круг
-
                 requestGo.requestExecute(auto) ;
-            }else {
-              var philosophyForm = paramSet.philosophyForm ;
-                philosophyForm.stopShow() ;
             }
         });
         $(window).on('resize', function() {
@@ -73,15 +65,12 @@ function UserInterface() {
             }, RESIZE_TIME_DELAY);
         }
     } ;
-     var centralCircleDefine = function() {
-        var block = backgroundImg.getCentralCircle() ;
-        var x1 = block['place']['x1'] ;
-        var y1 = block['place']['y1'] ;
-        var x2 = block['place']['x2'] ;
-        var y2 = block['place']['y2'] ;
-        var x0 = (x1 + x2) / 2;
-        var y0 = (y1 + y2) / 2;
-         var d = x2 - x1 ;
+    var centralCircleDefine = function() {
+        var Ymax = $(document).height();
+        var Xmax = $(document).width();
+        var d = 0.17 * Xmax;
+        var x0 = Xmax / 2;
+        var y0 = 0.57 * x0;
         var r = 0.95 * (d / 2);
         centralCircle = {
             x0 : x0,       // координаты центра
@@ -90,23 +79,27 @@ function UserInterface() {
         } ;
     } ;
     var stampDefine = function() {
-        var block = backgroundImg.getStamp() ;
-        var x1 = block['place']['x1'] ;
-        var y1 = block['place']['y1'] ;
-        var x2 = block['place']['x2'] ;
-        var y2 = block['place']['y2'] ;
+        var Xmax = $(document).width();
+        var aDoc = 0.535;   // Ymax/Xmax
+        var Ymax = Xmax * aDoc;
+        var btYTop = 0.69 * Ymax;
+        var btWidth = 0.145 * Xmax;
+        var btXLeft = (Xmax - btWidth) / 2;
+        var btXRight = btXLeft + btWidth;
+        var btHeight = btWidth * 0.23;
+        var btYBottom = btYTop + btHeight;
         stamp = {
-           top : y1,
-           left: x1,
-           bottom: y2,
-           right: x2
+            top : btYTop,
+            left: btXLeft,
+            bottom: btYBottom,
+            right: btXRight
         } ;
     } ;
     /**
      * click в центральном круге
      * @returns {boolean}
      */
-    var isCentralCircleClick = function(e) {
+    var centralCyrcleClick = function(e) {
         var x0 = centralCircle['x0'];
         var y0 = centralCircle['y0'];
         var r = centralCircle['r'];
@@ -114,21 +107,20 @@ function UserInterface() {
         var x = e.pageX;
         var y = e.pageY;
         var s = (x - x0) * (x - x0) + (y - y0) * (y - y0);
-       return (s <= r2) ;
+        return (s <= r2) ;
     } ;
     /**
      * область ввода запроса
      */
     var queryTextArea = function() {
-        var alphaY = 0.5 ;
+        var alphaY = 0.3 ;
         var x0 = centralCircle['x0'] ;
         var y0 = centralCircle['y0'] ;
         var r = centralCircle['r'] ;
-        var alphaR = Math.round(alphaY * r) ;
-        var areaHeight = (2 * alphaR) ; // * 0.87  ;
-        var areaTop = y0 - alphaR ;
-        var x1 = Math.round(r * Math.sqrt(1 - alphaY * alphaY) );
-        var areaLeft = x0 - x1* 1.1   ;
+        var areaHeight = (2 * alphaY * r) * 0.87  ;
+        var areaTop = y0 - alphaY * r ;
+        var x1 = r * Math.sqrt(1 - alphaY * alphaY) ;
+        var areaLeft = x0 - x1  ;
         var areaWidth = 2 * x1  ;
         $queryArea = $('#queryText') ;
         $queryArea.css('width',areaWidth) ;
@@ -152,7 +144,7 @@ function UserInterface() {
      * click  по печати
      * @returns {boolean}
      */
-    var isStampClick = function(e) {
+    var stampClick = function(e) {
         var btYTop = stamp['top'] ;
         var btXLeft = stamp['left'] ;
         var btXRight = stamp['right'] ;

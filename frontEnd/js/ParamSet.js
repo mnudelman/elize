@@ -19,6 +19,7 @@ function ParamSet() {
     this.philosophyForm ;
     this.userInterface ;
     this.requestGo ;
+    this.backgroundImage;
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -72,6 +73,7 @@ function ParamSet() {
         _this.philosophyForm = new PhilosophyForm() ;
         _this.userInterface = new UserInterface() ;
         _this.requestGo = new RequestGo() ;
+        _this.backgroundImage = new BackgroundImg() ;
 //
 
     } ;

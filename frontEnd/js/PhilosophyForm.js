@@ -3,17 +3,13 @@
  */
 function PhilosophyForm() {
     var formAttr ;        // объект - атрибуты формы
-    var $resultBlock = $('#resultBlockPhilosophy');
-    var phraseBlockId = 'phraseBlock' ;    // блок для вывода фразы
-    var pictureBlocksId = [] ;             // список id клеток с картинками
-    var pictureIndexes = [] ;              // индексы списка картинок
-    var currentBlockSize = {'W' : 160, 'H': 130} ;
-    var currentPictureSet = {} ;             // объект - набор картинок
-    var currentPictures  = [] ;       // набор картинок - атрибут pictureSet
     var currentPhrase = '' ;          // текущая фраза
-    var animateStop = false ;         //  остановить цикл анимации
+    var backgroundImg ; // объект - компоненты изображения
+    var animateStop = false ;
+    var $resultBlock = $('#resultBlockPhilosophy') ;
     //----------------------------------//
     this.init = function() {
+        backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
         formAttr = new PhilosophyFormAttr() ;        // объект - атрибуты формы
         formAttr.init() ;
     } ;
@@ -22,100 +18,48 @@ function PhilosophyForm() {
      */
     var phraseChange = function() {
         currentPhrase = formAttr.getPhrase() ;
-        $('#'+phraseBlockId).empty() ; 
-         $('#'+phraseBlockId).append('<strong>' + currentPhrase +'</strong>') ;
-
      } ;
 
     this.queryGo = function() {
        responseShow() ;
     } ;
-
+    var
+    /**
+     * прервать вывод
+     */
+    this.stopShow = function() {
+        $resultBlock.empty() ;
+    } ;
 
     var responseShow = function() {
         $resultBlock.empty() ;
+        var pictures = backgroundImg.getPhilosophyPictures() ;
+        var dir = pictures['dir'] ;
+        var items = pictures['items'] ;
+        for (var itemKey in items) {
+            var item = items[itemKey] ;
+            showItem(dir,item) ;
 
+        }
+    } ;
+    var showItem = function(dir,item) {
+       var place = item['place'] ;
+       var imgFile = dir + '/' + item['img']['file'] ;
+       var top = place['y1'] ;
+       var left =  place['x1'] ;
+       var width =  place['x2'] - place['x1'] ;
+       var height =  place['y2'] - place['y1'] ;
+       var $img = $('<img/>') ;
+       $img.attr('src',imgFile) ;
+       $img.css('width',width) ;
+       $img.css('height',height) ;
+       var $block = $('<div/>') ;
+       $block.append($img) ;
+        $block.css('position','absolute') ;
+        $block.css('top',top) ;
+        $block.css('left',left) ;
+       $resultBlock.append($block) ;
 
-        currentPictureSet = formAttr.getPictureSet() ;
-        currentPhrase = formAttr.getPhrase() ;
-
-  //      currentBlockSize = formAttr.getPictureSize() ;
-        var resultWidth = 1500 ; //(currentBlockSize['W'] + currentDw) * 7 ;
-        var resultHeight = 600 ; //currentBlockSize['H'] * 8 ;
-
-
-  //      $resultBlock.dialog({
-  //
-  //          title: 'Результат запроса',
-  //          maxWidth: resultWidth,
-  //          width: 1000 ,
-  ////          maxHeight : resultHeight,
-  //          modal: true,
-  //          position: {
-  //              my: "center top", at: "center top+10", of: window
-  //          },
-  //          beforeClose: function (event, ui) {
-  //          }
-  //      });
-
-        //var windowHeight = $(window).height() ;
-        //var windowWidth = $(window).width() ;
-        //var w = 1.203*windowHeight ;
-        //$resultBlock.dialog({
-        //    autoOpen: false,
-        //    width: w,
-        //    height: windowHeight,
-        //    minHeight: 400,
-        //    minWidth: 500,
-        //    maxWidth: 1500,
-        //    dialogClass: "result" ,
-        //    show: { effect: "blind", duration: 1000 },
-        //    hide: {
-        //        effect: "explode",
-        //        duration: 1000
-        //    },
-        //    beforeClose:function (event, ui) {
-        //        animateStop = true ;         //  остановить цикл анимации
-        //    }
-        //});
-
-        var windowHeight = $(window).height() ;
-        var windowWidth = $(window).width() ;
-        var w = 1.184*windowHeight ;
-        var left = (windowWidth - w)/2 ;
-        $resultBlock.css('width',w) ;
-        $resultBlock.css('height',windowHeight) ;
-        $resultBlock.css('overflow','auto') ;
-        $resultBlock.css('position','absolute') ;
-        $resultBlock.css('top',0) ;
-        $resultBlock.css('left',left) ;
-        $resultBlock.css('padding-left','10%') ;
-        $resultBlock.css('padding-right','10%') ;
-        $resultBlock.show( "blind", 1000);
-
-        $resultBlock.removeAttr('hidden') ;
-        $resultBlock.on('click',function(e) {     // закрыть по click
-            var x = e.pageX;
-            var y = e.pageY;
-            var windowHeight = $(window).height() ;
-            var windowWidth = $(window).width() ;
-            if (x/windowWidth >= 0.7 && y/windowHeight <= 0.1) {
-                animateStop = true ;         //  остановить цикл анимации
-                $resultBlock.hide( "explode", 1000);
-                //$resultBlock.hide( "drop", { direction: "down" }, "slow" );
-
-//                $resultBlock.attr('hidden','hidden') ;
-            }
-        }) ;
-
-
-        topologyBuild() ;     // построить топологию изображения
-   //     commandSet();
-        $('#'+phraseBlockId).click(function() {
-        // animateStop = true ;
-            phraseChange() ;
-        }) ;
-        cycleShow() ;
     } ;
     var cycleShow = function() {
         animateStop = false ;
