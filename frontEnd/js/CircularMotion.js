@@ -2,7 +2,6 @@
  * объект - круговое движение
  */
 function CircularMotion() {
-    var currentBlock ;
     //--- атрибуты кругового движения --//
     var mainAxis ;     // ось смещения(x|y)
     var direction ;    // направление смещения (+1 | -1)
@@ -22,15 +21,44 @@ function CircularMotion() {
     //------габариты--------//
     var blkWidth ;
     var blkHeight ;
-    var imjWidth ;
-    var imjHeight ;
+    var imgWidth ;
+    var imgHeight ;
      //--------------//
     var currentStep = 0 ;   // текущий шаг по оси (положение центра круга)
     var currentPhi = 0 ;    // текущий шаг при перемещении по окружности
 
-    this.init = function(block) {
-        currentBlock = block ;
-        var circleAttr = block['circleMove'] ;
+
+    //var motionBlock = {
+    //    timeDelay: 500,             // задержка таймера
+    //    block: {
+    //        width: blkWidth,
+    //        height: blkHeight
+    //    },
+    //    img: {                        // размеры картинки повторяют размеры блока
+    //        width: blkWidth,
+    //        height: blkHeight
+    //    },
+    //    circleMove: {
+    //        mainAxis: 'x' ,
+    //        direction: +1 ,
+    //        deltaMove: 10,       // %
+    //        rotationDirection: 'left',
+    //        radius: 10,         // %
+    //        deltaPhi: 20        // число точек на окружности
+    //    }
+    //} ;
+
+
+
+
+
+    this.init = function(motionBlock) {
+        blkHeight = motionBlock['block']['height'] ;
+        blkWidth = motionBlock['block']['width'] ;
+        imgHeight = motionBlock['img']['height'] ;
+        imgWidth = motionBlock['img']['width'] ;
+
+        var circleAttr = motionBlock['circleMove'] ;
 
         mainAxis = circleAttr['mainAxis'] ;   // ось смещения центра круга
 
@@ -39,17 +67,14 @@ function CircularMotion() {
         rotationDirection = circleAttr['rotationDirection'] ; // направление вращения(left|right)
         radius = circleAttr['radius'] ;       // радиус круга (% от размера)
         deltaPhi = circleAttr['deltaPhi'] ;   // n - число (1/n угловое смещение за такт)
+        axisMin = circleAttr['axisMin'] ;
+        axisMax = circleAttr['axisMax'] ;
         pixelSize() ;
     } ;
     /**
      * пересчёт размеров из % в pixel
      */
     var pixelSize = function() {
-        var blockId = currentBlock['id'] ;
-        blkHeight = $('#'+blockId).css('height') ;
-        blkWidth = $('#'+blockId).css('width') ;
-        blkHeight = pixelToNumber(blkHeight) ;
-        blkWidth = pixelToNumber(blkWidth) ;
         var axisLength = (mainAxis === 'x') ? blkWidth : blkHeight ;
         pxDeltaMove = axisLength * (deltaMove/100);
         pxRadius = axisLength * (radius/100);
@@ -60,20 +85,7 @@ function CircularMotion() {
         if (axisMax > 0 && axisMax < 100 ) {
             stepMax = Math.round(stepMax * (axisMax/100 ))
         }
-
         currentStep = stepMin ;
-
-        var imgPart = currentBlock['img'] ;
-        imjWidth = imgPart['size']['w'] ;
-        imjHeight = imgPart['size']['h'] ;
-        var sizeUnit = imgPart['size']['u'] ;
-        sizeUnit = (sizeUnit === undefined) ? 'px' : sizeUnit ;  // удиница измерения
-        if (sizeUnit == '%') {
-            imjWidth = (imjWidth/100) * blkWidth ;
-            imjHeight = (imjHeight/100) * blkHeight ;
-        }
-
-
     } ;
     /**
      * преобразовать строку вида 230px в число 230
@@ -87,10 +99,10 @@ function CircularMotion() {
     /**
      * получить позицию картинки в блоке {x:marginLeft, y: marginTop }
      */
-    this.getImjPosition = function() {
-        var imjPos = imjPositionClc() ;
-        imjNextPosition() ; // подготовить следующую
-        return imjPos ;
+    this.getImgPosition = function() {
+        var imgPos = imgPositionClc() ;
+        imgNextPosition() ; // подготовить следующую
+        return imgPos ;
     } ;
     /**
      * вычислить позицию на окружности
@@ -107,47 +119,48 @@ function CircularMotion() {
     /**
      * Вычислить положение центра круга
      */
-    var rindCenterClc = function() {
+    var ringCenterClc = function() {
         var axisOffset = pxDeltaMove * currentStep ;
-        var marginTop = 0 ;
-        var marginLeft = 0 ;
+        var y = 0 ;
+        var x = 0 ;
         switch (mainAxis) {
             case 'x' : {
-                marginTop = blkHeight/2 ;
-                marginLeft = (direction == +1) ?  axisOffset : blkWidth - axisOffset  ;
+                y = blkHeight/2 ;
+                x = (direction == +1) ?  axisOffset : blkWidth - axisOffset  ;
                 break ;
             }
             case 'y' : {
-                marginLeft = blkWidth/2 ;
-                marginTop = (direction == +1) ?  axisOffset : blkHeight - axisOffset  ;
+                x = blkWidth/2 ;
+                y = (direction == +1) ?  axisOffset : blkHeight - axisOffset  ;
                 break ;
             }
         }
-        return {x: marginLeft, y: marginTop} ;
+        return {x: x, y: y} ;
     } ;
     /**
      * Вычисление координат изображения : {x: <marginLeft>, y: <marginTop>
+     *  координаты изображения по отношению к блоку
      * @returns {{x: number, y: number}}
      */
-    var imjPositionClc = function() {
-        var centerRingPosition = rindCenterClc() ;  // {x: X, y: Y}
+    var imgPositionClc = function() {
+        var centerRingPosition = ringCenterClc() ;  // {x: X, y: Y}
         var deltaRingPosition = ringCoordinateClc() ;  // {dy: , dx: }
         var absoluteX = centerRingPosition['x'] + deltaRingPosition['dx'] ;
         var absoluteY = centerRingPosition['y'] - deltaRingPosition['dy'] ;
-        var imjMarginTop = absoluteY - imjHeight/2 ;
-        var imjMarginLeft = absoluteX - imjWidth/2 ;
-        return {x: imjMarginLeft, y: imjMarginTop} ;
+        var imgMarginTop = absoluteY - imgHeight/2 ;
+        var imgMarginLeft = absoluteX - imgWidth/2 ;
+        return {x: imgMarginLeft, y: imgMarginTop} ;
     } ;
     /**
      * след позиция. Определяется увеличением на шаг углового смещения
      *  Если сделан круг, то выполняется смещение по главной оси.
      *  Если главная ось пройдена, то меняется направление на обратное
      */
-    var imjNextPosition = function() {
+    var imgNextPosition = function() {
         currentPhi++ ;
-        if (currentPhi >= deltaPhi) {     // !! круг пройден
+        if (currentPhi > deltaPhi) {     // !! круг пройден
             currentPhi = 0 ;
-           if (++currentStep >= stepMax) {    // сменить направвление
+           if (++currentStep > stepMax) {    // сменить направвление
                currentStep = stepMin ;
                direction = (-1) * direction ;    // меняем знак
            }

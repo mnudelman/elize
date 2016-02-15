@@ -32,13 +32,6 @@ function ParamSet() {
     this.USER_STAT_USER = 10;        // добавление картинок по одной
     this.USER_STAT_GUEST = 5;      // только просмотр
 
-//    this.userProfile = {} ;
-    //------ параметры языка отображения --------//
-    //this.LANG_RU = 'RU' ;
-    //this.LANG_EN = 'EN' ;
-    //this.LANG_IMG_RU ;               // пиктограмма языка
-    //this.LANG_IMG_EN ;
-    //this.currentLang = 'RU' ;        // текущий язык(начальное значение)
     this.currentForm = '' ;          // текущая активная форма
     //------------------------------------------ //
     var _this = this ;
@@ -77,6 +70,12 @@ function ParamSet() {
 //
 
     } ;
+    this.setCurrentForm = function(form) {
+        _this.currentForm = form ;
+    } ;
+    this.getCurrentForm = function() {
+       return _this.currentForm ;
+    }
 
 
 }

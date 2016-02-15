@@ -63,9 +63,7 @@ function PhilosophyFormAttr() {
 
 
     };
-    this.init = function() {
 
-    } ;
     /**
      * случайный выбор фразы
      * @returns {*}

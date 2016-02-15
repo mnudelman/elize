@@ -720,7 +720,7 @@ function SmokeClouds() {
         var motion = new CircularMotion() ;     // управдение движением
         motion.init(smokeBlock) ;
         var tmpTimer = setInterval(function () {        // процесс анимации в блоке
-            var imjCoord = motion.getImjPosition() ;
+            var imjCoord = motion.getImgPosition() ;
             $img.css('margin-top',imjCoord['y']) ;
             $img.css('margin-left',imjCoord['x']) ;
             if (stopAnimation) {

@@ -7,6 +7,7 @@ function PhilosophyForm() {
     var backgroundImg ; // объект - компоненты изображения
     var animateStop = false ;
     var $resultBlock = $('#resultBlockPhilosophy') ;
+    var $answerArea ;     // область вывода текста
     //----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
@@ -18,20 +19,29 @@ function PhilosophyForm() {
      */
     var phraseChange = function() {
         currentPhrase = formAttr.getPhrase() ;
+         $answerArea.val(currentPhrase) ;
      } ;
 
     this.queryGo = function() {
        responseShow() ;
     } ;
-    var
+
     /**
      * прервать вывод
      */
     this.stopShow = function() {
         $resultBlock.empty() ;
+        animateStop = true ;
     } ;
 
     var responseShow = function() {
+        backgroundImg.centralCircleShow('answer') ;
+        var idText = backgroundImg.getIdText('answer') ;
+        $answerArea = $('#'+idText) ;
+
+
+
+
         $resultBlock.empty() ;
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
@@ -39,8 +49,8 @@ function PhilosophyForm() {
         for (var itemKey in items) {
             var item = items[itemKey] ;
             showItem(dir,item) ;
-
         }
+        cycleShow() ;
     } ;
     var showItem = function(dir,item) {
        var place = item['place'] ;
@@ -63,21 +73,12 @@ function PhilosophyForm() {
     } ;
     var cycleShow = function() {
         animateStop = false ;
-        var timeDelay = 1500;
-        var textTimeSteps = 4;
-        var timeStep = 0;
-        var moveSign = 1 ;
+        var timeDelay = 3000;
         var tmpTimer = setInterval(function () {
             if (animateStop) {        //  остановить цикл анимации)
                 clearInterval(tmpTimer);
             }
-            if (timeStep >= textTimeSteps) {
-                phraseChange() ;
-                moveSign = (Math.random() > 0.5 ) ? +1 : -1 ;
-                timeStep = 0 ;
-            }
-            timeStep++ ;
-            pictureMove(moveSign) ;
+            phraseChange() ;
         }, timeDelay);
 
 

@@ -13,6 +13,7 @@ function UserInterface() {
     var resizeSteps = 0 ;
     var RESIZE_TIME_DELAY = 500 ;        // задержка при контроле изменения размеров
     var RESIZE_TAKTS_MAX = 2;            // число тактов, после которых фиксируются изменения размера
+    var currentQuery = '' ;
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
@@ -20,15 +21,14 @@ function UserInterface() {
         backgroundImg.init() ;
          stampDefine() ;              // объект stamp   - печать
         centralCircleDefine() ;      // объект centralCircle - ценральный круг
-
         $(document).click(function (e) {
             if (isCentralCircleClick(e)) {
-                queryTextArea() ;
+  //              queryTextArea() ;
             }
             if (isStampClick(e)) {
-                var query = $queryArea.val() ;
+                currentQuery = $queryArea.val() ;
                 var requestGo = paramSet.requestGo ;
-                requestGo.setRequestText(query) ;
+                requestGo.setRequestText(currentQuery) ;
                 var auto = true ;
                 //  сначала тип, потом Go -  по типу меняем круг
 
@@ -36,13 +36,23 @@ function UserInterface() {
             }else {
               var philosophyForm = paramSet.philosophyForm ;
                 philosophyForm.stopShow() ;
+                backgroundImg.centralCircleShow('query') ;
+                var idText = backgroundImg.getIdText('query') ;
+                $queryArea = $('#'+idText) ;
+                $queryArea.attr('placeholder','введите вопрос') ;
+                $queryArea.val(currentQuery) ;
+                $queryArea.focus() ;
             }
         });
         $(window).on('resize', function() {
             smoke.smokeResize();
             resize() ;
         });
-
+        backgroundImg.centralCircleShow('query') ;
+        var idText = backgroundImg.getIdText('query') ;
+        $queryArea = $('#'+idText) ;
+        $queryArea.attr('placeholder','введите вопрос') ;
+        $queryArea.focus() ;
         smoke.init();
         smoke.smokeGo();
 
@@ -63,7 +73,6 @@ function UserInterface() {
                         resizeSteps = 0;
                         stampDefine();              // объект stamp   - печать
                         centralCircleDefine();      // объект centralCircle - ценральный круг
-                        queryTextArea();
                         smoke.smokeGo();
 
 
@@ -120,31 +129,7 @@ function UserInterface() {
      * область ввода запроса
      */
     var queryTextArea = function() {
-        var alphaY = 0.5 ;
-        var x0 = centralCircle['x0'] ;
-        var y0 = centralCircle['y0'] ;
-        var r = centralCircle['r'] ;
-        var alphaR = Math.round(alphaY * r) ;
-        var areaHeight = (2 * alphaR) ; // * 0.87  ;
-        var areaTop = y0 - alphaR ;
-        var x1 = Math.round(r * Math.sqrt(1 - alphaY * alphaY) );
-        var areaLeft = x0 - x1* 1.1   ;
-        var areaWidth = 2 * x1  ;
-        $queryArea = $('#queryText') ;
-        $queryArea.css('width',areaWidth) ;
-        $queryArea.css('max-width',areaWidth) ;
 
-        $queryArea.css('height',areaHeight) ;
-        $queryArea.css('max-height',areaHeight) ;
-        $queryArea.css('background-color','rgba(237,221,93,0.7)') ;
-        $queryArea.css('border','none') ;
-        $queryArea.css('border-radius','3px') ;
-        $queryArea.css('color','blue') ;
-        var $queryTextBlock = $('#queryTextBlock') ;
-        //$queryTextBlock.css('position','absolute') ;
-        $queryTextBlock.css('top',areaTop) ;
-        $queryTextBlock.css('left',areaLeft) ;
-        $queryTextBlock.removeAttr('hidden') ;
         $queryArea.focus() ;
 
     } ;

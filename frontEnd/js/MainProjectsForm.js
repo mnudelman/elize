@@ -78,7 +78,8 @@ function MainProjectsForm() {
             $resultBlock.css('position','absolute') ;
             $resultBlock.css('top',10) ;
             $resultBlock.css('left',left) ;
-            $resultBlock.removeAttr('hidden') ;
+            //$resultBlock.removeAttr('hidden') ;
+            $resultBlock.show( "blind", 1000);
             $resultBlock.on('click',function(e) {     // закрыть по click
                 var x = e.pageX;
                 var y = e.pageY;
@@ -92,7 +93,7 @@ function MainProjectsForm() {
                 }
             }) ;
 
-            cardCommands() ;
+//            cardCommands() ;
 
             var icon = queryResult['icon'] ;
             var results = queryResult['results'] ;

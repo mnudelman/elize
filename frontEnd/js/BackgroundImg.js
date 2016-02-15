@@ -8,6 +8,7 @@ function BackgroundImg() {
     var philosophyPictures = {} ; // картинки для иллюстрации
     var centralCircle = {} ;      // центральный круг
     var stamp = {} ;              // печать - ввод запроса
+    var scroll = {} ;             // свиток - панель для вывода результата
     var dirImages = paramSet.dirImages ;
     var dirMainImg ;
     var dirSmoke ;
@@ -28,29 +29,34 @@ function BackgroundImg() {
         centralCircle = {
             dir: dirMainImg,
             place: {
-                x1: 808,
+                x1: 800, //808,
                 y1: 380,
                 x2: 1130,
                 y2: 700
             },
-            textArea : {
+            textArea: {
                 x1: 827,
-                y1:460,
+                y1: 460,
                 x2: 1095,
-                y2: 632
+                y2: 625 //630 // 632
             },
-            pictures: {
-                query: {
-                    ball : 'yellow_ball_clear.png',
-                    textArea: 'yellow_text_area.png',
-                    color: '#11f371'
-                },
-                answer: {
-                    ball : 'blue_ball.png',
-                    textArea: 'blue_text_area.png',
-                    color: '#f3114c'
-                }
+
+            query: {
+                idText : 'queryText',
+                ball: 'yellow_ball_clear.png',
+                textArea: 'yellow_text_area.png',
+                color: 'black', //'#47d4d9', // 'blue',    // '#11f371',
+                readonly: false
+
+            },
+            answer: {
+                idText : 'answerText',
+                ball: 'blue_ball.png',
+                textArea: 'blue_text_area.png',
+                color: 'yellow' , ///   '#f3114c',
+                readonly: true
             }
+
         } ;
         stamp = {
             place: {
@@ -227,7 +233,7 @@ function BackgroundImg() {
                        y2: 824
                    },
                    img: {
-                       file: '140rl.png'
+                       file: '140r.png'
                    }
                }
            }
@@ -371,6 +377,7 @@ function BackgroundImg() {
             }
         } ;
 
+
     } ;
     /**
      * отношение высоты к ширине
@@ -460,7 +467,8 @@ function BackgroundImg() {
         currentCircle['dir'] = centralCircle['dir'] ;
         currentCircle['place'] =  placeResize(centralCircle['place']) ;
         currentCircle['textArea'] =  placeResize(centralCircle['textArea']) ;
-        currentCircle['pictures'] = centralCircle['pictures'] ;
+        currentCircle['query'] = centralCircle['query'] ;
+        currentCircle['answer'] = centralCircle['answer'] ;
         return currentCircle ;
     } ;
     var newTextArea = function(alpha,newPlace) {
@@ -482,13 +490,19 @@ function BackgroundImg() {
         var place = currentCircle['place'] ;
         var textAreaPlace = currentCircle['textArea'] ;
         var dir = currentCircle['dir'] ;
-        var img = currentCircle['pictures'][showType] ;
-        var ballPicture = img['ball'] ;
-        var textAreaBackGround = img['textArea'] ;
-        var currentColor = img['color'] ;
 
+        var typeBlock = currentCircle[showType] ;
+
+        var ballPicture = dir +'/' + typeBlock['ball'] ;
+        var textAreaBackGround = dir +'/' + typeBlock['textArea'] ;
+        var currentColor = typeBlock['color'] ;
+        var readonly = typeBlock['readonly'] ;
+        var idText = typeBlock['idText'] ;
+        _this.defineAbsolutePosition($centralCircleBlock,place,ballPicture) ;
+        defineTextArea($centralCircleTextBlock,textAreaPlace,textAreaBackGround,
+            currentColor,0,readonly,idText) ;
     } ;
-    var defineAbsolutePosition = function($block,place,imgFile) {
+    this.defineAbsolutePosition = function($block,place,imgFile) {
         $block.css('position','absolute') ;
         $block.empty() ;
         var x1 = place['x1'] ;
@@ -503,7 +517,7 @@ function BackgroundImg() {
         $img.css('width',x2 - x1) ;
         $block.append($img) ;
     } ;
-    var defineTextArea = function($block,place,imgFile,color,fontSize,readOnly) {
+    var defineTextArea = function($block,place,imgFile,color,fontSize,readonly,idText) {
         $block.css('position','absolute') ;
         $block.empty() ;
         var x1 = place['x1'] ;
@@ -514,16 +528,33 @@ function BackgroundImg() {
         $block.css('top',y1) ;
         $block.css('left',x1) ;
         $block.css('color',color) ;
-        if (readOnly) {
+        if (readonly) {
             $txt.attr('readonly','readonly') ;
+        }else {
+            $txt.removeAttr('readonly') ;
         }
+
         $txt.css('width',x2 - x1) ;
+        $txt.attr('id',idText) ;
         $txt.css('max-width',x2 - x1) ;
         $txt.css('height',y2 - y1) ;
         $txt.css('max-height',y2 - y1) ;
-        $text.css('background-image',imgFile) ;
-        $text.css('background-repeat','no-repeat') ;
-        $text.css('background-size','100 100') ;
+        $block.css('background-image','url("'+imgFile +'")') ;
+        $block.css('background-repeat','no-repeat') ;
+        $block.css('background-size','100% 100%') ;
+        $block.css('overflow','hidden') ;
+        $txt.css('background-color','rgba(0,0,0,0)') ;
+        $txt.css('color',color) ;
+        $txt.css('border','0') ;
         $block.append($txt) ;
+
     } ;
+    /**
+     * ид области ввода текста
+     * @param showType - тип ('query' | 'answer')
+     * @returns {*}
+     */
+    this.getIdText = function(showType) {
+        return centralCircle[showType]['idText'] ;
+    }
 }

@@ -70,7 +70,7 @@ $dirStyle = './frontEnd/styles';
     <div id="queryTextBlock" hidden="hidden" style="position:absolute;background-color: transparent;border:none">
 
 
-    <textarea id="queryText"></textarea>
+<!--    <textarea id="queryText"></textarea>-->
 </div>
 
 <div id="total">
@@ -103,6 +103,7 @@ $dirStyle = './frontEnd/styles';
 
     </div>
     <div id="centralCircleText"></div>
+    <div id="smokeClouds"></div>
 </div>
 
 </body>

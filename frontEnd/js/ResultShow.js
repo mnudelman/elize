@@ -5,6 +5,9 @@ function ResultShow() {
     this.init = function () {
 
     };
+
+
+
     this.showGo = function () {
         var windowHeight = $(window).height() ;
         var windowWidth = $(window).width() ;

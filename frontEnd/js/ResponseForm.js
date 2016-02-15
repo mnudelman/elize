@@ -118,7 +118,7 @@ function ResponseForm() {
             }
         }) ;
 
-        cardCommands() ;
+ //       cardCommands() ;
 
         var totalHuman  = yandexResult['totalHuman'] ;
         var pageStart =  yandexResult['pageStart'] ;
