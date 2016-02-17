@@ -8,9 +8,11 @@ function ResponseForm() {
     var $resultBlock = $('#resultBlock');
     var yandexResult = {};    // результат поиска yandex
     var dirImages = paramSet.dirImages+'/cards' ;
+    var scrollBackground = paramSet.scrollBackground ;
     var _this = this ;
     //--------------------------------------//
     this.init = function() {
+
     } ;
     /**
      * установить запрос
@@ -24,6 +26,10 @@ function ResponseForm() {
      * Отправить запрос.получить ответ
      */
     this.queryGo = function(i) {
+        scrollBackground = paramSet.scrollBackground ;
+        scrollBackground.answerInit() ;        // вывод пустой формы
+
+
         yandexResult = {} ;
         var page =  (i === undefined) ? 0 : i  ;
         var goVect = {
@@ -52,95 +58,37 @@ function ResponseForm() {
 
     } ;
     /**
-     * Отправить запрос.получить ответ
-     */
-    this.mainProjectsGo = function() {
-        var mainProjectsREsult = {} ;
-        var url = 'http://www.mnogonado.net/search/gki/' ;
-        var goVect = {
-            'operation' : 'mainProjects',
-            'query' : currentQuery,
-            'successful' : false       } ;
-        ajaxExecute.postData(goVect, true);
-        var tmpTimer = setInterval(function () {
-            var answ = ajaxExecute.getRequestResult();
-            if (false == answ || undefined == answ) {
-                var mess = 'Нет соединения с БД....' ;
-
-            } else {
-                clearInterval(tmpTimer);
-                if (answ['successful'] == true) {
-                    yandexResult = answ ;
-                    responseShow() ;
-                } else {
-                    message = answ['message'];
-                }
-            }
-        }, 300);
-
-    } ;
-    /**
      * Показать ответ
      */
     var responseShow = function() {
-        var windowHeight = $(window).height() ;
-        var windowWidth = $(window).width() ;
-        var w = 1.184*windowHeight ;
-        w = Math.min(w,0.8 * windowWidth) ;
-        var left = (windowWidth - w)/2 ;
-        $resultBlock.css('width',w) ;
-        $resultBlock.css('height',windowHeight) ;
-        $resultBlock.css('overflow','auto') ;
-        $resultBlock.css('position','absolute') ;
-        $resultBlock.css('top',10) ;
-        $resultBlock.css('left',left) ;
-        $resultBlock.show( "blind", 1000);
-      //  $resultBlock.removeAttr('hidden') ;
-        $resultBlock.on('click',function(e) {     // закрыть по click
-            var x = e.pageX;
-            var y = e.pageY;
-            var windowHeight = $(window).height() ;
-            var windowWidth = $(window).width() ;
-
-            //alert('x%: ' + x/windowWidth+ '\n' + 'y%: ' + y/windowHeight + '\n'+
-            //'winW:' + windowWidth+'\n' + 'winH:' + windowHeight + '\n' +
-            //'x: '+x + '  y:' + y) ;
-
-            if (x/windowWidth >= 0.7 && y/windowHeight <= 0.1) {
-                $('#resultBoxDocs').empty() ;
-                $('#totalHuman').empty() ;
-                //$resultBlock.hide( "drop", { direction: "down" }, "slow" );
-                $resultBlock.hide( "explode", 1000);
-
-
-
-             //   $resultBlock.attr('hidden','hidden') ;
-            }
-        }) ;
-
- //       cardCommands() ;
-
+        scrollBackground.answerBegin() ;     // начало выводаима
         var totalHuman  = yandexResult['totalHuman'] ;
         var pageStart =  yandexResult['pageStart'] ;
         var results = yandexResult['results'] ;
         var error = yandexResult['error'] ;
         if (error === 'false' || error === 'true' ) {
-            $('#resultBoxError').text(error) ;
-        }
-        $('#totalHuman').empty() ;
-        $('#totalHuman').append(totalHuman) ;
-        $('#totalHuman').addClass('result') ;
+     //       $('#resultBoxError').text(error) ;
 
-        var data_ol = $('#resultBoxDocs') ;
-        data_ol.empty() ;
+            scrollBackground.putError(error) ;      // вывод ошибки
+        }
+        //$('#totalHuman').empty() ;
+        //$('#totalHuman').append(totalHuman) ;
+        scrollBackground.putTotalHuman(totalHuman) ;      // вывод количество ответов
+
+
+        //var data_ol = $('#resultBoxDocs') ;
+        //data_ol.empty() ;
 
    //     $resultBlock.append(data_ol) ;
 
-        data_ol.attr('start',pageStart) ;
+//        data_ol.attr('start',pageStart) ;
         for (var i = 0; i < results.length; i++) {
             var result = results[i] ;
             var li = liCreate(result) ;
-            data_ol.append(li) ;
+
+            scrollBackground.putAnswerItem(li) ;   // вывод элемента ответа
+
+//            data_ol.append(li) ;
         }
   //     $resultBlock.dialog('open') ;
     } ;

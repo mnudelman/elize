@@ -4,6 +4,7 @@
 function UserInterface() {
     var smoke = new SmokeClouds();      // движение облаков
     var backgroundImg  ; // объект - элементы изображения
+    var scrollBackground ;
     var centralCircle = {} ;            // центральный круг
     var stamp = {} ;                    // печать
     var screenClosed = false ;
@@ -18,7 +19,13 @@ function UserInterface() {
     //-----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - элементы изображения
+        scrollBackground = paramSet.scrollBackground ;
+
         backgroundImg.init() ;
+
+        scrollBackground.init() ;
+
+
          stampDefine() ;              // объект stamp   - печать
         centralCircleDefine() ;      // объект centralCircle - ценральный круг
         $(document).click(function (e) {
@@ -26,14 +33,21 @@ function UserInterface() {
   //              queryTextArea() ;
             }
             if (isStampClick(e)) {
-                currentQuery = $queryArea.val() ;
-                var requestGo = paramSet.requestGo ;
-                requestGo.setRequestText(currentQuery) ;
-                var auto = true ;
-                //  сначала тип, потом Go -  по типу меняем круг
 
-                requestGo.requestExecute(auto) ;
-            }else {
+           //     scrollBackground.show() ;
+//                testScrollBackground() ;
+
+
+  //           if (false) {
+                 currentQuery = $queryArea.val();
+                 var requestGo = paramSet.requestGo;
+                 requestGo.setRequestText(currentQuery);
+                 var auto = true;
+                 //  сначала тип, потом Go -  по типу меняем круг
+
+                 requestGo.requestExecute(auto);
+    //         }
+        }else {
               var philosophyForm = paramSet.philosophyForm ;
                 philosophyForm.stopShow() ;
                 backgroundImg.centralCircleShow('query') ;
@@ -44,18 +58,20 @@ function UserInterface() {
                 $queryArea.focus() ;
             }
         });
+ //       if (false) {
         $(window).on('resize', function() {
             smoke.smokeResize();
             resize() ;
         });
-        backgroundImg.centralCircleShow('query') ;
-        var idText = backgroundImg.getIdText('query') ;
-        $queryArea = $('#'+idText) ;
-        $queryArea.attr('placeholder','введите вопрос') ;
-        $queryArea.focus() ;
-        smoke.init();
-        smoke.smokeGo();
 
+     backgroundImg.centralCircleShow('query');
+     var idText = backgroundImg.getIdText('query');
+     $queryArea = $('#' + idText);
+     $queryArea.attr('placeholder', 'введите вопрос');
+     $queryArea.focus();
+     smoke.init();
+     smoke.smokeGo();
+ //}
 
     } ;
     var resize = function() {

@@ -30,8 +30,8 @@ class MainProjects {
         curl_close($ch);
     }
     public function setQuery($query) {
-        //$this->currentQuery = urlencode($query) ;
-        $this->currentQuery = 'холодильник' ;    // $query;
+        $this->currentQuery = urlencode($query) ;
+        //$this->currentQuery = 'холодильник' ;    // $query;
     }
     public function getResult() {
         return [

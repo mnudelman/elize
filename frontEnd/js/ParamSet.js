@@ -20,6 +20,7 @@ function ParamSet() {
     this.userInterface ;
     this.requestGo ;
     this.backgroundImage;
+    this.scrollBackground ;
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -67,6 +68,7 @@ function ParamSet() {
         _this.userInterface = new UserInterface() ;
         _this.requestGo = new RequestGo() ;
         _this.backgroundImage = new BackgroundImg() ;
+        _this.scrollBackground = new ScrollBackground();
 //
 
     } ;

@@ -6,6 +6,7 @@ body {
 }
 /**--- представление результата --**/
 .result {
+    /*background-image: url("../../images/userInterface/scroll_clear.png") ;*/
     background-image: url("../../images/userInterface/scroll_clear.png") ;
     background-size: auto 100%;
     background-repeat: no-repeat;

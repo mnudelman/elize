@@ -73,7 +73,7 @@ fieldset img{
 }
 .data ol{
     margin-left:-54px;
-    padding-left:54px;
+    padding-left:0 ; /*54px;*/
 }
 .data ol li{
     font-size:20px;

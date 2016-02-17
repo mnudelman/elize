@@ -7,6 +7,7 @@ function MainProjectsForm() {
         var currentPage = 0;        //  текущая страница результата
         var $resultBlock = $('#resultBlock');
         var queryResult = {};    // результат запроса
+        var scrollBackground ;
         var _this = this ;
         //--------------------------------------//
         this.init = function() {
@@ -23,6 +24,9 @@ function MainProjectsForm() {
          * Отправить запрос.получить ответ
          */
         this.queryGo = function(i) {
+            scrollBackground = paramSet.scrollBackground ;
+            scrollBackground.answerInit() ;        // вывод пустой формы
+
             var page =  (i === undefined) ? 0 : i  ;
             queryResult = {} ;
             var goVect = {
@@ -68,32 +72,7 @@ function MainProjectsForm() {
     //}
 
     var responseShow = function() {
-            var windowHeight = $(window).height() ;
-            var windowWidth = $(window).width() ;
-            var w = 1.184*windowHeight ;
-            var left = (windowWidth - w)/2 ;
-            $resultBlock.css('width',w) ;
-            $resultBlock.css('height',windowHeight) ;
-            $resultBlock.css('overflow','auto') ;
-            $resultBlock.css('position','absolute') ;
-            $resultBlock.css('top',10) ;
-            $resultBlock.css('left',left) ;
-            //$resultBlock.removeAttr('hidden') ;
-            $resultBlock.show( "blind", 1000);
-            $resultBlock.on('click',function(e) {     // закрыть по click
-                var x = e.pageX;
-                var y = e.pageY;
-                var windowHeight = $(window).height() ;
-                var windowWidth = $(window).width() ;
-                if (x/windowWidth >= 0.7 && y/windowHeight <= 0.1) {
-                    $('#resultBoxDocs').empty() ;
-                    $('#totalHuman').empty() ;
-                    $resultBlock.hide( "drop", { direction: "down" }, "slow" );
-             //       $resultBlock.attr('hidden','hidden') ;
-                }
-            }) ;
-
-//            cardCommands() ;
+            scrollBackground.answerBegin() ;     // начало выводаима
 
             var icon = queryResult['icon'] ;
             var results = queryResult['results'] ;
@@ -101,21 +80,22 @@ function MainProjectsForm() {
             var pageStart =  1 ;        //   queryResult['pageStart'] ;
             var error = false ;
             if (error === 'false' || error === 'true' ) {
-                $('#resultBoxError').text(error) ;
+      //          $('#resultBoxError').text(error) ;
+                scrollBackground.putError(error) ;      // вывод ошибки
             }
-            $('#totalHuman').empty() ;
-            $('#totalHuman').append(totalHuman) ;
-            $('#totalHuman').addClass('result') ;
+            scrollBackground.putTotalHuman(totalHuman) ;      // вывод количество ответов
+  //          $('#totalHuman').addClass('result') ;
 
-            var data_ol = $('#resultBoxDocs') ;
-            data_ol.empty() ;
-        //    $resultBlock.append(data_ol) ;
-            data_ol.attr('start',pageStart) ;
+        //    var data_ol = $('#resultBoxDocs') ;
+        //    data_ol.empty() ;
+        ////    $resultBlock.append(data_ol) ;
+        //    data_ol.attr('start',pageStart) ;
             for (var i = 0; i < results.length; i++) {
                 var result = results[i] ;
                 var li = liCreate(result) ;
                 li.css('list-style-image','url('+icon+')') ;
-                data_ol.append(li) ;
+                scrollBackground.putAnswerItem(li) ;   // вывод элемента ответа
+        //        data_ol.append(li) ;
             }
         } ;
         var liCreate = function(result) {

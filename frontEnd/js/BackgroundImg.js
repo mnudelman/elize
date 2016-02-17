@@ -84,10 +84,10 @@ function BackgroundImg() {
                },
                '196l': {
                    place: {
-                       x1: 192,
-                       y1: 710,
-                       x2: 632,
-                       y2: 996
+                       x1: 159, //192,
+                       y1: 705, //710,
+                       x2: 684,   //632,
+                       y2: 1023
                    },
                    img: {
                        file: '196l.png'
@@ -371,7 +371,7 @@ function BackgroundImg() {
                         y2: 688
                     },
                     img: {
-                        file: 'r1_3.png'
+                        file: 'r3_1.png'
                     }
                 }
             }
