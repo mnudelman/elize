@@ -112,6 +112,7 @@ function ScrollBackground() {
             dataAreaY: 0,
             dyHidden: 0 ,
             kdyDataArea : 1,
+            wheelMoving :0 ,
            sliderYMin : caption['place']['y2'],
            sliderYMax: mainHeight - (slider['place']['y2'] - slider['place']['y1']) ,
             stop : true
@@ -264,11 +265,24 @@ function ScrollBackground() {
 
     } ;
     var scrollEvents = function() {
+        $mainBlockDiv.mousewheel(function(event, delta) {
+
+            scrollingGo(event) ;
+ //           scrollingDebug(delta) ;
+        });
+
+
+
+
+
         $sliderDiv.off('click') ;
         $mainBlockDiv.off('mousemove') ;
         $sliderDiv.click(function(e) {
             scrolling.stop = !scrolling.stop;
-            var height = slider.place['y2'] - slider.place['y1'];
+            if (scrolling.pageY0 === 0) {
+
+            }
+             var height = slider.place['y2'] - slider.place['y1'];
             scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
             scrolling.sliderYMax = kResize['ky'] * (mainHeight - height);
             scrolling.pageY = e.pageY;
@@ -282,21 +296,21 @@ function ScrollBackground() {
     //        scrollingDebug();
         }) ;
 
-        $mainBlockDiv.mousemove(function(e) {
-            if (!scrolling.stop ) {
-                scrolling.pageY = e.pageY;
-                var top = scrolling.sliderY0 + (e.pageY - scrolling.pageY0);
-                top = Math.max(top,scrolling.sliderYMin) ;
-                top = Math.min(top,scrolling.sliderYMax) ;
-
-                $sliderDiv.css('top', top);
-                scrolling.sliderY = pixelToNumber($sliderDiv.css('top')) ;
-                var topData = scrolling.dataAreaY0 -
-                    scrolling.kdyDataArea * (scrolling.sliderY - scrolling.sliderY0);
-                $dataAreaDiv.css('top',topData) ;
-            }
+        //$mainBlockDiv.mousemove(function(e) {
+        //    if (!scrolling.stop ) {
+        //        scrolling.pageY = e.pageY;
+        //        var top = scrolling.sliderY0 + (e.pageY - scrolling.pageY0);
+        //        top = Math.max(top,scrolling.sliderYMin) ;
+        //        top = Math.min(top,scrolling.sliderYMax) ;
+        //
+        //        $sliderDiv.css('top', top);
+        //        scrolling.sliderY = pixelToNumber($sliderDiv.css('top')) ;
+        //        var topData = scrolling.dataAreaY0 -
+        //            scrolling.kdyDataArea * (scrolling.sliderY - scrolling.sliderY0);
+        //        $dataAreaDiv.css('top',topData) ;
+        //    }
      //       scrollingDebug() ;
-        }) ;
+     //   }) ;
        // ------ закрытие формы   --------//
         $CaptionDiv.click(function(e) {
             var x = e.pageX;
@@ -314,6 +328,52 @@ function ScrollBackground() {
                 scrolling.stop = true ;
             }
         }) ;
+    } ;
+    var scrollingBegin = function() {
+        scrolling.stop = (scrolling.dyHidden <= 0) ;
+        var height = slider.place['y2'] - slider.place['y1'];
+        scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
+        scrolling.sliderYMax = kResize['ky'] * (mainHeight - height);
+        scrolling.pageY = 0 ; //e.pageY;
+        scrolling.pageY0 = 0 ; //e.pageY;
+        scrolling.sliderY = pixelToNumber($sliderDiv.css('top'));
+        scrolling.sliderY0 = pixelToNumber($sliderDiv.css('top'));
+        scrolling.dataAreaY0 = pixelToNumber($dataAreaDiv.css('top'));
+        scrolling.dataAreaY = scrolling.dataAreaY0 ;
+        scrolling.wheelMoving = 0 ;
+        scrolling.kdyDataArea =
+            scrolling.dyHidden / (scrolling.sliderYMax - scrolling.sliderYMin) ;
+
+    } ;
+    var scrollingGo = function(e) {
+        if (!scrolling.stop ) {
+            var wheelSteps = 10 ;    // число вращений колеса мыши
+            var maxDy = 20 ;
+            var minDy = 10 ;
+            scrolling.pageY = e.pageY;
+            var dyMin = Math.round(scrolling.dyHidden/wheelSteps) ;
+            dyMin = Math.min(dyMin,maxDy) ;
+            dyMin = Math.max(dyMin,minDy) ;
+            var eDy = e.deltaY * dyMin ;
+
+
+
+            var newMoving = scrolling.wheelMoving + eDy ;
+
+        //    var top = scrolling.sliderY0 + (e.pageY - scrolling.pageY0);
+            var top = scrolling.sliderY0 - newMoving ;
+
+            var realTop = Math.max(top,scrolling.sliderYMin) ;
+            realTop = Math.min(realTop,scrolling.sliderYMax) ;
+            var deltaMoving = realTop - top ;
+            scrolling.wheelMoving = newMoving - deltaMoving ;
+            $sliderDiv.css('top', top);
+            scrolling.sliderY = pixelToNumber($sliderDiv.css('top')) ;
+            var topData = scrolling.dataAreaY0 -
+                scrolling.kdyDataArea * (scrolling.sliderY - scrolling.sliderY0);
+            $dataAreaDiv.css('top',topData) ;
+        }
+
     } ;
     /**
      * расчёт не видимой части выведенных данных
@@ -353,6 +413,8 @@ function ScrollBackground() {
     var scrollingDebug = function() {
         $messageDiv.empty() ;
         var $p = $('<p/>') ;
+        $p.css('background-color','#CAD752') ;
+        $p.css('paddind','10') ;
         $messageDiv.append($p) ;
         var text  = 'stepDy : ' + scrolling.stepDy+'<br>' ;
         $p.append(text) ;
@@ -371,6 +433,9 @@ function ScrollBackground() {
         $p.append(text) ;
         text  = 'kDy : ' + scrolling.kdyDataArea +'<br>' ;
         $p.append(text) ;
+            text  = 'wheelMoving : ' + scrolling.wheelMoving  +'<br>' ;
+            $p.append(text) ;
+
     } ;
     /**
      * начало вывода пустая форма
@@ -380,6 +445,10 @@ function ScrollBackground() {
         defineTopology() ;
         // запустить диаграмму
         $mainBlockDiv.css('cursor','progress') ;
+        dataAreaHiddenClc() ;
+        scrollingShow() ;
+        scrollingBegin() ;
+
     } ;
     this.answerBegin = function() {
         $mainBlockDiv.css('cursor','default') ;
@@ -402,6 +471,7 @@ function ScrollBackground() {
         $dataList.append($liItem) ;
         dataAreaHiddenClc() ;
         scrollingShow() ;
+        scrollingBegin() ;
     } ;
     /**
      * конец вывода ответа

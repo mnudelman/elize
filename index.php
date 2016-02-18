@@ -10,6 +10,7 @@
 $dirLib = './../lib';
 $dirJstree = $dirLib . '/jstree';
 $dirJquery_ui = $dirLib . '/jquery-ui/jquery-ui-1.11.4';
+$dirMousewheel = $dirLib.'/jquery-mousewheel/mousewheel-3.1.13' ;
 $dirJs = './frontEnd/js';
 $dirStyle = './frontEnd/styles';
 ?>
@@ -33,13 +34,9 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirLib; ?>/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="<?= $dirJquery_ui; ?>/jquery-ui.js"></script>
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
+    <script type="text/javascript" src="<?= $dirMousewheel; ?>/jquery.mousewheel.js"></script>
 
-
-    <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script> <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script> <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script> <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script> <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ResponseForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/MainProjectsForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
