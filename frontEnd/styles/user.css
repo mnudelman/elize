@@ -1,13 +1,14 @@
 /**--- фоновая картинка --**/
 body {
     background-image: url("../../images/userInterface/magic2.png");
-    background-size: cover;
+    background-size: 100% auto ; /*contain ;/*cover;*/
+    overflow: hidden;
     background-repeat: no-repeat;
 }
 /**--- представление результата --**/
 .result {
     /*background-image: url("../../images/userInterface/scroll_clear.png") ;*/
-    background-image: url("../../images/userInterface/scroll_clear.png") ;
+    background-image: url("../../images/userInterface/scroll_empty.png") ;
     background-size: auto 100%;
     background-repeat: no-repeat;
     z-index: 100 ;

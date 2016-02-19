@@ -8,6 +8,7 @@ function PhilosophyForm() {
     var animateStop = false ;
     var $resultBlock = $('#resultBlockPhilosophy') ;
     var $answerArea ;     // область вывода текста
+    var formShowFlag = false ;
     //----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
@@ -23,6 +24,7 @@ function PhilosophyForm() {
      } ;
 
     this.queryGo = function() {
+       formShowFlag = true ;
        responseShow() ;
     } ;
 
@@ -32,6 +34,13 @@ function PhilosophyForm() {
     this.stopShow = function() {
         $resultBlock.empty() ;
         animateStop = true ;
+        formShowFlag = false ;
+    } ;
+    this.resize = function() {
+        if (formShowFlag) {
+            animateStop = true ;
+            responseShow() ;
+        }
     } ;
 
     var responseShow = function() {

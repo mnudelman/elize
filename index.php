@@ -92,7 +92,11 @@ $dirStyle = './frontEnd/styles';
 <!--            <img src="images/cards/1.png" style="width:7%">-->
         </div>
     </div>
-    <div id="resultBlockNew"></div>
+    <!--rgba(10,10,120,0.5) -->
+    <div id="resultBackground" style="position:absolute;background-color:rgba(10,10,120,0.7);
+                              width:100%;height:100%; top:0;left:0;" >
+          <div id="resultBlockNew"></div>
+    </div>
 </div>
 
 <div>

@@ -12,6 +12,7 @@ function ScrollBackground() {
     var mainHeight ;
     var rightMargin ;
     var $mainBlockDiv = $('#resultBlockNew') ;
+    var $resultBackground = $('#resultBackground') ;
 
     var $CaptionDiv ;           // шапка - заголовок свитка
     var $dataAreaDiv ;            // область данных
@@ -24,6 +25,7 @@ function ScrollBackground() {
     var kResize = {kx: 1, ky:1} ; // коэффициенты пересчёта по размеру экрана
     var dirImg ;
     var scrolling = {} ;         // текущая прокрутка
+    var formShowFlag = false ;
     //---------------------//
     var $movingSlider ;
     var _this = this ;
@@ -72,7 +74,7 @@ function ScrollBackground() {
                 y1:126,
                 x2: 1530 - 370 -30 ,
                 y2: 422,
-                y1Max : mainHeight - (422 - 126)
+                y1Max : mainHeight - (422 - 126) -10
             },
             img : {
                 file: 'slider.png'
@@ -84,6 +86,7 @@ function ScrollBackground() {
                 y1:126,
                 x2: 1530 - 370 - 50,
                 y2: mainHeight - 30
+
             },
             background : {
                 img: {
@@ -119,7 +122,7 @@ function ScrollBackground() {
         } ;
 
         kResizeClc() ;
-
+        $resultBackground.attr('hidden','hidden') ;
     } ;
     var mainSizes = function() {
         var place = mainBlock['place'] ;
@@ -143,6 +146,7 @@ function ScrollBackground() {
         $scrollLineDiv = $('#' + mainBlockId +'_scrollLine') ;
         $messageDiv = $('#' + mainBlockId +'_message') ;
         scrollEvents() ;
+
     } ;
     var kResizeClc = function() {
         var place = mainBlock['place'] ;
@@ -151,10 +155,10 @@ function ScrollBackground() {
         var screenWidth = $(window).width() ;
         var screenHeight = $(window).height() ;
         kResize['ky'] = Math.round((screenHeight/placeHeight)*10000)/10000 ;
-        var placeClcWidth = kResize['ky'] * placeClcWidth ;
+        var placeClcWidth = kResize['ky'] * placeWidth ;
         if (placeClcWidth > screenWidth*0.8) {
             var realWidth = Math.min(screenWidth*0.8,placeClcWidth) ;
-            kResize['kx'] = Math.round((realWidtht/placeClcWidth)*10000)/10000 ;
+            kResize['kx'] = Math.round((realWidth/placeWidth)*10000)/10000 ;
         } else {
             kResize['kx'] = kResize['ky'] ;
         }
@@ -173,6 +177,7 @@ function ScrollBackground() {
 
         $mainBlockDiv.css('height',ky * (y2 - y1)) ;
         var width = kx * (x2 - x1) ;
+
         $mainBlockDiv.css('width',width) ;
 
         $mainBlockDiv.css('left',(screenWidth - width)/2) ;
@@ -181,10 +186,13 @@ function ScrollBackground() {
         $mainBlockDiv.css('background-image','url("' + imgFile +'")') ;
         $mainBlockDiv.css('background-repeat','no-repeat') ;
         $mainBlockDiv.css('background-size','100% 100%') ;
+      //  $mainBlockDiv.css('background-color','black') ;
         $mainBlockDiv.css('z-index',10) ;
         $mainBlockDiv.css('overflow','hidden') ;
         //$mainBlockDiv.removeAttr('hidden') ;
+        $resultBackground.removeAttr('hidden') ;
         $mainBlockDiv.show( "blind", 1000);
+        formShowFlag = true ;
     } ;
     var dataBlockDefine = function() {
         internalBlockDefine('dataArea',dataArea) ;
@@ -213,10 +221,13 @@ function ScrollBackground() {
     var internalBlockDefine = function(blockName,block) {
         var mainId = $mainBlockDiv.attr('id') ;
         var place = block['place'] ;
-
-        var $blk = $('<div/>') ;
-        $blk.attr('id',mainId+'_'+blockName) ;
-        $mainBlockDiv.append($blk) ;
+        var blkId = mainId+'_'+blockName ;
+        var $blk = $('#' + blkId) ;
+        if ($blk.length === 0) {
+            $blk = $('<div/>') ;
+            $blk.attr('id',blkId) ;
+            $mainBlockDiv.append($blk) ;
+        }
         $blk.css('position','absolute') ;
         var x1 = place['x1'] ;
         var x2 = place['x2'] ;
@@ -234,13 +245,19 @@ function ScrollBackground() {
         $blk.css('left',kx * x1) ;
         if (block['img'] !== undefined) {
             var imgFile = dirImg + '/' + block['img']['file'];
-            var $img = $('<img/>');
-            $img.attr('src', imgFile);
+            var $img = $('#'+blkId + ' img') ;
+            if($img.length === 0) {
+               $img = $('<img/>');
+                $blk.append($img);
+                $img.attr('src', imgFile);
+            }
+
             $img.css('width', width);
             if (height !== undefined) {
                 $img.css('height', height);
             }
-            $blk.append($img);
+
+
         }
         if (block['background'] !== undefined) {
 
@@ -312,6 +329,11 @@ function ScrollBackground() {
      //       scrollingDebug() ;
      //   }) ;
        // ------ закрытие формы   --------//
+        captionClick() ;
+    } ;
+    var captionClick = function() {
+        // ------ закрытие формы   --------//
+        $CaptionDiv.off('click') ;
         $CaptionDiv.click(function(e) {
             var x = e.pageX;
             var y = e.pageY;
@@ -321,13 +343,16 @@ function ScrollBackground() {
             var width = kx *(mainBlock['place']['x2'] -  mainBlock['place']['x1']) ;
             var top = ky * mainBlock['place']['y1'] ;
             var height =  ky *(caption['place']['y2'] -  caption['place']['y1']) ;
-            if ((x - left) >= 0.7 * width && (y - top) <= 0.5 * height) {
+            if ((x - left) >= 0.5 * width && (y - top) <= 0.7 * height) {
 
                 $mainBlockDiv.hide( "explode", 1000);
                 $mainBlockDiv.empty() ;
                 scrolling.stop = true ;
+                formShowFlag = false ;
+                $resultBackground.attr('hidden','hidden') ;
             }
         }) ;
+
     } ;
     var scrollingBegin = function() {
         scrolling.stop = (scrolling.dyHidden <= 0) ;
@@ -478,5 +503,37 @@ function ScrollBackground() {
      */
     this.answerEnd = function() {
 
+    };
+    this.resize = function() {
+        if (formShowFlag) {
+            kResizeClc();
+            var screenWidth = $(window).width();
+            var place = mainBlock.place;
+            var x1 = place['x1'];
+            var x2 = place['x2'];
+            var y1 = place['y1'];
+            var y2 = place['y2'];
+            var kx = kResize['kx'];
+            var ky = kResize['ky'];
+            $mainBlockDiv.css('top', ky * y1);
+
+            $mainBlockDiv.css('height', ky * (y2 - y1));
+            var width = kx * (x2 - x1);
+
+            $mainBlockDiv.css('width', width);
+
+            $mainBlockDiv.css('left', (screenWidth - width) / 2);
+            //
+            dataAreaHiddenClc() ;
+            scrollingShow() ;
+            scrollingBegin() ;
+
+            internalBlockDefine('dataArea',dataArea) ;
+
+            internalBlockDefine('scrollLine', scrollLine);
+            internalBlockDefine('slider', slider);
+            internalBlockDefine('caption', caption);
+
+        }
     }
 }

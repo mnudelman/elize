@@ -5,22 +5,24 @@ function UserInterface() {
     var smoke = new SmokeClouds();      // движение облаков
     var backgroundImg  ; // объект - элементы изображения
     var scrollBackground ;
+    var philosophyForm ;
     var centralCircle = {} ;            // центральный круг
     var stamp = {} ;                    // печать
     var screenClosed = false ;
     var $queryArea ;                    // область ввовда текста
-    var resizeFlag = false ;
     var resizeGo = false ;
     var resizeSteps = 0 ;
-    var RESIZE_TIME_DELAY = 500 ;        // задержка при контроле изменения размеров
-    var RESIZE_TAKTS_MAX = 2;            // число тактов, после которых фиксируются изменения размера
+    var RESIZE_TIME_DELAY = 200 ;        // задержка при контроле изменения размеров
+    var RESIZE_TAKTS_MAX = 1;            // число тактов, после которых фиксируются изменения размера
     var currentQuery = '' ;
+    var waitRequestType = false ;        // ожидание определения типа запроса(во избежании повторных нажатий)
+    var stopWait = false ;               //  остановить ожидания
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - элементы изображения
         scrollBackground = paramSet.scrollBackground ;
-
+        philosophyForm = paramSet.philosophyForm ;
         backgroundImg.init() ;
 
         scrollBackground.init() ;
@@ -30,37 +32,36 @@ function UserInterface() {
         centralCircleDefine() ;      // объект centralCircle - ценральный круг
         $(document).click(function (e) {
             if (isCentralCircleClick(e)) {
-  //              queryTextArea() ;
             }
             if (isStampClick(e)) {
+ //               if (!waitRequestType) {      // повторные не работают
+                    //                testScrollBackground() ;
 
-           //     scrollBackground.show() ;
-//                testScrollBackground() ;
 
+                    currentQuery = $queryArea.val();
+                    var requestGo = paramSet.requestGo;
+                    requestGo.setRequestText(currentQuery);
+                    var auto = true;
+                    //waitRequestType = true ;
+                    //waitRequestReady() ;    // ждёмс
 
-  //           if (false) {
-                 currentQuery = $queryArea.val();
-                 var requestGo = paramSet.requestGo;
-                 requestGo.setRequestText(currentQuery);
-                 var auto = true;
-                 //  сначала тип, потом Go -  по типу меняем круг
+                    requestGo.requestExecute(auto);
 
-                 requestGo.requestExecute(auto);
-    //         }
-        }else {
-              var philosophyForm = paramSet.philosophyForm ;
-                philosophyForm.stopShow() ;
-                backgroundImg.centralCircleShow('query') ;
-                var idText = backgroundImg.getIdText('query') ;
-                $queryArea = $('#'+idText) ;
-                $queryArea.attr('placeholder','введите вопрос') ;
-                $queryArea.val(currentQuery) ;
-                $queryArea.focus() ;
+ //               }
+            } else {
+                var philosophyForm = paramSet.philosophyForm;
+                philosophyForm.stopShow();
+                backgroundImg.centralCircleShow('query');
+                var idText = backgroundImg.getIdText('query');
+                $queryArea = $('#' + idText);
+                $queryArea.attr('placeholder', 'введите вопрос');
+                $queryArea.val(currentQuery);
+                $queryArea.focus();
             }
         });
  //       if (false) {
         $(window).on('resize', function() {
-            smoke.smokeResize();
+    //        smoke.smokeResize();
             resize() ;
         });
 
@@ -74,25 +75,41 @@ function UserInterface() {
  //}
 
     } ;
+    /**
+     * ожидание ответа о типе запроса
+     */
+    var waitRequestReady = function() {
+        var tmpTimer = setInterval(function () {
+            if (stopWait || requestGo.isAnswReady() ) {
+                clearInterval(tmpTimer);
+                waitRequestType = false ;
+                $queryArea.css('cursor','progress') ;
+                $queryArea.attr('readonly','readonly') ;
+            }else {
+                $queryArea.css('cursor','default') ;
+                $queryArea.removeAttr('readonly') ;
+            }
+
+        }, 300);
+    } ;
     var resize = function() {
-        resizeFlag =true ;
+        resizeSteps = 0;
         if (!resizeGo) {    // запустить таймер
             resizeGo = true;
             var tmpTimer = setInterval(function () {
-                if (resizeFlag) {
-                    resizeFlag = false;
+                if (++resizeSteps >= RESIZE_TAKTS_MAX) {    // конец изменения размера
+                    clearInterval(tmpTimer);
+                    stampDefine();              // объект stamp   - печать
+                    centralCircleDefine();      // объект centralCircle - ценральный круг
+                    backgroundImg.centralCircleShow('query');
+                    $queryArea.attr('placeholder', 'введите вопрос');
+                    $queryArea.focus();
+                    smoke.smokeGo();
+                    resizeGo = false;
                     resizeSteps = 0;
-                } else {
-                    if (++resizeSteps >= RESIZE_TAKTS_MAX) {    // конец изменения размера
-                        clearInterval(tmpTimer);
-                        resizeGo = false;
-                        resizeSteps = 0;
-                        stampDefine();              // объект stamp   - печать
-                        centralCircleDefine();      // объект centralCircle - ценральный круг
-                        smoke.smokeGo();
+                    philosophyForm.resize() ;
+                    scrollBackground.resize() ;
 
-
-                    }
                 }
 
             }, RESIZE_TIME_DELAY);
