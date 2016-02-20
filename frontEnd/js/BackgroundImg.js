@@ -73,10 +73,10 @@ function BackgroundImg() {
            items: {
                '141': {
                    place: {
-                       x1: 548,
-                       y1: 670,
-                       x2: 1408,
-                       y2: 860
+                       x1: 514,
+                       y1: 606,
+                       x2: 1463,
+                       y2: 933
                    },
                    img: {
                        file: '141.png'
@@ -84,10 +84,10 @@ function BackgroundImg() {
                },
                '196l': {
                    place: {
-                       x1: 159, //192,
-                       y1: 705, //710,
-                       x2: 684,   //632,
-                       y2: 1023
+                       x1: 167, //192,
+                       y1: 708, //710,
+                       x2: 929,   //632,
+                       y2: 1052
                    },
                    img: {
                        file: '196l.png'
@@ -95,10 +95,10 @@ function BackgroundImg() {
                },
                '196r': {
                    place: {
-                       x1: 1154,
-                       y1: 718,
-                       x2: 1598,
-                       y2: 996
+                       x1: 821,
+                       y1: 695,
+                       x2: 1615,
+                       y2: 1085
                    },
                    img: {
                        file: '196r.png'
@@ -106,10 +106,10 @@ function BackgroundImg() {
                },
                '197l': {
                    place: {
-                       x1: 120,
-                       y1: 672,
-                       x2: 616,
-                       y2: 922
+                       x1: 92,
+                       y1: 669,
+                       x2: 689,
+                       y2: 1090
                    },
                    img: {
                        file: '197l.png'
@@ -117,10 +117,10 @@ function BackgroundImg() {
                },
                '197r': {
                    place: {
-                       x1: 1270,
-                       y1: 672,
-                       x2: 1776,
-                       y2: 930
+                       x1: 1206,
+                       y1: 670,
+                       x2: 1787,
+                       y2: 1071
                    },
                    img: {
                        file: '197r.png'
@@ -128,10 +128,10 @@ function BackgroundImg() {
                },
                '146l': {
                    place: {
-                       x1: 534,
-                       y1: 680,
-                       x2: 726,
-                       y2: 796
+                       x1: 437,
+                       y1: 647,
+                       x2: 729,
+                       y2: 801
                    },
                    img: {
                        file: '146l.png'
@@ -139,10 +139,10 @@ function BackgroundImg() {
                },
                '146r': {
                    place: {
-                       x1: 1093,
-                       y1: 688,
-                       x2: 1274,
-                       y2: 788
+                       x1: 1073,
+                       y1: 647,
+                       x2: 1399,
+                       y2: 803
                    },
                    img: {
                        file: '146r.png'
@@ -150,10 +150,10 @@ function BackgroundImg() {
                },
                '147': {
                    place: {
-                       x1: 645,
-                       y1: 804,
-                       x2: 1349,
-                       y2: 956
+                       x1: 602,
+                       y1: 771,
+                       x2: 1376,
+                       y2: 1018
                    },
                    img: {
                        file: '147.png'
@@ -161,10 +161,10 @@ function BackgroundImg() {
                },
                '144': {
                    place: {
-                       x1: 547,
-                       y1: 713,
-                       x2: 1330,
-                       y2: 1019
+                       x1: 480,
+                       y1: 657,
+                       x2: 1417,
+                       y2: 1142
                    },
                    img: {
                        file: '144.png'
@@ -172,10 +172,10 @@ function BackgroundImg() {
                },
                '142r': {
                    place: {
-                       x1: 1426,
-                       y1: 680,
-                       x2: 1790,
-                       y2: 824
+                       x1: 1373,
+                       y1: 671,
+                       x2: 1780,
+                       y2: 870
                    },
                    img: {
                        file: '142r.png'
@@ -183,10 +183,10 @@ function BackgroundImg() {
                },
                '142l': {
                    place: {
-                       x1: 110,
-                       y1: 678,
-                       x2: 476,
-                       y2: 834
+                       x1: 90,
+                       y1: 672,
+                       x2: 505,
+                       y2: 874
                    },
                    img: {
                        file: '142l.png'
@@ -194,10 +194,10 @@ function BackgroundImg() {
                },
                '139r': {
                    place: {
-                       x1: 740,
-                       y1: 658,
-                       x2: 1172,
-                       y2: 834
+                       x1: 650,
+                       y1: 544,
+                       x2: 1224,
+                       y2: 892
                    },
                    img: {
                        file: '139r.png'
@@ -205,10 +205,10 @@ function BackgroundImg() {
                },
                '139l': {
                    place: {
-                       x1: 740,
-                       y1: 658,
-                       x2: 1172,
-                       y2: 834
+                       x1: 648,
+                       y1: 559,
+                       x2: 1267,
+                       y2: 913
                    },
                    img: {
                        file: '139l.png'
@@ -216,10 +216,10 @@ function BackgroundImg() {
                },
                '140l': {
                    place: {
-                       x1: 384,
-                       y1: 648,
-                       x2: 826,
-                       y2: 828
+                       x1: 341,
+                       y1: 560,
+                       x2: 882,
+                       y2: 901
                    },
                    img: {
                        file: '140l.png'
@@ -227,10 +227,10 @@ function BackgroundImg() {
                },
                '140r': {
                    place: {
-                       x1: 1112,
-                       y1: 634,
-                       x2: 1572,
-                       y2: 824
+                       x1: 1034,
+                       y1: 548,
+                       x2: 1643,
+                       y2: 904
                    },
                    img: {
                        file: '140r.png'
