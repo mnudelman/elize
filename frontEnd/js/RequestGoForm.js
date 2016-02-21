@@ -11,6 +11,7 @@ function RequestGoForm() {
     var resultNodes ;         // список узлов, полученный от разбора запроса
     var currentTreeResult  ;
     var currentRootId ;       // корневой результата
+    var scrollBackground= paramSet.scrollBackground ;
     var _this = this ;
     //-----------------------------//
     this.init = function() {
@@ -60,6 +61,8 @@ function RequestGoForm() {
         $('#mainProjectsBt').button() ;
         $('#philosophyBt').button() ;
         treeInit() ;
+        scrollBackground= paramSet.scrollBackground ;
+        scrollBackground.init() ;
     } ;
     var queryGo = function() {
        var responseForm = paramSet.responseForm ;

@@ -21,7 +21,11 @@ class ConceptFunction
         $result = [] ;
         switch ($functName) {
             case 'ru_names' : {
-               $result =  $this->ru_names();
+                $result = $this->ru_names();
+                break;
+            }
+            case 'one_word_noun' : {
+                $result = $this->findNoun() ;
             }
         }
         return $result ;
@@ -42,6 +46,45 @@ class ConceptFunction
             }
 
         }
+        return $result ;
+    }
+
+    /**
+     * определить существительное.
+     * фраза соответсвует правилу, если состоит из единственного слова в именительном
+     * падеже едиств числа
+     * @return array
+     */
+    private function findNoun() {
+        $result = ['find'=>false, 'word' => ''] ;
+
+        if (sizeof($this->phraseWords) !== 1) {
+            return $result ;
+        }
+
+        $morphology = new MorphologyRu() ;
+        $morphology->setWords($this->phraseWords) ;
+
+
+
+        $parseResult = $morphology->parsePhrase() ;
+        // ищем сушествительное - в первом ( единственном слове)
+        $pars = $parseResult[0]['pars'] ;
+        $word = $parseResult[0]['word'] ;
+//        if (!is_array($pars)) {
+//            return $result ;
+//        }
+        foreach ($pars as $i => $item) {
+            $parsItem = $item['pars'] ;
+            if ($parsItem[0] === 'noun' &&                // существительное
+                $parsItem[1] === 'only' &&                // единственное число
+                $parsItem[3] === 'nominative-ends'        // иминительный падеж
+                 ) {
+                $result = ['find'=>true, 'word' => $word] ;
+                break ;
+            }
+        }
+
         return $result ;
     }
 

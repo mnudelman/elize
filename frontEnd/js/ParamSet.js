@@ -52,6 +52,7 @@ function ParamSet() {
         str = str.replace('/#','') ;
         str = str.replace('#','') ;
         str = str.replace('/index.php','') ;
+        str = str.replace('/index_admin.php','') ;
      //   str = str.replace('/frontEnd','') ;
         _this.windowLocationHost = str ;     //     str.replace('/index.html','') ;
         var url = _this.windowLocationHost+'/backEnd' ;

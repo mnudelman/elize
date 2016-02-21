@@ -65,7 +65,9 @@ class RequestType {
              'operation' => ['OR'],
              'concepts' => [
                  'buy' => ['action','buy'],
-                 'price' => ['object','price']
+                 'price' => ['object','price'],
+                 'noun' => ['object','noun']            // существительное
+
              ]
            ],
            // ПС, если один из вопросов (что, где,когда, .....)

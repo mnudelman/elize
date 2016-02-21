@@ -15,9 +15,12 @@ function MainScript() {
         if ($user.length == 0 ) {
             var $tabs = $('#tabs');
             $tabs.tabs({
-                heightStyle: 'auto'
+                heightStyle: 'auto',
+                collapsible: true
             });
+
             $tabs.animate({height: "show"}, 1000);
+            $tabs.draggable();
             requestForm.init();       // нач установка
             requestGoForm.init();
             philosophyForm.init();

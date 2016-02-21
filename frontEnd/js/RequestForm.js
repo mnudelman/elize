@@ -14,6 +14,8 @@ function RequestForm() {
     var $treeSaveBt = $('#treeSave') ;   // кнопка сохранения
     var nodeRootDefaultName = 'requestRoot' ;   // имя по умолчанию корневого узла дерева
     var POCKET_SIZE = 20 ;         // размер пакета (узлов)
+    var scrollBackground ;
+
     /**
      * загрузка описания
      */
@@ -93,6 +95,10 @@ function RequestForm() {
 
         };
         nodeEditForm.init(nodeTypes,typesNames) ;     // форма редактирования узла
+        scrollBackground = paramSet.scrollBackground ;
+        scrollBackground.init() ;
+        var backgroundImg = paramSet.backgroundImage ;
+        backgroundImg.init() ;
     };
     /**
      * редактировать описание
@@ -100,8 +106,9 @@ function RequestForm() {
     this.requestEdit = function () {
 
         $('#addForm').attr('hidden', 'hidden');
-        commandSet() ;          // командные кнопки
-        requestTreeInit() ;     // инициализация дерева
+           requestTreeInit() ;     // инициализация дерева
+           commandSet() ;          // командные кнопки
+
     };
     var  commandSet = function() {
         $treeSaveBt.button() ;
@@ -239,25 +246,32 @@ function RequestForm() {
             'successful' : false,
             'nodes' : []
         } ;
-
+        var iMax = 10 ;
+        var i = 0 ;
         ajaxExecute.postData(uploadVect, true);
         var tmpTimer = setInterval(function () {
             var answ = ajaxExecute.getRequestResult();
-            if (false == answ || undefined == answ) {
+            if ((false == answ || undefined == answ) && i++ < iMax) {
                 var mess = 'Нет соединения с БД....' ;
 
             } else {
+                if (i >= iMax) {
+
+               //     $('#tabs').tabs('option','hide') ;
+                    var disabled = $( "#tabs" ).tabs( "option", "disabled" );
+
+                   document.write('прервано по таймеру') ;
+                }
                 clearInterval(tmpTimer);
                 var message = answ['message'];
                 if (answ['successful'] == true) {
                     uploadVect['successful'] = true;
                     message = answ['message'];
-                    ready = true;
+                    treeBuild(answ['nodes']);
                 } else {
-                    ready = false;
                     message = answ['message'];
                 }
-                treeBuild(answ['nodes']);
+
             }
         }, 300);
 
