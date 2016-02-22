@@ -41,7 +41,6 @@ function AjaxExecutor(ajaxUrl) {
         ajaxComplete = false ;
         requestData = false ;
         $.post(
-       //     ajaxUrl + '/index.php',
             currentUrl + '/index.php',
             sendData,
             function(data) {

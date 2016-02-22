@@ -76,6 +76,15 @@ function MainProjectsForm() {
 
             var icon = queryResult['icon'] ;
             var results = queryResult['results'] ;
+            if (results.length === 0) {
+                    var responseForm = paramSet.responseForm ;
+                    responseForm.setQuery(currentQuery) ;
+                    responseForm.queryGo() ;
+                    return true ;
+            }
+
+
+
             var totalHuman  = 'обнаружено записей: ' + results.length ;
             var pageStart =  1 ;        //   queryResult['pageStart'] ;
             var error = false ;
