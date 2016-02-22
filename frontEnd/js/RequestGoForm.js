@@ -2,7 +2,8 @@
  * форма исполнения запроса
  */
 function RequestGoForm() {
-    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+//    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+    var ajax = new AjaxRequest() ;
     var $textLabel = $('#textGoLabel') ;
     var $requestText = $('#requestText') ;
     var $buttonGo = $('#requestGoBt') ;
@@ -82,39 +83,69 @@ function RequestGoForm() {
     /**
      * Отправить запрос на выполнение
      */
-    var requestGo = function() {    // отправить запрос на исполнение
+    //var requestGo__ = function() {    // отправить запрос на исполнение
+    //    resultNodes = {} ;
+    //    var goVect = {
+    //            'operation' : 'requestGo',
+    //            'nodeRoot' : 'requestRoot',
+    //            'nodeType' : 'root',
+    //            'successful' : false,
+    //            'requestText' : $requestText.val(),
+    //            'nodes' : []
+    //        } ;
+    //
+    //        ajaxExecute.postData(goVect, true);
+    //        var tmpTimer = setInterval(function () {
+    //            var answ = ajaxExecute.getRequestResult();
+    //            if (false == answ || undefined == answ) {
+    //                var mess = 'Нет соединения с БД....' ;
+    //
+    //            } else {
+    //                clearInterval(tmpTimer);
+    //                if (answ['successful'] == true) {
+    //                    goVect['successful'] = true;
+    //
+    //                    resultNodes = answ['result'] ;
+    //                    treeBuild() ;
+    //                    requestTypeShow(answ['requestTypes']) ;  // таблица типов
+    //                } else {
+    //                    ready = false;
+    //                    message = answ['message'];
+    //                }
+    //            }
+    //        }, 300);
+    //
+    //    } ;
+
+    var requestGo = function() {
         resultNodes = {} ;
         var goVect = {
-                'operation' : 'requestGo',
-                'nodeRoot' : 'requestRoot',
-                'nodeType' : 'root',
-                'successful' : false,
-                'requestText' : $requestText.val(),
-                'nodes' : []
-            } ;
-
-            ajaxExecute.postData(goVect, true);
-            var tmpTimer = setInterval(function () {
-                var answ = ajaxExecute.getRequestResult();
-                if (false == answ || undefined == answ) {
-                    var mess = 'Нет соединения с БД....' ;
-
-                } else {
-                    clearInterval(tmpTimer);
-                    if (answ['successful'] == true) {
-                        goVect['successful'] = true;
-
-                        resultNodes = answ['result'] ;
-                        treeBuild() ;
-                        requestTypeShow(answ['requestTypes']) ;  // таблица типов
-                    } else {
-                        ready = false;
-                        message = answ['message'];
-                    }
-                }
-            }, 300);
-
+            'operation' : 'requestGo',
+            'nodeRoot' : 'requestRoot',
+            'nodeType' : 'root',
+            'successful' : false,
+            'requestText' : $requestText.val(),
+            'nodes' : []
         } ;
+        ajax.setData(goVect) ;
+        ajax.setRequestFunc(function(answ){
+            if (answ['successful'] == true) {
+                goVect['successful'] = true;
+
+                resultNodes = answ['result'] ;
+                treeBuild() ;
+                requestTypeShow(answ['requestTypes']) ;  // таблица типов
+            }else {
+                var message = answ['message'];
+                ajax.errorMessage(message) ;
+            }
+        }) ;
+        ajax.go() ;
+    } ;
+
+
+
+
     /**
      * строится дерево вида:
      * root -> question, subject, action, object  - разделы запроса

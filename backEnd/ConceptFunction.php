@@ -61,7 +61,11 @@ class ConceptFunction
         if (sizeof($this->phraseWords) !== 1) {
             return $result ;
         }
-
+        //--- проверить ru_names -- //
+        $resNames = $this->ru_names() ;
+        if ($resNames['find'] === true) {
+            return $result ;
+        }
         $morphology = new MorphologyRu() ;
         $morphology->setWords($this->phraseWords) ;
 

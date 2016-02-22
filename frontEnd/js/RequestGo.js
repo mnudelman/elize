@@ -2,7 +2,7 @@
  * Выполнение запроса
  */
 function RequestGo() {
-    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+    var ajax = new AjaxRequest() ;         // исполнитель работы с ajax
     var requestText = '' ;
     var resultNodes = {} ;   // дерево результата запроса(для контроля и отладки)
     var answReady = false ;   // возврат запроса
@@ -19,10 +19,45 @@ function RequestGo() {
     /**
      * Отправить запрос на выполнение
      */
-    this.requestExecute = function(autoFlag) {    // отправить запрос на исполнение
-        autoFlag = (autoFlag === undefined) ? false : autoFlag ;  // автомат выполнение
-        answReady = false ;
+    //this.requestExecute__ = function(autoFlag) {    // отправить запрос на исполнение
+    //    autoFlag = (autoFlag === undefined) ? false : autoFlag ;  // автомат выполнение
+    //    answReady = false ;
+    //    resultNodes = {} ;
+    //    var goVect = {
+    //        'operation' : 'requestGo',
+    //        'nodeRoot' : 'requestRoot',
+    //        'nodeType' : 'root',
+    //        'successful' : false,
+    //        'requestText' : requestText,
+    //        'nodes' : []
+    //    } ;
+    //
+    //    ajaxExecute.postData(goVect, true);
+    //    var tmpTimer = setInterval(function () {
+    //        var answ = ajaxExecute.getRequestResult();
+    //        if (false == answ || undefined == answ) {
+    //            var mess = 'Нет соединения с БД....' ;
+    //
+    //        } else {
+    //            clearInterval(tmpTimer);
+    //            answReady = true ;
+    //            if (answ['successful'] == true) {
+    //                goVect['successful'] = true;
+    //
+    //                resultNodes = answ['result'] ;              // дерево результата
+    //                requestTypesDefine(answ['requestTypes']) ;  // таблица типов
+    //                if (autoFlag) {
+    //                    _this.automaticallyGo() ;
+    //                }
+    //            } else {
+    //            }
+    //        }
+    //    }, 300);
+    //
+    //} ;
+    this.requestExecute = function(auto) {
         resultNodes = {} ;
+        answReady = false ;
         var goVect = {
             'operation' : 'requestGo',
             'nodeRoot' : 'requestRoot',
@@ -31,29 +66,23 @@ function RequestGo() {
             'requestText' : requestText,
             'nodes' : []
         } ;
+        ajax.setData(goVect) ;
+        ajax.setRequestFunc(function(answ){
+            answReady = true ;
+            if (answ['successful'] == true) {
+                goVect['successful'] = true;
 
-        ajaxExecute.postData(goVect, true);
-        var tmpTimer = setInterval(function () {
-            var answ = ajaxExecute.getRequestResult();
-            if (false == answ || undefined == answ) {
-                var mess = 'Нет соединения с БД....' ;
-
-            } else {
-                clearInterval(tmpTimer);
-                answReady = true ;
-                if (answ['successful'] == true) {
-                    goVect['successful'] = true;
-
-                    resultNodes = answ['result'] ;              // дерево результата
-                    requestTypesDefine(answ['requestTypes']) ;  // таблица типов
-                    if (autoFlag) {
-                        _this.automaticallyGo() ;
-                    }
-                } else {
+                resultNodes = answ['result'] ;              // дерево результата
+                requestTypesDefine(answ['requestTypes']) ;  // таблица типов
+                if (auto) {
+                    _this.automaticallyGo() ;
                 }
+            }else {
+                var message = answ['message'];
+                ajax.errorMessage(message) ;
             }
-        }, 300);
-
+        }) ;
+        ajax.go() ;
     } ;
     /**
      * проверяет завершение запроса

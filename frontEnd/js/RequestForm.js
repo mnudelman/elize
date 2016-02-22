@@ -2,7 +2,8 @@
  * форма редактирования описателя запроса
  */
 function RequestForm() {
-    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+//    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+    var ajax ;         //  объект обмена с сервером
     var nodeTypes = {};       // типы узлов в смысле jstree
     var typesNames = {};       // имена типов
     var conceptSet = {} ;     // возможные значения узла типа concept
@@ -20,6 +21,7 @@ function RequestForm() {
      * загрузка описания
      */
     this.init = function() {       // Загрузка описания
+        ajax = new AjaxRequest() ;
         conceptSet = {
             'question_concept' : ['why','where','when'],
             'subject_concept'  : ['user']
@@ -201,11 +203,9 @@ function RequestForm() {
         currentTree = $('#mytree').jstree(true) ;
 
         $('#mytree').on("open_node.jstree", function (e,data) {
-//            alert('node: is opened') ;       // поставить счётчик видимых узлов
             paneHeightChange() ;
         }) ;
         $('#mytree').on("close_node.jstree", function (e,data) {
-//            alert('node:is closed') ;       // поставить счётчик видимых узлов
             paneHeightChange() ;
         }) ;
 
@@ -220,7 +220,6 @@ function RequestForm() {
        var height = minHeight/minNodes * nodeCount ;
        var realHeight = Math.max(height,minHeight) ;
        $('#treeEditDialog').css('height',realHeight) ;
-       // $('#tabs').css('height',realHeight) ;
     } ;
     var heightPanelCalculate = function() {
         var treeNodes = nodeEditForm.getTreeNodes() ;
@@ -235,6 +234,7 @@ function RequestForm() {
         }
         return countOpenedNodes ;
     } ;
+
     /**
      * Загрузить описание
      */
@@ -246,36 +246,20 @@ function RequestForm() {
             'successful' : false,
             'nodes' : []
         } ;
-        var iMax = 10 ;
-        var i = 0 ;
-        ajaxExecute.postData(uploadVect, true);
-        var tmpTimer = setInterval(function () {
-            var answ = ajaxExecute.getRequestResult();
-            if ((false == answ || undefined == answ) && i++ < iMax) {
-                var mess = 'Нет соединения с БД....' ;
 
-            } else {
-                if (i >= iMax) {
-
-               //     $('#tabs').tabs('option','hide') ;
-                    var disabled = $( "#tabs" ).tabs( "option", "disabled" );
-
-                   document.write('прервано по таймеру') ;
-                }
-                clearInterval(tmpTimer);
+        ajax.setData(uploadVect) ;
+        ajax.setRequestFunc(function(answ){
+            if (answ['successful'] == true) {
+                treeBuild(answ['nodes']);
+            }else {
                 var message = answ['message'];
-                if (answ['successful'] == true) {
-                    uploadVect['successful'] = true;
-                    message = answ['message'];
-                    treeBuild(answ['nodes']);
-                } else {
-                    message = answ['message'];
-                }
-
+                ajax.errorMessage(message) ;
             }
-        }, 300);
+        }) ;
+        ajax.go() ;
 
     } ;
+
     /**
      * индекс в списке - id в БД.
      * 1. ищем node.type == 'root'
@@ -303,6 +287,7 @@ function RequestForm() {
         autoTreeBuild = false ;
         nodeEditForm.setOperationIsComplete(true) ;
     } ;
+
     var childNodeAdd = function(parentNode,dbChildId,nodes) {
         for (var i = 0; i < dbChildId.length; i++) {
             var dbId = dbChildId[i] ;
@@ -336,49 +321,21 @@ function RequestForm() {
             'pocketEnd' : pocketEnd,
             'nodes' : sendPocket
         } ;
-
-        ajaxExecute.postData(downloadVect, true);
-        var tmpTimer = setInterval(function () {
-            var answ = ajaxExecute.getRequestResult();
-            if (false == answ || undefined == answ) {
-                var mess = {
-                    'fieldsMustBeFilled' : {
-                        'messageId': 'noAnswerFromDB'
-                    }
-                } ;
-
-            } else {
-                clearInterval(tmpTimer);
-                var message = answ['message'];
-
-
-
-                if (answ['successful'] == true) {
-                    downloadVect['successful'] = true;
-                    message = answ['message'];
-                    // загрузка в БД прошла успешно -> убрать флаги 'new' и поставить dbId
-                    if (answ['pocketEnd' == true]) {     // последний пакет
-                        nodeEditForm.clearNewNode(answ['downloadNodes'])
-                    }
-
-                    ready = true;
-                } else {
-                    ready = false;
-                    message = answ['message'];
+        ajax.setData(downloadVect) ;
+        ajax.setRequestFunc(function(answ){       // обработка нормального возврата
+            if (answ['successful'] == true) {
+                downloadVect['successful'] = true;
+                message = answ['message'];
+                // загрузка в БД прошла успешно -> убрать флаги 'new' и поставить dbId
+                if (answ['pocketEnd'] == true) {     // последний пакет
+                    nodeEditForm.clearNewNode(answ['downloadNodes'])
                 }
+            }else {
+                var message = answ['message'];
+                ajax.errorMessage(message) ;
             }
-
-
-        }, 300);
-
+        }) ;
+        ajax.go() ;
     } ;
 
-
-    /**
-     * исполнить запрос
-     */
-    this.requestGo = function () {
-
-    }
 }
-// inline data demo

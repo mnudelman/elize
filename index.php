@@ -51,6 +51,8 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/ResultShow.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/UserInterface.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/RequestGo.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/AjaxRequest.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 
@@ -109,7 +111,7 @@ $dirStyle = './frontEnd/styles';
     <div id="centralCircleText"></div>
     <div id="smokeClouds"></div>
 </div>
-
+<div id="messages"></div>
 </body>
 
 </html>

@@ -2,7 +2,8 @@
  * Результат запроса к ОсновнымПроектам
  */
 function MainProjectsForm() {
-        var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+  //      var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+        var ajax = new AjaxRequest() ;
         var currentQuery = '';         // текущий запрос
         var currentPage = 0;        //  текущая страница результата
         var $resultBlock = $('#resultBlock');
@@ -23,35 +24,65 @@ function MainProjectsForm() {
         /**
          * Отправить запрос.получить ответ
          */
-        this.queryGo = function(i) {
-            scrollBackground = paramSet.scrollBackground ;
-            scrollBackground.answerInit() ;        // вывод пустой формы
+        //this.queryGo = function(i) {
+        //    scrollBackground = paramSet.scrollBackground ;
+        //    scrollBackground.answerInit() ;        // вывод пустой формы
+        //
+        //    var page =  (i === undefined) ? 0 : i  ;
+        //    queryResult = {} ;
+        //    var goVect = {
+        //        'operation' : 'mainProjects',
+        //        'query' : currentQuery,
+        //        'page' : i,
+        //        'successful' : false       } ;
+        //    ajaxExecute.postData(goVect, true);
+        //    var tmpTimer = setInterval(function () {
+        //        var answ = ajaxExecute.getRequestResult();
+        //        if (false == answ || undefined == answ) {
+        //            var mess = 'Нет соединения с БД....' ;
+        //
+        //        } else {
+        //            clearInterval(tmpTimer);
+        //            if (answ['successful'] == true) {
+        //                queryResult = answ['results'] ;
+        //                responseShow() ;
+        //            } else {
+        //                message = answ['message'];
+        //            }
+        //        }
+        //    }, 300);
+        //
+        //} ;
 
-            var page =  (i === undefined) ? 0 : i  ;
-            queryResult = {} ;
-            var goVect = {
-                'operation' : 'mainProjects',
-                'query' : currentQuery,
-                'page' : i,
-                'successful' : false       } ;
-            ajaxExecute.postData(goVect, true);
-            var tmpTimer = setInterval(function () {
-                var answ = ajaxExecute.getRequestResult();
-                if (false == answ || undefined == answ) {
-                    var mess = 'Нет соединения с БД....' ;
+    /**
+     * Отправить запрос.получить ответ
+     */
+    this.queryGo = function(i) {
+        scrollBackground = paramSet.scrollBackground ;
+        scrollBackground.answerInit() ;        // вывод пустой формы
 
-                } else {
-                    clearInterval(tmpTimer);
-                    if (answ['successful'] == true) {
-                        queryResult = answ['results'] ;
-                        responseShow() ;
-                    } else {
-                        message = answ['message'];
-                    }
-                }
-            }, 300);
+        var page =  (i === undefined) ? 0 : i  ;
+        queryResult = {} ;
+        var goVect = {
+            'operation' : 'mainProjects',
+            'query' : currentQuery,
+            'page' : i,
+            'successful' : false       } ;
 
-        } ;
+        ajax.setData(goVect) ;
+        ajax.setRequestFunc(function(answ){
+            if (answ['successful'] == true) {
+                queryResult = answ['results'] ;
+                responseShow() ;
+            }else {
+                var message = answ['message'];
+                ajax.errorMessage(message) ;
+            }
+        }) ;
+        ajax.go() ;
+    } ;
+
+
         /**
          * Показать ответ
          */

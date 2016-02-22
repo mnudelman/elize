@@ -116,38 +116,44 @@ class YandexController {
     public function getResultsForShow() {
         $error = $this->Yandex->error ;
         $error = (is_null($error) || empty($error)) ? false : $error ;
-        $totalHuman = $this->Yandex->totalHuman() ;
-        $totalHuman = Yandex::getHighlight($totalHuman) ;
-        $res = $this->Yandex->results() ;
-        $resultForShow = [] ;
-        foreach ($res as $result) {
-            $result_i = [] ;
-            $url = (isset($result->url) && !is_null($result->url)) ? Yandex::getHighlight($result->url) : '' ;
-            $result_i['url'] = $url ;
-            $headline = (isset($result->headline) && !is_null($result->headline)) ? Yandex::getHighlight($result->headline) : '' ;
-            $result_i['headline'] = $headline ;
-            $domain = (isset($result->domain) && !is_null($result->domain)) ? Yandex::getHighlight($result->domain) : '' ;
-            $result_i['domain'] = $domain ;
-            $title = (isset($result->title) && !is_null($result->title)) ? Yandex::getHighlight($result->title) : '' ;
-            $result_i['title'] = $title ;
-            $result_i['passages'] = [] ;
-            if(isset($result->passages) && !is_null($result->passages)) {
-                if ($result->passages) {
-                    foreach ($result->passages as $passage)  {
-                        $pass = Yandex::getHighlight($passage);
-                        $result_i['passages'][] = $pass ;
+        $resultForShow = [];
+        $totalHuman = '' ;
+        if (false === $error ) {
+            $totalHuman = $this->Yandex->totalHuman();
+            $totalHuman = Yandex::getHighlight($totalHuman);
+            $res = $this->Yandex->results();
+
+            foreach ($res as $result) {
+                $result_i = [];
+                $url = (isset($result->url) && !is_null($result->url)) ? Yandex::getHighlight($result->url) : '';
+                $result_i['url'] = $url;
+                $headline = (isset($result->headline) && !is_null($result->headline)) ? Yandex::getHighlight($result->headline) : '';
+                $result_i['headline'] = $headline;
+                $domain = (isset($result->domain) && !is_null($result->domain)) ? Yandex::getHighlight($result->domain) : '';
+                $result_i['domain'] = $domain;
+                $title = (isset($result->title) && !is_null($result->title)) ? Yandex::getHighlight($result->title) : '';
+                $result_i['title'] = $title;
+                $result_i['passages'] = [];
+                if (isset($result->passages) && !is_null($result->passages)) {
+                    if ($result->passages) {
+                        foreach ($result->passages as $passage) {
+                            $pass = Yandex::getHighlight($passage);
+                            $result_i['passages'][] = $pass;
+                        }
                     }
                 }
-            }
 
-            $resultForShow[] = $result_i ;
+                $resultForShow[] = $result_i;
+            }
         }
+
         return [
             'successful' => !$error ,
             'totalHuman' => $totalHuman, //  'total Human',
             'pageStart' => $this->Yandex->getLimit()*$this->Yandex->getPage() + 1,
             'results' => $resultForShow ,
-            'error' => $error
+            'error' => $error,
+            'message' => $error
         ] ;
     }
 }

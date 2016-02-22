@@ -82,6 +82,7 @@ switch($operation) {
         $yandex->setQuery($query) ;
         $yandex->setPage($page) ;
         $yandex->queryGo() ;
+
         $answ = $yandex->getResultsForShow() ;
         break ;
     }
