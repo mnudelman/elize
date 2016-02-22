@@ -52,7 +52,7 @@ function AjaxRequest(sendDataObject,overtimeFunc,requestFunc) {
         ajaxExecute.postData(currentSendData, true);
         var tmpTimer = setInterval(function () {
             var answ = ajaxExecute.getRequestResult();
-            if ((false === answ || undefined === answ) && iStep++ < iMax) {
+            if ((false === answ || undefined === answ) && iStep++ <= MAX_STEPS) {
             } else {
                 clearInterval(tmpTimer);
                 $(document).css('cursor','default') ;
@@ -81,11 +81,10 @@ function AjaxRequest(sendDataObject,overtimeFunc,requestFunc) {
     /**
      * ошибка в запросе. Может вызываться при отсутствии спец обработчика
      */
-    this.errorMessage = function(text) {
-            var text ='Запрос выполнен с ошибкой.' + '<br>' +
-            ((text !== undefined) ? 'сообщение об ошибке: ' + '<br>' + text : '') ;
+    this.errorMessage = function(message) {
+            var title ='Запрос выполнен с ошибкой.' ;
         var msg = new Messages() ;
-        msg.showMessage(text) ;
+        msg.showMessage(message,title) ;
     } ;
 
 
