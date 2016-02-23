@@ -68,6 +68,7 @@ class ConceptFunction
             return $result ;
         }
         $morphology = new MorphologyRu() ;
+        $morphology->init() ;
         $morphology->setWords($this->phraseWords) ;
 
 
@@ -76,6 +77,9 @@ class ConceptFunction
         // ищем сушествительное - в первом ( единственном слове)
         $pars = $parseResult[0]['pars'] ;
         $word = $parseResult[0]['word'] ;
+        if (!is_array($pars)) {
+            return $result ;
+        }
         foreach ($pars as $i => $item) {
             $parsItem = $item['pars'] ;
             if (
