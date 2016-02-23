@@ -2,7 +2,8 @@
  * Сообщения программы
  */
 function Messages() {
-    var $message = $('#messages');
+    var $message = $('#messages');      // блок вывода сообщений
+    //------------------------------------//
     this.showMessage = function(text,title) {
 
         $message.dialog({

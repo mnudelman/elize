@@ -1,10 +1,7 @@
 <?php
 
 /**
- * Created by PhpStorm.
- * User: michael
- * Date: 20.12.15
- * Time: 20:41
+ * морфологический разбор на основе окончаний слов
  */
 
 class MorphologyRu
@@ -183,8 +180,6 @@ class MorphologyRu
                 array_pop($pars) ;
             }
         }
-        //var_dump($this->wordEnds) ;
-
     }
 
     /**

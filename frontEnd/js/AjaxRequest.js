@@ -74,9 +74,11 @@ function AjaxRequest(sendDataObject,overtimeFunc,requestFunc) {
      */
     this.defaultOverTime = function() {
         var waitTime = TIME_DELAY * MAX_STEPS ;
-        alert('Запрос прерван.' + '\n' +
-        'превышено время ожидания ответа от сервера ' + '\n' +
-        'max время: '+ waitTime + ' mSec') ;
+        var message ='Запрос прерван.' + '<br>' +
+        'превышено время ожидания ответа от сервера ' + '<br>' +
+        'max время: '+ waitTime + ' mSec' ;
+        var msg = new Messages() ;
+        msg.showMessage(message) ;
     } ;
     /**
      * ошибка в запросе. Может вызываться при отсутствии спец обработчика

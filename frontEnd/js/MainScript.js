@@ -1,5 +1,7 @@
 /**
- * наличие блока $('#userInterfaceBlock') - признак запуска userInterface()
+ * контроллер 0 уровня. Определяет вид запуска user | admin.
+ * запуск user при наличии блока $('#userInterfaceBlock'), иначе
+ * запуск admin ( редактирование описаний)
  */
 function MainScript() {
     var requestForm = paramSet.requestForm ; //

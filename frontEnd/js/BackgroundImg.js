@@ -1,5 +1,17 @@
 /**
  * Описатель фонового изображения
+ * объект содержит описание компонентов фонового изображения:
+ * главное фоновое изображение - mainImg
+ * центральный Круг - centralCircle,
+ * облака - clouds,
+ * планка "продолжить" - stamp,
+ * "философские картинки" - philosophyPictures
+ * компонент описаний place содержит абсолютные координаты элемента,
+ * взятые из шаблона фонового изображения (magic2.psd) .
+ * Операции:
+ *  пересчёт коэффициентов под реальный размер окна браузера
+ *  в основе пересчёта отношение ширины_окна_браузера к размеру фонового изображения
+ *  getter'ы для соответствующих объектов выдают клоны с пересчитанными кординатами объектов
  */
 function BackgroundImg() {
     var mainImg = {} ;          // главная кртинка( body {background-image}
@@ -41,7 +53,7 @@ function BackgroundImg() {
                 y2: 625 //630 // 632
             },
 
-            query: {
+            query: {                               // ценральный круг при вводе запроса
                 idText : 'queryText',
                 ball: 'yellow_ball_clear.png',
                 textArea: 'yellow_text_area.png',
@@ -49,7 +61,7 @@ function BackgroundImg() {
                 readonly: false
 
             },
-            answer: {
+            answer: {                             // центральный круг при "философском" ответе
                 idText : 'answerText',
                 ball: 'blue_ball.png',
                 textArea: 'blue_text_area.png',
@@ -84,9 +96,9 @@ function BackgroundImg() {
                },
                '196l': {
                    place: {
-                       x1: 167, //192,
-                       y1: 708, //710,
-                       x2: 929,   //632,
+                       x1: 167,
+                       y1: 708,
+                       x2: 929,
                        y2: 1052
                    },
                    img: {

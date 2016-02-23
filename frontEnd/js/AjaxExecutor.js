@@ -1,6 +1,5 @@
 /**
  * в обоих запросах к БД результат возвращается в виде JSON-обекта  data
- * если data['successful'] == false, то вывод в блок $('#dbError')
  */
 function AjaxExecutor(ajaxUrl) {
    var requestData = false ;                 // результат запроса
@@ -8,13 +7,12 @@ function AjaxExecutor(ajaxUrl) {
    var debugFlag =  false ;                   // отладка запроса
     var currentUrl = ajaxUrl ;
     var successDefault = function(data,textStatus) {
-        alert('successDefault:status-'+textStatus+' ; hostAnswer:'+data) ;
+ //       alert('successDefault:status-'+textStatus+' ; hostAnswer:'+data) ;
    } ;
     var errorDefault = function(event, XMLHttpRequest, ajaxOptions, thrownError) {
         var responseText = event.responseText ; // html - page
 
         $('#dbError').append(responseText) ;    // здесь будут необработанные php-ошибки
-   //    var answ  = alert('ERROR: code :'+event.status +' (' + event.statusText+')') ;
     } ;
     var completeDefault = function() {
         ajaxComplete = true ;

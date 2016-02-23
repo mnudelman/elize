@@ -1,8 +1,6 @@
 <?php
 session_start() ;
 /**
- * по $_GET определяет передачу управления
- *  параметр: typ имя программы-исполнителя запроса
  */
 ?>
 <?php
@@ -23,7 +21,7 @@ $answ = [
 ] ;
 
 switch($operation) {
-    case 'requestUpload' : {                // получить узды дерева
+    case 'requestUpload' : {                // получить узлы дерева
         $nodeRootName = $taskPar->getParameter('nodeRoot') ;
         $requestTree->setNodeRoot($nodeRootName) ;      // имя корня
         $answ = $requestTree->uploadTree() ;
@@ -59,15 +57,15 @@ switch($operation) {
 
         break ;
     }
-    case 'requestGo' : {
-        $phrase = $taskPar->getParameter('requestText')  ;
+    case 'requestGo' : {                                  // тип запроса
+        $phrase = $taskPar->getParameter('requestText')  ;  // 1 шаг - разбор
         $rootName = $taskPar->getParameter('nodeRoot')  ;
         $reqGo = new RequestGo($rootName) ;
         $nodes = $reqGo->getRequestTree() ;
         $reqGo->parseDo($phrase) ;
         $answ = $reqGo->getResult() ;
         //-----------------------------------
-        $requestResult = $answ['result'] ;
+        $requestResult = $answ['result'] ;               // 2 шаг - определить тип
         $rType = new RequestType() ;
         $rType->init() ;
         $rType->setResultRequest($requestResult) ;

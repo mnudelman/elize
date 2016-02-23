@@ -3,10 +3,7 @@
  * класс - контроллер обращений с запросами к xml.yandex
  * Time: 16:37
  */
-//$url = 'https://yandex.ru/search/xml'
-//. '?user='.$this->user
-//. '&key='.$this->key;
-include_once __DIR__.'/yandexConfig.php' ;
+include_once __DIR__.'/yandexConfig.php' ;       // констатнты подключения
 class YandexController {
     private $Yandex ;
     private $user ;
@@ -62,19 +59,6 @@ class YandexController {
             ->request()                        // send request
         ;
 
-        // Debug request
-    //    $request = $this->Yandex->getRequest()->asXml();
-   //     var_dump($request);
-
-// current URL
-//        $server = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
-//        $server = substr($server, 0, strpos($server, '?'));
-//        $url = $server . '?query=' . urlencode($query)
-//            . '&host=' . urlencode($host)
-//            . '&geo=' . urlencode($geo)
-//            . '&cat=' . urlencode($cat)
-//            . '&theme=' . urlencode($theme);
-
     }
     public function getError() {
         return $this->Yandex->error ;
@@ -82,15 +66,6 @@ class YandexController {
     public function getResults() {
        $error = $this->Yandex->error ;
         $error = (is_null($error) || empty($error)) ? false : $error ;
-//        if (false === $error) {
-//            return [
-//                'successful' => false ,
-//                'totalHuman' => false,
-//                'pageStart' => $this->Yandex->getLimit()*$this->Yandex->getPage() + 1,
-//                'results' => false,
-//                'error' => $error
-//            ] ;
-//        }
         $res = $this->Yandex->results() ;
         return [
             'successful' => true ,

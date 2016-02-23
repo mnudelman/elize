@@ -55,48 +55,23 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
-
-
-
-
-
-
 </head>
 <body>
-<div id="userInterfaceBlock">
-
-</div>
-<!--<div id="queryTextBlock" style="position:absolute;-->
-<!--    top:200px;left:100px;background-color: grey">-->
-    <div id="queryTextBlock" hidden="hidden" style="position:absolute;background-color: transparent;border:none">
-
-
-<!--    <textarea id="queryText"></textarea>-->
-</div>
-
-<div id="total">
-
-
-    <div id="mainBlock"
-         style="position:relative;width:100%;height:165px; margin-top:350px;border:0px solid red">
-    </div>
-</div>
+<div id="userInterfaceBlock"></div>
+<div id="queryTextBlock" hidden="hidden" ></div>
+<!--<div id="total"></div>-->
 
 <div>
     <div id="resultBlock" class="data result" hidden="hidden">
         <p id="resultBoxError"></p>
 
-        <p id="totalHuman" style="height:10%"></p>
+        <p id="totalHuman" ></p>
         <ol start="1" id="resultBoxDocs">
 
         </ol>
-        <div id="resultCommands">
-<!--            <img src="images/cards/1.png" style="width:7%">-->
-        </div>
+<!--        <div id="resultCommands"></div>-->
     </div>
-    <!--rgba(10,10,120,0.5) -->
-    <div id="resultBackground" style="position:absolute;background-color:rgba(10,10,120,0.7);
-                              width:100%;height:100%; top:0;left:0;" >
+    <div id="resultBackground"  >
           <div id="resultBlockNew"></div>
     </div>
 </div>

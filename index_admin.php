@@ -22,6 +22,7 @@ $dirStyle = './frontEnd/styles';
     <link rel="stylesheet" href="<?= $dirStyle; ?>/style.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/yandexStyles.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/user.css"/>
+    <link rel="stylesheet" href="<?= $dirStyle; ?>/admin.css"/>
 
     <script language="javascript" src="<?= $dirLib; ?>/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="<?= $dirJquery_ui; ?>/jquery-ui.js"></script>
@@ -47,41 +48,6 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
-
-
-
-
-
-    <style>
-        html {
-            margin: 0;
-            padding: 0;
-            font-size: 62.5%;
-        }
-
-        body {
-            max-width: 800px;
-            min-width: 300px;
-            margin: 0 auto;
-            padding: 20px 10px;
-            font-size: 14px;
-            font-size: 1.4em;
-        }
-
-        .jstree-default-contextmenu {
-            z-index: 110;
-        }
-
-        .dialogPane {
-            min-height: 400px;
-            min-width: 650px;
-            width: 650px;
-            overflow-x: auto ;
-            /*overflow-y: visible ;*/
-        }
-    </style>
-
-
 
 </head>
 <body>
@@ -187,17 +153,13 @@ $dirStyle = './frontEnd/styles';
     <div id="resultBlock" class="data result" hidden="hidden">
         <p id="resultBoxError"></p>
 
-        <p id="totalHuman" style="height:10%"></p>
+        <p id="totalHuman" ></p>
         <ol start="1" id="resultBoxDocs">
 
         </ol>
-        <div id="resultCommands">
-            <!--            <img src="images/cards/1.png" style="width:7%">-->
-        </div>
+        <div id="resultCommands"></div>
     </div>
-    <!--rgba(10,10,120,0.5) -->
-    <div id="resultBackground" style="position:absolute;background-color:rgba(10,10,120,0.7);
-                              width:100%;height:100%; top:0;left:0;" >
+    <div id="resultBackground">
         <div id="resultBlockNew"></div>
     </div>
 </div>

@@ -3,7 +3,7 @@
  */
 function UserInterface() {
     var smoke = new SmokeClouds();      // движение облаков
-    var backgroundImg  ; // объект - элементы изображения
+    var backgroundImg  ;                // объект - элементы изображения
     var scrollBackground ;
     var philosophyForm ;
     var centralCircle = {} ;            // центральный круг
@@ -20,34 +20,25 @@ function UserInterface() {
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
-        backgroundImg = paramSet.backgroundImage ; // объект - элементы изображения
-        scrollBackground = paramSet.scrollBackground ;
-        philosophyForm = paramSet.philosophyForm ;
-        backgroundImg.init() ;
+        backgroundImg = paramSet.backgroundImage; // объект - элементы изображения
+        scrollBackground = paramSet.scrollBackground;    // "свиток" - фоновое изображение результата
+        philosophyForm = paramSet.philosophyForm;
+        backgroundImg.init();
 
-        scrollBackground.init() ;
+        scrollBackground.init();
 
 
-         stampDefine() ;              // объект stamp   - печать
-        centralCircleDefine() ;      // объект centralCircle - ценральный круг
+        stampDefine();              // объект stamp   - планка для запуска запроса
+        centralCircleDefine();      // объект centralCircle - ценральный круг
         $(document).click(function (e) {
             if (isCentralCircleClick(e)) {
             }
-            if (isStampClick(e)) {
- //               if (!waitRequestType) {      // повторные не работают
-                    //                testScrollBackground() ;
-
-
-                    currentQuery = $queryArea.val();
-                    var requestGo = paramSet.requestGo;
-                    requestGo.setRequestText(currentQuery);
-                    var auto = true;
-                    //waitRequestType = true ;
-                    //waitRequestReady() ;    // ждёмс
-
-                    requestGo.requestExecute(auto);
-
- //               }
+            if (isStampClick(e)) {                   // выполнение запроса
+                currentQuery = $queryArea.val();
+                var requestGo = paramSet.requestGo;
+                requestGo.setRequestText(currentQuery);
+                var auto = true;
+                requestGo.requestExecute(auto);
             } else {
                 var philosophyForm = paramSet.philosophyForm;
                 philosophyForm.stopShow();
@@ -59,39 +50,23 @@ function UserInterface() {
                 $queryArea.focus();
             }
         });
- //       if (false) {
-        $(window).on('resize', function() {
-    //        smoke.smokeResize();
-            resize() ;
+        $(window).on('resize', function () {      // размеры окна браузера
+            resize();
         });
 
-     backgroundImg.centralCircleShow('query');
-     var idText = backgroundImg.getIdText('query');
-     $queryArea = $('#' + idText);
-     $queryArea.attr('placeholder', 'введите вопрос');
-     $queryArea.focus();
-     smoke.init();
-     smoke.smokeGo();
- //}
+        backgroundImg.centralCircleShow('query');
+        var idText = backgroundImg.getIdText('query');
+        $queryArea = $('#' + idText);
+        $queryArea.attr('placeholder', 'введите вопрос');
+        $queryArea.focus();
+        smoke.init();
+        smoke.smokeGo();
 
     } ;
     /**
-     * ожидание ответа о типе запроса
+     * исполнитель изменения размера окна браузера
+     * компоненты меняют размеры, если они в данный момент активны
      */
-    var waitRequestReady = function() {
-        var tmpTimer = setInterval(function () {
-            if (stopWait || requestGo.isAnswReady() ) {
-                clearInterval(tmpTimer);
-                waitRequestType = false ;
-                $queryArea.css('cursor','progress') ;
-                $queryArea.attr('readonly','readonly') ;
-            }else {
-                $queryArea.css('cursor','default') ;
-                $queryArea.removeAttr('readonly') ;
-            }
-
-        }, 300);
-    } ;
     var resize = function() {
         resizeSteps = 0;
         if (!resizeGo) {    // запустить таймер
@@ -178,9 +153,5 @@ function UserInterface() {
         var x = e.pageX;
         var y = e.pageY;
         return (x >= btXLeft && x <= btXRight && y >= btYTop && y <= btYBottom)  ;
-    } ;
-
-    this.go = function() {
-
     } ;
 }

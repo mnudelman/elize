@@ -11,7 +11,7 @@ function NodeEditForm() {
     var opIsCompleted = true ;     // завершение операции
     var parentType = '' ;  // type узла
     var currentTree ;    // дерево запроса
-    //'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
+    //операции с узлами 'create_node', 'rename_node', 'delete_node', 'move_node' or 'copy_node'
     var OP_CREATE_NODE = 'create_node' ;
     var OP_RENAME_NODE = 'rename_node' ;
     var OP_DELETE_NODE = 'delete_node' ;

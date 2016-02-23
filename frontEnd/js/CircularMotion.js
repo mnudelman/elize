@@ -1,5 +1,27 @@
 /**
  * объект - круговое движение
+ * параметры движения задаются через init() объектом вида:
+ *  motionBlock: {
+            timeDelay: timeDelay,             // задержка таймера
+            block: {                          // параметры блока, внутри которого движется картинка
+                width: blkWidth,
+                height: blkHeight
+            },
+            img: {                        // размеры картинки повторяют размеры блока
+                width: blkWidth,
+                height: blkHeight
+            },
+            circleMove: {             // параметры движения  по отношению к центру блока(цетральной точке)
+                mainAxis: mainAxis,   // ось перемещения (x|y)
+                direction: direction, // +1 // направление (+1 - увеличение -1 - убывание) по оси
+                deltaMove: 10,        // % от главной оси  - шаг перемещения по оси
+                rotationDirection: rotationDirection,    // направление вращения (left | right),
+                radius: 10,          // %  от главной оси // радиус окружности, описываемой цетральной точкой
+                deltaPhi: 20,        // число точек на окружности (шаг углового смещения 1/20 )
+                axisMin: 40,         // % - границы перемещения по оси mainAxis (т.е. центр окружности колеблется
+                axisMax: 60          // около цетра блока
+            }
+        } ;
  */
 function CircularMotion() {
     //--- атрибуты кругового движения --//
@@ -26,32 +48,7 @@ function CircularMotion() {
      //--------------//
     var currentStep = 0 ;   // текущий шаг по оси (положение центра круга)
     var currentPhi = 0 ;    // текущий шаг при перемещении по окружности
-
-
-    //var motionBlock = {
-    //    timeDelay: 500,             // задержка таймера
-    //    block: {
-    //        width: blkWidth,
-    //        height: blkHeight
-    //    },
-    //    img: {                        // размеры картинки повторяют размеры блока
-    //        width: blkWidth,
-    //        height: blkHeight
-    //    },
-    //    circleMove: {
-    //        mainAxis: 'x' ,
-    //        direction: +1 ,
-    //        deltaMove: 10,       // %
-    //        rotationDirection: 'left',
-    //        radius: 10,         // %
-    //        deltaPhi: 20        // число точек на окружности
-    //    }
-    //} ;
-
-
-
-
-
+    //------------------------------------//
     this.init = function(motionBlock) {
         blkHeight = motionBlock['block']['height'] ;
         blkWidth = motionBlock['block']['width'] ;
@@ -72,7 +69,7 @@ function CircularMotion() {
         pixelSize() ;
     } ;
     /**
-     * пересчёт размеров из % в pixel
+     * пересчёт размеров из % в  абсолютные  pixel
      */
     var pixelSize = function() {
         var axisLength = (mainAxis === 'x') ? blkWidth : blkHeight ;
@@ -117,7 +114,7 @@ function CircularMotion() {
 
     } ;
     /**
-     * Вычислить положение центра круга
+     * Вычислить положение центра окружности
      */
     var ringCenterClc = function() {
         var axisOffset = pxDeltaMove * currentStep ;

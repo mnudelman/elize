@@ -13,22 +13,21 @@ body {
     background-repeat: no-repeat;
     z-index: 100 ;
 }
-/*- ввод в круге **/
-.roundInput {
-    width: 250px;
-    height: 250px;
-    border: 2px solid green;
-    border-radius: 250px;
+#totalHuman {
+    height:10% ;
 }
-
-.text {
-    margin-top: 70px;
-    margin-left: 20px;
-    width: 210px;
-    height: 100px;
-    max-width: 210px;
-    max-height: 100px;
+/* прозрачная подложка **/
+#resultBackground {
+    position:absolute;
+    background-color:rgba(10,10,120,0.7);
+    width:100%;
+    height:100%;
+    top:0;
+    left:0 ;
+}
+/**поле ввода запроса **/
+#queryTextBlock {
+    position:absolute;
     background-color: transparent;
-    border-color: rgba(0, 0, 0, 0);
-    color: white;
+    border:none
 }

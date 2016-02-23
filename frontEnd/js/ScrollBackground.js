@@ -1,5 +1,5 @@
 /**
- * "свиток", подложенный под вывод результатов запроса
+ * Фоновое изображение - "свиток", подложенный под вывод результатов запроса
  */
 function ScrollBackground() {
     var mainBlock = {} ;           // главный блок
@@ -7,7 +7,7 @@ function ScrollBackground() {
     var dataArea = {} ;            // область данных
     var scrollLine = {} ;          // линия скролирования
     var slider = {} ;              // бегунок
-    var message = {} ;
+    var message = {} ;             // сообщения (для отладки)
     var mainWidth ;
     var mainHeight ;
     var rightMargin ;
@@ -27,8 +27,8 @@ function ScrollBackground() {
     var scrolling = {} ;         // текущая прокрутка
     var formShowFlag = false ;
     //---------------------//
-    var $movingSlider ;
     var _this = this ;
+    //---------------------//
     this.init = function() {
         dirImg = paramSet.dirImages + '/userInterface' ;
 
@@ -105,7 +105,7 @@ function ScrollBackground() {
                 y2: 600
             }
     } ;
-        scrolling = {
+        scrolling = {        // сотояние прокрутки
            stepDy : 20,
            pageY : 0,
            pageY0 : 0,
@@ -124,6 +124,9 @@ function ScrollBackground() {
         kResizeClc() ;
         $resultBackground.attr('hidden','hidden') ;
     } ;
+    /**
+     * размеры главного блока
+     */
     var mainSizes = function() {
         var place = mainBlock['place'] ;
         mainWidth = place['x2'] - place['x1'] ;
@@ -148,6 +151,9 @@ function ScrollBackground() {
         scrollEvents() ;
 
     } ;
+    /**
+     * пересчёт размеров под размер окна браузера
+     */
     var kResizeClc = function() {
         var place = mainBlock['place'] ;
         var placeHeight = place['y2'] - place['y1'] ;
@@ -194,12 +200,14 @@ function ScrollBackground() {
         $mainBlockDiv.show( "blind", 1000);
         formShowFlag = true ;
     } ;
+    /**
+     * Блок для вывода результата
+     */
     var dataBlockDefine = function() {
         internalBlockDefine('dataArea',dataArea) ;
         var mainBlockId = $mainBlockDiv.attr('id') ;
         $dataAreaDiv = $('#' + mainBlockId +'_dataArea') ;
-        $dataAreaDiv.css('background-color','rgba(0,0,0,0)') ;
- //       $dataAreaDiv.css('border','1px solid red') ;
+        $dataAreaDiv.css('background-color','rgba(0,0,0,0)') ;   // прозрачный
         var $pError = $('<p/>') ;
         $pError.attr('id','dataErrorBox') ;
         $dataAreaDiv.addClass('data') ;
@@ -218,6 +226,11 @@ function ScrollBackground() {
         $dataList =  $("#" + 'dataList') ;
 
     } ;
+    /**
+     * внутренние блоки
+     * @param blockName
+     * @param block
+     */
     var internalBlockDefine = function(blockName,block) {
         var mainId = $mainBlockDiv.attr('id') ;
         var place = block['place'] ;
@@ -243,7 +256,7 @@ function ScrollBackground() {
 
         $blk.css('top',ky * y1) ;
         $blk.css('left',kx * x1) ;
-        if (block['img'] !== undefined) {
+        if (block['img'] !== undefined) {                 // блок включает картинку
             var imgFile = dirImg + '/' + block['img']['file'];
             var $img = $('#'+blkId + ' img') ;
             if($img.length === 0) {
@@ -259,7 +272,7 @@ function ScrollBackground() {
 
 
         }
-        if (block['background'] !== undefined) {
+        if (block['background'] !== undefined) {       // блок имеет фоновое изображение
 
             var background = block['background'] ;
             var imgFile = dirImg + '/' + background['img']['file'];
@@ -281,56 +294,19 @@ function ScrollBackground() {
 
 
     } ;
+    /**
+     * события прокрутки
+     */
     var scrollEvents = function() {
-        $mainBlockDiv.mousewheel(function(event, delta) {
-
-            scrollingGo(event) ;
- //           scrollingDebug(delta) ;
+        $mainBlockDiv.mousewheel(function(event, delta) {     //  колесо мыши (jquery plagin)
+           scrollingGo(event) ;
         });
-
-
-
-
-
-        $sliderDiv.off('click') ;
-        $mainBlockDiv.off('mousemove') ;
-        $sliderDiv.click(function(e) {
-            scrolling.stop = !scrolling.stop;
-            if (scrolling.pageY0 === 0) {
-
-            }
-             var height = slider.place['y2'] - slider.place['y1'];
-            scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
-            scrolling.sliderYMax = kResize['ky'] * (mainHeight - height);
-            scrolling.pageY = e.pageY;
-            scrolling.pageY0 = e.pageY;
-            scrolling.sliderY = pixelToNumber($sliderDiv.css('top'));
-            scrolling.sliderY0 = pixelToNumber($sliderDiv.css('top'));
-            scrolling.dataAreaY0 = pixelToNumber($dataAreaDiv.css('top'));
-            scrolling.dataAreaY = scrolling.dataAreaY0 ;
-            scrolling.kdyDataArea =
-                scrolling.dyHidden / (scrolling.sliderYMax - scrolling.sliderYMin) ;
-    //        scrollingDebug();
-        }) ;
-
-        //$mainBlockDiv.mousemove(function(e) {
-        //    if (!scrolling.stop ) {
-        //        scrolling.pageY = e.pageY;
-        //        var top = scrolling.sliderY0 + (e.pageY - scrolling.pageY0);
-        //        top = Math.max(top,scrolling.sliderYMin) ;
-        //        top = Math.min(top,scrolling.sliderYMax) ;
-        //
-        //        $sliderDiv.css('top', top);
-        //        scrolling.sliderY = pixelToNumber($sliderDiv.css('top')) ;
-        //        var topData = scrolling.dataAreaY0 -
-        //            scrolling.kdyDataArea * (scrolling.sliderY - scrolling.sliderY0);
-        //        $dataAreaDiv.css('top',topData) ;
-        //    }
-     //       scrollingDebug() ;
-     //   }) ;
        // ------ закрытие формы   --------//
         captionClick() ;
     } ;
+    /**
+     * click по шапке для закрытия
+     */
     var captionClick = function() {
         // ------ закрытие формы   --------//
         $CaptionDiv.off('click') ;
@@ -354,6 +330,9 @@ function ScrollBackground() {
         }) ;
 
     } ;
+    /**
+     * начальные атрибуты прокрутки (объект scrolling = {})
+     */
     var scrollingBegin = function() {
         scrolling.stop = (scrolling.dyHidden <= 0) ;
         var height = slider.place['y2'] - slider.place['y1'];
@@ -367,9 +346,13 @@ function ScrollBackground() {
         scrolling.dataAreaY = scrolling.dataAreaY0 ;
         scrolling.wheelMoving = 0 ;
         scrolling.kdyDataArea =
-            scrolling.dyHidden / (scrolling.sliderYMax - scrolling.sliderYMin) ;
+                   scrolling.dyHidden / (scrolling.sliderYMax - scrolling.sliderYMin) ;
 
     } ;
+    /**
+     * реакция на 1 шаг вращения колеса мыши
+     * @param e
+     */
     var scrollingGo = function(e) {
         if (!scrolling.stop ) {
             var wheelSteps = 10 ;    // число вращений колеса мыши
@@ -380,12 +363,7 @@ function ScrollBackground() {
             dyMin = Math.min(dyMin,maxDy) ;
             dyMin = Math.max(dyMin,minDy) ;
             var eDy = e.deltaY * dyMin ;
-
-
-
             var newMoving = scrolling.wheelMoving + eDy ;
-
-        //    var top = scrolling.sliderY0 + (e.pageY - scrolling.pageY0);
             var top = scrolling.sliderY0 - newMoving ;
 
             var realTop = Math.max(top,scrolling.sliderYMin) ;
@@ -412,6 +390,9 @@ function ScrollBackground() {
         scrolling.dyHidden = dyHidden ;
         return dyHidden ;
     } ;
+    /**
+     * показать прокрутку перемещением бегунка
+     */
     var scrollingShow = function() {
         if (scrolling.dyHidden === 0 ) {
            //-- убрать scrolling
@@ -435,6 +416,9 @@ function ScrollBackground() {
         var n = strPixel.replace('px','') ;
         return n - 0 ;
     } ;
+    /**
+     * вывод параметров для отладки
+     */
     var scrollingDebug = function() {
         $messageDiv.empty() ;
         var $p = $('<p/>') ;
@@ -475,6 +459,9 @@ function ScrollBackground() {
         scrollingBegin() ;
 
     } ;
+    /**
+     * запрос определён ->  вернуть курсор в обычное состояние
+     */
     this.answerBegin = function() {
         $mainBlockDiv.css('cursor','default') ;
     } ;
@@ -490,6 +477,7 @@ function ScrollBackground() {
     } ;
     /**
      * вывод блока ответа - элемента списка
+     * при этом пересчитываются параметры прокрутки( неизветно является ли блок последним)
      * @param $liItem
      */
     this.putAnswerItem = function($liItem) {
@@ -504,6 +492,9 @@ function ScrollBackground() {
     this.answerEnd = function() {
 
     };
+    /**
+     *   перевывод при изменении размера окна браузера
+     */
     this.resize = function() {
         if (formShowFlag) {
             kResizeClc();

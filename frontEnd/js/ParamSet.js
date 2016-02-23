@@ -1,26 +1,25 @@
 /**
- * Created by mnudelman@yandex.ru on 22.11.15.
  * ОБщие параметры задачи
  */
 function ParamSet() {
     //-----------------------------------------------------------------------------//
     this.winLocation ;           // относительный адрес директории запуска
     this.windowLocationHost ;    // http - адрес для доступа к php-модулям БД
-    this.dirImages ;
+    this.dirImages ;             // картинки задачи
     this.windowLocationHref ;
     //-------------------------------------------------------------------------------------//
 
-    this.ajaxExecute ;   // исполнитель запросов к БД
+    this.ajaxExecute ;   // исполнитель запросов ajax
     //-------------формы----------------------------- //
      this.requestForm ;        // редактирование запроса
-     this.requestGoForm ;
-     this.responseForm ;
-     this.mainProjectsForm ;
-    this.philosophyForm ;
-    this.userInterface ;
-    this.requestGo ;
-    this.backgroundImage;
-    this.scrollBackground ;
+     this.requestGoForm ;      // исполнение запроса
+     this.responseForm ;       // запрос к поисковой системе
+     this.mainProjectsForm ;   // запрос к основным проектам(mnogonado.net)
+    this.philosophyForm ;      // абстрактный запрос
+    this.userInterface ;       // объект-контроллер пользователя
+    this.requestGo ;           // исполнение( определение типа запроса)
+    this.backgroundImage;      // объект - основной фон и его элементы
+    this.scrollBackground ;    //  объект  -фок результата запроса
     //-------------------------------------------------//
     this.user = {
         login : 'guest',

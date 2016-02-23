@@ -51,6 +51,7 @@ class ConceptFunction
 
     /**
      * определить существительное.
+     *  ru_names является более приоретентным
      * фраза соответсвует правилу, если состоит из единственного слова в именительном
      * падеже едиств числа
      * @return array
@@ -75,15 +76,18 @@ class ConceptFunction
         // ищем сушествительное - в первом ( единственном слове)
         $pars = $parseResult[0]['pars'] ;
         $word = $parseResult[0]['word'] ;
-//        if (!is_array($pars)) {
-//            return $result ;
-//        }
         foreach ($pars as $i => $item) {
             $parsItem = $item['pars'] ;
-            if ($parsItem[0] === 'noun' &&                // существительное
+            if (
+                ($parsItem[0] === 'noun' &&                // существительное
                 $parsItem[1] === 'only' &&                // единственное число
                 $parsItem[3] === 'nominative-ends'        // иминительный падеж
-                 ) {
+                ) ||
+                ($parsItem[0] === 'noun' &&                // существительное
+                $parsItem[1] === 'plural' &&               //допустим множ число
+                $parsItem[2] === 'nominative-ends'        // иминительный падеж
+                )
+            ) {
                 $result = ['find'=>true, 'word' => $word] ;
                 break ;
             }

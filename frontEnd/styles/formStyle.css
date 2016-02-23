@@ -50,12 +50,3 @@
     color : #ff0000;
 }
 
-#infoForm,#statSetup,#gameSetup,#about {
-
-    width:550px;
-    height:310px;
-    border:2px solid green;
-    margin-top: 7px;
-    position: relative;
-    background-color: rgb(228, 233, 236) ;
-}

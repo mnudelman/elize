@@ -1,6 +1,6 @@
 <?php
 /**
- * Исполнитель запроса
+ * Исполнитель - это разбор запроса в соответствии с деревом рписания $requestTree
  */
 
 class RequestGo {
@@ -20,7 +20,6 @@ class RequestGo {
     public function __construct($nodeRootName) {
         $this->msg = Message::getInstace() ;
         $taskPar = TaskParameters::getInstance() ;
-//        $nodeRootName = $taskPar->getParameter('nodeRoot') ;
         $nodeRootName = (false === $nodeRootName) ? 'requestRoot' : $nodeRootName ;
         $requestTree = new RequestTree() ;
         $requestTree->setNodeRoot($nodeRootName) ;      // имя корня
@@ -58,9 +57,7 @@ class RequestGo {
         ] ;
     }
     /**
-     * Задать текст запроса
-     * Убрать лишние прбелы, знаки припинания
-     *  использование \W - убирает и русские буквы
+     * убирает из запроса все лишние символы и разбивает на слова
      * @param $phrase
      */
     private function phraseWords() {

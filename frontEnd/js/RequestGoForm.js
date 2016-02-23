@@ -1,18 +1,21 @@
 /**
- * форма исполнения запроса
+ * форма исполнения запроса - часть редактирования описания запроса
+ * используется при запуске администратором.
+ * Запросы выполняются через объект requestGo
  */
 function RequestGoForm() {
 //    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
     var ajax = new AjaxRequest() ;
     var $textLabel = $('#textGoLabel') ;
     var $requestText = $('#requestText') ;
-    var $buttonGo = $('#requestGoBt') ;
-    var $treeResult = $('#treeResult') ;
+    var $buttonGo = $('#requestGoBt') ;          // запуск определения типа
+    var $treeResult = $('#treeResult') ;         // дерево  - результат определелния типа
     var $requestTypes = $('#requestTypes') ;
     var resultNodes ;         // список узлов, полученный от разбора запроса
     var currentTreeResult  ;
     var currentRootId ;       // корневой результата
     var scrollBackground= paramSet.scrollBackground ;
+    var requestGo ;           // объект RequestGo
     var _this = this ;
     //-----------------------------//
     this.init = function() {
@@ -55,98 +58,47 @@ function RequestGoForm() {
             of : "#requestGoDialog"
 
         }) ;
-        $('#searchSystemBt').on('click',queryGo) ;
+        $('#searchSystemBt').on('click',searchSystemGo) ;
         $('#mainProjectsBt').on('click',mainProjectsGo) ;
         $('#philosophyBt').on('click',philosophyGo) ;
         $('#searchSystemBt').button() ;
         $('#mainProjectsBt').button() ;
         $('#philosophyBt').button() ;
         treeInit() ;
-        scrollBackground= paramSet.scrollBackground ;
+        scrollBackground= paramSet.scrollBackground ;   // нужно потом для конкретных запросов
         scrollBackground.init() ;
-    } ;
-    var queryGo = function() {
-       var responseForm = paramSet.responseForm ;
-       responseForm.setQuery($requestText.val()) ;
-       responseForm.queryGo() ;
-    } ;
-    var mainProjectsGo = function() {
-        var mainProjectsForm = paramSet.mainProjectsForm ;
-        mainProjectsForm.setQuery($requestText.val()) ;
-        mainProjectsForm.queryGo() ;
-
-    } ;
-    var philosophyGo = function() {
-        var philosophyForm = paramSet.philosophyForm ;
-        philosophyForm.queryGo() ;
+        requestGo = paramSet.requestGo ;
     } ;
     /**
-     * Отправить запрос на выполнение
+     * запрос к поисковым системам
      */
-    //var requestGo__ = function() {    // отправить запрос на исполнение
-    //    resultNodes = {} ;
-    //    var goVect = {
-    //            'operation' : 'requestGo',
-    //            'nodeRoot' : 'requestRoot',
-    //            'nodeType' : 'root',
-    //            'successful' : false,
-    //            'requestText' : $requestText.val(),
-    //            'nodes' : []
-    //        } ;
-    //
-    //        ajaxExecute.postData(goVect, true);
-    //        var tmpTimer = setInterval(function () {
-    //            var answ = ajaxExecute.getRequestResult();
-    //            if (false == answ || undefined == answ) {
-    //                var mess = 'Нет соединения с БД....' ;
-    //
-    //            } else {
-    //                clearInterval(tmpTimer);
-    //                if (answ['successful'] == true) {
-    //                    goVect['successful'] = true;
-    //
-    //                    resultNodes = answ['result'] ;
-    //                    treeBuild() ;
-    //                    requestTypeShow(answ['requestTypes']) ;  // таблица типов
-    //                } else {
-    //                    ready = false;
-    //                    message = answ['message'];
-    //                }
-    //            }
-    //        }, 300);
-    //
-    //    } ;
-
+    var searchSystemGo = function() {
+       requestGo.searchSystemGo() ;
+    } ;
+    /**
+     * запрос к основным проектам
+     */
+    var mainProjectsGo = function() {
+        requestGo.mainProjectsGo() ;
+    } ;
+    /**
+     * фолософский вопрос
+     */
+    var philosophyGo = function() {
+        requestGo.philosophyGo() ;
+    } ;
     var requestGo = function() {
         resultNodes = {} ;
-        var goVect = {
-            'operation' : 'requestGo',
-            'nodeRoot' : 'requestRoot',
-            'nodeType' : 'root',
-            'successful' : false,
-            'requestText' : $requestText.val(),
-            'nodes' : []
-        } ;
-        ajax.setData(goVect) ;
-        ajax.setRequestFunc(function(answ){
-            if (answ['successful'] == true) {
-                goVect['successful'] = true;
-
-                resultNodes = answ['result'] ;
-                treeBuild() ;
-                requestTypeShow(answ['requestTypes']) ;  // таблица типов
-            }else {
-                var message = answ['message'];
-                ajax.errorMessage(message) ;
-            }
-        }) ;
-        ajax.go() ;
+        requestGo.setRequestText($requestText.val());
+        var auto = false;                  // отмена автоматического запуска запроса
+        requestGo.requestExecute(auto,function(){
+            resultNodes = requestGo.getResultNodes() ;
+            var requestTypes = requestGo.getRequestTypes() ;
+            treeBuild() ;
+            requestTypeShow(requestTypes) ;  // таблица типов
+        });
     } ;
-
-
-
-
-    /**
+   /**
      * строится дерево вида:
      * root -> question, subject, action, object  - разделы запроса
      * каждый раздел представлен структурой: concepts - список распознанных понятий
@@ -166,12 +118,7 @@ function RequestGoForm() {
         clearTree(currentRootNode) ;                 // чистить старые узлы
         for (var nodeKey in resultNodes) {
             var resultNode = resultNodes[nodeKey] ;
-     //       var concepts = resultNode['concepts'] ;      // убрал из результата
             var treeNodeId = currentTreeResult.create_node(currentRootNode,nodeKey) ; // разделы запроса
-    //            var pNode = currentTreeResult.get_node(treeNodeId) ;
-    //        var conceptsId = currentTreeResult.create_node(pNode,'concepts') ;
-    //        var conceptsNode = currentTreeResult.get_node(conceptsId) ;
-          //  for (var i = 0; i < concepts.length; i++) {
             for (var i = 0; i < resultNode.length; i++) {
                 var concept = resultNode[i] ;      //    concepts[i] ;
                 var conceptName = 'concept: '+concept['concept'] ;
@@ -179,7 +126,6 @@ function RequestGoForm() {
                 var conceptPath = 'path: '+ path.replace(/,/g,'/') ;
                 var synonym = 'synonym: '+concept['synonym'] ;
                 var valid = 'valid: '+concept['valid'] ;
-             //   var conceptId = currentTreeResult.create_node(conceptsNode,conceptName) ;
                 var conceptId = currentTreeResult.create_node(treeNodeId,conceptName) ;
                 var conceptNode = currentTreeResult.get_node(conceptId) ;
                 currentTreeResult.create_node(conceptNode,conceptPath) ;
@@ -269,7 +215,6 @@ function RequestGoForm() {
         return countOpenedNodes;
     } ;
     var requestTypeShow = function(requestTypes) {
-        //var $types = [$('#mainProjectsType'),$('#searchSystemType'),$('#philosophyType')] ;
         var $types = [
             {
                 'type' : 'mainProjects',
@@ -289,17 +234,10 @@ function RequestGoForm() {
         ] ;
         for (var i = 0; i < $types.length; i++ ) {
            var type = $types[i]['type'] ;
-           var result =   requestTypes[type]['result'] ;
+           var result =   requestTypes[type] ;
             $('#'+$types[i]['inputField']).val(result) ;
             var bt = $types[i]['goButton'] ;
             $('#'+bt).button( "option", "disabled", !result );
-           // if (result === true ) {
-           //    $('#'+bt).removeAttr('disabled') ;
-           //     $('#'+bt).button( "option", "disabled", false );
-           //} else {
-           //     $('#'+bt).attr('disabled','disabled') ;
-           // }
-
         }
     };
 }

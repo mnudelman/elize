@@ -1,5 +1,7 @@
 /**
- * Выполнение запроса
+ * Выполнение запроса -  определение типа запроса (проекты(mnogonado)|поисковые системы(yandex) |
+ * философия ( всё остальное)
+ * после определения типа запускается соответствующий объект для выполнения запроса.
  */
 function RequestGo() {
     var ajax = new AjaxRequest() ;         // исполнитель работы с ajax
@@ -17,45 +19,10 @@ function RequestGo() {
         requestText = text ;
     } ;
     /**
-     * Отправить запрос на выполнение
+     * запрос на определение типа
+     * @param auto - true - сразу запуск на выполнение
      */
-    //this.requestExecute__ = function(autoFlag) {    // отправить запрос на исполнение
-    //    autoFlag = (autoFlag === undefined) ? false : autoFlag ;  // автомат выполнение
-    //    answReady = false ;
-    //    resultNodes = {} ;
-    //    var goVect = {
-    //        'operation' : 'requestGo',
-    //        'nodeRoot' : 'requestRoot',
-    //        'nodeType' : 'root',
-    //        'successful' : false,
-    //        'requestText' : requestText,
-    //        'nodes' : []
-    //    } ;
-    //
-    //    ajaxExecute.postData(goVect, true);
-    //    var tmpTimer = setInterval(function () {
-    //        var answ = ajaxExecute.getRequestResult();
-    //        if (false == answ || undefined == answ) {
-    //            var mess = 'Нет соединения с БД....' ;
-    //
-    //        } else {
-    //            clearInterval(tmpTimer);
-    //            answReady = true ;
-    //            if (answ['successful'] == true) {
-    //                goVect['successful'] = true;
-    //
-    //                resultNodes = answ['result'] ;              // дерево результата
-    //                requestTypesDefine(answ['requestTypes']) ;  // таблица типов
-    //                if (autoFlag) {
-    //                    _this.automaticallyGo() ;
-    //                }
-    //            } else {
-    //            }
-    //        }
-    //    }, 300);
-    //
-    //} ;
-    this.requestExecute = function(auto) {
+    this.requestExecute = function(auto,callback) {
         resultNodes = {} ;
         answReady = false ;
         var goVect = {
@@ -67,13 +34,15 @@ function RequestGo() {
             'nodes' : []
         } ;
         ajax.setData(goVect) ;
-        ajax.setRequestFunc(function(answ){
+        ajax.setRequestFunc(function(answ){        // callback  при возврате ответа
             answReady = true ;
             if (answ['successful'] == true) {
                 goVect['successful'] = true;
-
                 resultNodes = answ['result'] ;              // дерево результата
                 requestTypesDefine(answ['requestTypes']) ;  // таблица типов
+                if (callback !== undefined) {
+                    callback() ;
+                }
                 if (auto) {
                     _this.automaticallyGo() ;
                 }

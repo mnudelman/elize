@@ -2,8 +2,7 @@
  * форма редактирования описателя запроса
  */
 function RequestForm() {
-//    var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
-    var ajax ;         //  объект обмена с сервером
+    var ajax ;                //  объект обмена с сервером
     var nodeTypes = {};       // типы узлов в смысле jstree
     var typesNames = {};       // имена типов
     var conceptSet = {} ;     // возможные значения узла типа concept
