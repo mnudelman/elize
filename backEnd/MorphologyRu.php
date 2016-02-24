@@ -49,7 +49,7 @@ class MorphologyRu
                     'prepositional-ends' => ['е', 'и', 'е', 'е', 'и']
                 ],
                 'declension_3' => [               // 3 склонение
-                    'nominative-ends' => ['чь,шь,ть'], // ночь, мышь
+                    'nominative-ends' => ['чь,шь,сть,дь'], // ночь, мышь "сть"(жесть,месть - добавил
                     'genitive-ends' => ['чи,ши'],
                     'dative-ends' => ['чи,ши'],
                     'accusative-ends' => ['чь,шь'],

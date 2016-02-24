@@ -6,47 +6,54 @@
 class ConceptFunction
 {
     private $functList = ['ru_names'];      // список определённых функций
-    private $phraseWords =[] ;              // список слов запроса
-    private $db ;                     // объект для обращений к БД
-    private $msg ;                    // формирование сообщений
+    private $phraseWords = [];              // список слов запроса
+    private $db;                     // объект для обращений к БД
+    private $msg;                    // формирование сообщений
 
     //----------------------------//
-    public function __construct() {
-        $this->db= new RequestTree_db() ;
-        $this->msg = Message::getInstace() ;
-    }
-    public function functionExecute($functName,$phraseWords)
+    public function __construct()
     {
-        $this->phraseWords = $phraseWords ;
-        $result = [] ;
+        $this->db = new RequestTree_db();
+        $this->msg = Message::getInstace();
+    }
+
+    public function functionExecute($functName, $phraseWords)
+    {
+        $this->phraseWords = $phraseWords;
+        $result = [];
         switch ($functName) {
             case 'ru_names' : {
                 $result = $this->ru_names();
                 break;
             }
             case 'one_word_noun' : {
-                $result = $this->findNoun() ;
+                $result = $this->findNoun();
+                break ;
+            }
+            case 'adjective_noun': {
+                $result = $this->adjectivePlusNoun() ;
             }
         }
-        return $result ;
+        return $result;
     }
 
     /**
      * поиск имён собственных в запросе
      */
-    private function ru_names() {
-        $result = ['find'=>false, 'word' => ''] ;
-        for ($i = 0; $i < count($this->phraseWords); $i++){
-            $word = $this->phraseWords[$i] ;
-            $firstLetter = mb_strtoupper( mb_substr($word,0,1)) ;
-            $word = $firstLetter.mb_substr($word,1) ;
-            $result = $this->db->findRuNameSynonym($word) ;
+    private function ru_names()
+    {
+        $result = ['find' => false, 'word' => ''];
+        for ($i = 0; $i < count($this->phraseWords); $i++) {
+            $word = $this->phraseWords[$i];
+            $firstLetter = mb_strtoupper(mb_substr($word, 0, 1));
+            $word = $firstLetter . mb_substr($word, 1);
+            $result = $this->db->findRuNameSynonym($word);
             if (isset($result['find']) && $result['find']) {
-                break ;
+                break;
             }
 
         }
-        return $result ;
+        return $result;
     }
 
     /**
@@ -56,48 +63,117 @@ class ConceptFunction
      * падеже едиств числа
      * @return array
      */
-    private function findNoun() {
-        $result = ['find'=>false, 'word' => ''] ;
+    private function findNoun()
+    {
+        $result = ['find' => false, 'word' => ''];
 
         if (sizeof($this->phraseWords) !== 1) {
-            return $result ;
+            return $result;
         }
         //--- проверить ru_names -- //
-        $resNames = $this->ru_names() ;
+        $resNames = $this->ru_names();
         if ($resNames['find'] === true) {
-            return $result ;
+            return $result;
         }
-        $morphology = new MorphologyRu() ;
-        $morphology->init() ;
-        $morphology->setWords($this->phraseWords) ;
+        $morphology = new MorphologyRu();
+        $morphology->init();
+        $morphology->setWords($this->phraseWords);
 
 
-
-        $parseResult = $morphology->parsePhrase() ;
+        $parseResult = $morphology->parsePhrase();
         // ищем сушествительное - в первом ( единственном слове)
-        $pars = $parseResult[0]['pars'] ;
-        $word = $parseResult[0]['word'] ;
+        $pars = $parseResult[0]['pars'];
+        $word = $parseResult[0]['word'];
         if (!is_array($pars)) {
-            return $result ;
+            return $result;
         }
         foreach ($pars as $i => $item) {
-            $parsItem = $item['pars'] ;
+            $parsItem = $item['pars'];
             if (
                 ($parsItem[0] === 'noun' &&                // существительное
-                $parsItem[1] === 'only' &&                // единственное число
-                $parsItem[3] === 'nominative-ends'        // иминительный падеж
+                    $parsItem[1] === 'only' &&                // единственное число
+                    $parsItem[3] === 'nominative-ends'        // иминительный падеж
                 ) ||
                 ($parsItem[0] === 'noun' &&                // существительное
-                $parsItem[1] === 'plural' &&               //допустим множ число
-                $parsItem[2] === 'nominative-ends'        // иминительный падеж
+                    $parsItem[1] === 'plural' &&               //допустим множ число
+                    $parsItem[2] === 'nominative-ends'        // иминительный падеж
                 )
             ) {
-                $result = ['find'=>true, 'word' => $word] ;
-                break ;
+                $result = ['find' => true, 'word' => $word];
+                break;
             }
         }
 
-        return $result ;
+        return $result;
     }
 
+    /**
+     *  пара прилагательное+существительное именительного радежа
+     */
+    private function adjectivePlusNoun() {
+        $result = ['find' => false, 'word' => ''];
+
+        if (sizeof($this->phraseWords) !== 2) {
+            return $result;
+        }
+        //--- проверить ru_names -- //
+        $resNames = $this->ru_names();
+        if ($resNames['find'] === true) {
+            return $result;
+        }
+        $morphology = new MorphologyRu();
+        $morphology->init();
+        $morphology->setWords($this->phraseWords);
+
+
+        $parseResult = $morphology->parsePhrase();
+        $twoWords = ['noun' => false, 'adjective' => false] ;
+        for ($i = 0 ; $i < 2 ; $i++) {
+            $pars = $parseResult[$i]['pars'];
+
+            if (!is_array($pars)) {     // не распознано
+                break ;
+            }
+
+            foreach ($pars as $j => $item) {
+                $parsItem = $item['pars'];
+                if (
+                    ($parsItem[0] === 'noun' &&                // существительное
+                        $parsItem[1] === 'only' &&                // единственное число
+                        $parsItem[3] === 'nominative-ends'        // иминительный падеж
+                    ) ||
+                    ($parsItem[0] === 'noun' &&                // существительное
+                        $parsItem[1] === 'plural' &&               //допустим множ число
+                        $parsItem[2] === 'nominative-ends'        // иминительный падеж
+                    )
+                ) {
+                    $twoWords['noun'] = true ;
+                    break;
+                }
+                if (
+                    ($parsItem[0] === 'adjective' &&                // существительное
+                        $parsItem[1] === 'only' &&                // единственное число
+                        $parsItem[3] === 'nominative-ends'        // иминительный падеж
+                    ) ||
+                    ($parsItem[0] === 'adjective' &&                // существительное
+                        $parsItem[1] === 'plural' &&               //допустим множ число
+                        $parsItem[2] === 'nominative-ends'        // иминительный падеж
+                    )
+                ) {
+                    $twoWords['adjective'] = true ;
+                    break;
+                }
+
+            }
+         }
+        if ($twoWords['noun'] &&  $twoWords['adjective']) {
+            $result = [
+                'find' => true,
+                'word' => implode(",", $this->phraseWords)] ;
+        }
+
+
+        return $result;
+
+    }
 }

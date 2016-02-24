@@ -35,7 +35,7 @@ function BackgroundImg() {
         dirMainImg =   dirImages + '/userInterface' ;
 
         mainImg = {
-            file: "magic2.png",
+            file: "magic2_empty_serg.jpg",
             size : {w:1917, h:1074 ,u:'px'}
         } ;
         centralCircle = {
@@ -306,7 +306,7 @@ function BackgroundImg() {
                         y2: 690
                     },
                     img: {
-                        file: 'l2_2.png'
+                        file: 'l2_2.jpg'
                     }
                 },
                 'l3_1': {

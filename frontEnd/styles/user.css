@@ -1,6 +1,6 @@
 /**--- фоновая картинка --**/
 body {
-    background-image: url("../../images/userInterface/magic2.png");
+    background-image: url("../../images/userInterface/magic2_empty_serg.jpg");
     background-size: 100% auto ; /*contain ;/*cover;*/
     overflow: hidden;
     background-repeat: no-repeat;
