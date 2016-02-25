@@ -36,7 +36,11 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
     <script type="text/javascript" src="<?= $dirMousewheel; ?>/jquery.mousewheel.js"></script>
 
-    <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script> <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script> <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script> <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script> <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ResponseForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/MainProjectsForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
@@ -53,6 +57,7 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/RequestGo.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/AjaxRequest.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/MagicNormalPictures.js"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>

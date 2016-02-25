@@ -6,6 +6,7 @@ function UserInterface() {
     var backgroundImg  ;                // объект - элементы изображения
     var scrollBackground ;
     var philosophyForm ;
+    var magicNormalPictures ;           // фоновые картинки
     var centralCircle = {} ;            // центральный круг
     var stamp = {} ;                    // печать
     var screenClosed = false ;
@@ -15,8 +16,6 @@ function UserInterface() {
     var RESIZE_TIME_DELAY = 200 ;        // задержка при контроле изменения размеров
     var RESIZE_TAKTS_MAX = 1;            // число тактов, после которых фиксируются изменения размера
     var currentQuery = '' ;
-    var waitRequestType = false ;        // ожидание определения типа запроса(во избежании повторных нажатий)
-    var stopWait = false ;               //  остановить ожидания
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
@@ -26,19 +25,23 @@ function UserInterface() {
         backgroundImg.init();
 
         scrollBackground.init();
-
-
+        magicNormalPictures = paramSet.magicNormalPictures ;
+        magicNormalPictures.init() ;
         stampDefine();              // объект stamp   - планка для запуска запроса
         centralCircleDefine();      // объект centralCircle - ценральный круг
         $(document).click(function (e) {
             if (isCentralCircleClick(e)) {
             }
             if (isStampClick(e)) {                   // выполнение запроса
-                currentQuery = $queryArea.val();
-                var requestGo = paramSet.requestGo;
-                requestGo.setRequestText(currentQuery);
-                var auto = true;
-                requestGo.requestExecute(auto);
+
+                backgroundImg.centralCircleRotate(function() {
+                    currentQuery = $queryArea.val();
+                    var requestGo = paramSet.requestGo;
+                    requestGo.setRequestText(currentQuery);
+                    var auto = true;
+                    requestGo.requestExecute(auto);
+                }) ;
+
             } else {
                 var philosophyForm = paramSet.philosophyForm;
                 philosophyForm.stopShow();
@@ -57,10 +60,13 @@ function UserInterface() {
         backgroundImg.centralCircleShow('query');
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
+        $('#centralCircleText').removeAttr('hidden') ;
+        $queryArea.removeAttr('hidden') ;
         $queryArea.attr('placeholder', 'введите вопрос');
         $queryArea.focus();
         smoke.init();
         smoke.smokeGo();
+        magicNormalPictures.show() ;
 
     } ;
     /**

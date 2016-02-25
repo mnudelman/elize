@@ -27,6 +27,7 @@ function BackgroundImg() {
     var dirPictures ;
     var $centralCircleBlock = $('#centralCircle') ;
     var $centralCircleTextBlock = $('#centralCircleText') ;
+    var animateStop = false ;
     var _this = this ;
     //------------------------------------//
     this.init = function() {
@@ -253,8 +254,9 @@ function BackgroundImg() {
 
         philosophyPictures = {
             dir: dirPictures,
+            borderSize: 20,        // толщина рамки px
             items: {
-                'l1_1': {
+                'l1_1': {                      // карты
                     place: {
                         x1: 344,
                         y1: 215,
@@ -262,10 +264,12 @@ function BackgroundImg() {
                         y2: 358
                     },
                     img: {
-                        file: 'l1_1.png'
-                    }
+                        file: 'l1_1_o.jpg',
+                        border:'l1_1_b.jpg'
+                    },
+                    subst: 'cards'
                 },
-                'l1_2': {
+                'l1_2': {                      // созвездия
                     place: {
                         x1: 536,
                         y1: 215,
@@ -273,10 +277,12 @@ function BackgroundImg() {
                         y2: 362
                     },
                     img: {
-                        file: 'l1_2.png'
-                    }
+                        file: 'l1_2_o.jpg',
+                        border:'l1_2_b.jpg'
+                    },
+                    subst: 'astrology'
                 },
-                'l1_3': {
+                'l1_3': {                     // домино
                     place: {
                         x1: 732,
                         y1: 215,
@@ -284,10 +290,12 @@ function BackgroundImg() {
                         y2: 361
                     },
                     img: {
-                        file: 'l1_3.png'
-                    }
+                        file: 'l1_3_o.jpg',
+                        border:'l1_3_b.jpg'
+                    },
+                    subst: 'domino'
                 },
-                'l2_1': {
+                'l2_1': {                      // лунно-солнечный календарь
                     place: {
                         x1: 344,
                         y1: 377,
@@ -295,10 +303,12 @@ function BackgroundImg() {
                         y2: 524
                     },
                     img: {
-                        file: 'l2_1.png'
-                    }
+                        file: 'l2_1_o.jpg',
+                        border:'l2_1_b.jpg'
+                    },
+                    subst: 'moon_calendar'
                 },
-                'l2_2': {
+                'l2_2': {                      // карты таро
                     place: {
                         x1: 563,
                         y1: 377,
@@ -306,10 +316,12 @@ function BackgroundImg() {
                         y2: 690
                     },
                     img: {
-                        file: 'l2_2.jpg'
-                    }
+                        file: 'l2_2_o.jpg',
+                        border:'l2_2_b.jpg'
+                    },
+                    subst: 'taro'
                 },
-                'l3_1': {
+                'l3_1': {                      // стихии
                     place: {
                         x1: 344,
                         y1: 542,
@@ -317,10 +329,12 @@ function BackgroundImg() {
                         y2: 690
                     },
                     img: {
-                        file: 'l3_1.png'
-                    }
+                        file: 'l3_1_o.jpg',
+                        border:'l3_1_b.jpg'
+                    },
+                    subst: 'elements'
                 },
-                'r1_1': {
+                'r1_1': {                         // звери
                     place: {
                         x1: 1023,
                         y1: 215,
@@ -328,21 +342,25 @@ function BackgroundImg() {
                         y2: 356
                     },
                     img: {
-                        file: 'r1_1.png'
-                    }
+                        file: 'r1_1_o.jpg',
+                        border:'r1_1_b.jpg'
+                    },
+                    subst: 'animals'
                 },
-                'r1_2': {
+                'r1_2': {                         // деревья
                     place: {
-                        x1: 1017,
+                        x1: 1217,
                         y1: 215,
                         x2: 1385,
                         y2: 356
                     },
                     img: {
-                        file: 'r1_2.png'
-                    }
+                        file: 'r1_2_o.jpg',
+                        border:'r1_2_b.jpg'
+                    },
+                    subst: 'trees'
                 },
-                'r1_3': {
+                'r1_3': {                        // валюта
                     place: {
                         x1: 1409,
                         y1: 215,
@@ -350,10 +368,12 @@ function BackgroundImg() {
                         y2: 358
                     },
                     img: {
-                        file: 'r1_3.png'
-                    }
+                        file: 'r1_3_o.jpg',
+                        border:'r1_3_b.jpg'
+                    },
+                    subst: 'money'
                 },
-                'r2_1': {
+                'r2_1': {                       // цифры
                     place: {
                         x1: 1164,
                         y1: 377,
@@ -361,10 +381,12 @@ function BackgroundImg() {
                         y2: 688
                     },
                     img: {
-                        file: 'r2_1.png'
-                    }
+                        file: 'r2_1_o.jpg',
+                        border:'r2_1_b.jpg'
+                    },
+                    subst: 'digits'
                 },
-                'r2_2': {
+                'r2_2': {                     // цвета
                     place: {
                         x1: 1381,
                         y1: 377,
@@ -372,10 +394,12 @@ function BackgroundImg() {
                         y2: 524
                     },
                     img: {
-                        file: 'r2_2.png'
-                    }
+                        file: 'r2_2_o.jpg',
+                        border:'r2_2_b.jpg'
+                    },
+                    subst: 'colors'
                 },
-                'r3_1': {
+                'r3_1': {                    // страны
                     place: {
                         x1: 1381,
                         y1: 542,
@@ -383,8 +407,10 @@ function BackgroundImg() {
                         y2: 688
                     },
                     img: {
-                        file: 'r3_1.png'
-                    }
+                        file: 'r3_1_o.jpg',
+                        border:'r3_1_b.jpg'
+                    },
+                    subst: 'countries'
                 }
             }
         } ;
@@ -440,11 +466,13 @@ function BackgroundImg() {
         var place = item['place'] ;
         currentItem['place'] = placeResize(place) ;
         currentItem['img'] = newItemImg(item['img']) ;
+        currentItem['subst'] = item['subst'] ;
         return currentItem ;
     } ;
     var newItemImg = function(itemImg) {
         var file = itemImg['file'] ;
-        return {file: file} ;
+        var borderFile = itemImg['border'] ;
+        return {file: file, border:borderFile} ;
     } ;
     var placeResize = function(place) {
         var x1 = place['x1'] ;
@@ -465,6 +493,13 @@ function BackgroundImg() {
     this.getPhilosophyPictures = function() {
         var currentPictures = {} ;
         currentPictures['dir'] = philosophyPictures['dir'] ;
+
+        var kResize = _this.getKResize()  ;
+        var kx = kResize['kx']  ;
+        var ky = kResize['ky']  ;
+       // оставим одну толщину
+        currentPictures['borderSize'] = philosophyPictures['borderSize'] * kx ;
+
         currentPictures['items'] = {} ;
         var currentItems = currentPictures['items'] ;
         var items = philosophyPictures['items'] ;
@@ -513,6 +548,9 @@ function BackgroundImg() {
         _this.defineAbsolutePosition($centralCircleBlock,place,ballPicture) ;
         defineTextArea($centralCircleTextBlock,textAreaPlace,textAreaBackGround,
             currentColor,0,readonly,idText) ;
+
+ //           centralCircleRotate($centralCircleBlock) ;
+
     } ;
     this.defineAbsolutePosition = function($block,place,imgFile) {
         $block.css('position','absolute') ;
@@ -545,7 +583,7 @@ function BackgroundImg() {
         }else {
             $txt.removeAttr('readonly') ;
         }
-
+        $txt.removeAttr('hidden') ;
         $txt.css('width',x2 - x1) ;
         $txt.attr('id',idText) ;
         $txt.css('max-width',x2 - x1) ;
@@ -568,5 +606,44 @@ function BackgroundImg() {
      */
     this.getIdText = function(showType) {
         return centralCircle[showType]['idText'] ;
-    }
+    } ;
+    this.centralCircleRotate = function(callback) {
+        $centralCircleTextBlock.attr('hidden', 'hidden');
+        var $block = $centralCircleBlock;
+        var x0 = pixelToNumber($block.css('left')) + pixelToNumber($block.css('width')) / 2;
+        var y0 = pixelToNumber($block.css('top')) + pixelToNumber($block.css('height')) / 2;
+        var $img = $block.children('img');
+        var n = 0;
+        var maxTime = 3000 ;
+        animateStop = false;
+        var time = 0 ;
+
+        var timeDelay = 300;
+        var tmpTimer = setInterval(function () {
+            if (time > maxTime) {        //  остановить цикл анимации)
+                clearInterval(tmpTimer);
+                $centralCircleTextBlock.removeAttr('hidden');
+                if (callback !== undefined) {
+                    callback() ;
+                }
+            }
+            var alpha = ++n * 30;
+            $img.css('transform', 'rotate(' + alpha + 'deg)');
+            n = (n >= 6) ? 0 : n;
+            time += timeDelay ;
+        }, timeDelay);
+
+
+    };
+    /**
+     * преобразовать строку вида 230px в число 230
+     * @param strPixel
+     * @returns {number}
+     */
+    var pixelToNumber = function (strPixel) {
+        var n = strPixel.replace('px', '');
+        return n - 0;
+    };
+
+
 }

@@ -20,6 +20,7 @@ function ParamSet() {
     this.requestGo ;           // исполнение( определение типа запроса)
     this.backgroundImage;      // объект - основной фон и его элементы
     this.scrollBackground ;    //  объект  -фок результата запроса
+    this.magicNormalPictures ; // вывод картинок при вводе запроса
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -69,6 +70,7 @@ function ParamSet() {
         _this.requestGo = new RequestGo() ;
         _this.backgroundImage = new BackgroundImg() ;
         _this.scrollBackground = new ScrollBackground();
+        _this.magicNormalPictures = new MagicNormalPictures() ;
 //
 
     } ;

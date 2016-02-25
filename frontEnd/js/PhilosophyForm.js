@@ -32,9 +32,11 @@ function PhilosophyForm() {
      * прервать вывод
      */
     this.stopShow = function() {
-        $resultBlock.empty() ;
+//        $resultBlock.empty() ;
         animateStop = true ;
         formShowFlag = false ;
+        magicNormalPictures = paramSet.magicNormalPictures ;
+        magicNormalPictures.show() ;
     } ;
     this.resize = function() {
         if (formShowFlag) {
@@ -54,6 +56,7 @@ function PhilosophyForm() {
         $resultBlock.empty() ;
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
+        var borderSize = pictures['borderSize'] ;
         var items = pictures['items'] ;
         for (var itemKey in items) {
             var item = items[itemKey] ;
@@ -63,7 +66,9 @@ function PhilosophyForm() {
     } ;
     var showItem = function(dir,item) {
        var place = item['place'] ;
-       var imgFile = dir + '/' + item['img']['file'] ;
+       var substName = item['subst'] ;
+       var substFile = formAttr.getPictSubst(substName) ;
+       var imgFile =  substFile ;
        var top = place['y1'] ;
        var left =  place['x1'] ;
        var width =  place['x2'] - place['x1'] ;
@@ -80,6 +85,22 @@ function PhilosophyForm() {
        $resultBlock.append($block) ;
 
     } ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     var cycleShow = function() {
         animateStop = false ;
         var timeDelay = 3000;
