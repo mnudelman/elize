@@ -8,7 +8,7 @@
 function AjaxRequest(sendDataObject,overtimeFunc,requestFunc) {
     var ajaxExecute = paramSet.ajaxExecute;
     var TIME_DELAY = 300;       // задежка при опросе ajax
-    var MAX_STEPS = 12;        // количество опросов ajax
+    var MAX_STEPS = 20;        // количество опросов ajax
     var currentSendData = {};
     var currentOvertimeFunc = overtimeFunc;
     var currentRequestFunc = requestFunc;

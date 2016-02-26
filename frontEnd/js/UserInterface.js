@@ -22,6 +22,7 @@ function UserInterface() {
         backgroundImg = paramSet.backgroundImage; // объект - элементы изображения
         scrollBackground = paramSet.scrollBackground;    // "свиток" - фоновое изображение результата
         philosophyForm = paramSet.philosophyForm;
+        philosophyForm.init() ;
         backgroundImg.init();
 
         scrollBackground.init();
@@ -33,40 +34,46 @@ function UserInterface() {
             if (isCentralCircleClick(e)) {
             }
             if (isStampClick(e)) {                   // выполнение запроса
+                if (philosophyForm.getFormShowFlag() === true) {
+                    philosophyForm.stopShow() ;
+                    normalQueryShow() ;
+                } else {
+                    backgroundImg.centralCircleRotate(function() {
+                        currentQuery = $queryArea.val();
+                        var requestGo = paramSet.requestGo;
+                        requestGo.setRequestText(currentQuery);
+                        var auto = true;
+                        requestGo.requestExecute(auto);
+                    }) ;
+                }
 
-                backgroundImg.centralCircleRotate(function() {
-                    currentQuery = $queryArea.val();
-                    var requestGo = paramSet.requestGo;
-                    requestGo.setRequestText(currentQuery);
-                    var auto = true;
-                    requestGo.requestExecute(auto);
-                }) ;
 
             } else {
-                var philosophyForm = paramSet.philosophyForm;
-                philosophyForm.stopShow();
-                backgroundImg.centralCircleShow('query');
-                var idText = backgroundImg.getIdText('query');
-                $queryArea = $('#' + idText);
-                $queryArea.attr('placeholder', 'введите вопрос');
-                $queryArea.val(currentQuery);
-                $queryArea.focus();
+                if (philosophyForm.getFormShowFlag() === true) {
+                    philosophyForm.stopShow();
+                }
+                normalQueryShow() ;
             }
         });
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
+        normalQueryShow() ;
+        smoke.init();
+        smoke.smokeGo();
+        backgroundImg.stampShow() ;
 
+
+    } ;
+    var normalQueryShow = function() {
         backgroundImg.centralCircleShow('query');
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
-        $('#centralCircleText').removeAttr('hidden') ;
-        $queryArea.removeAttr('hidden') ;
         $queryArea.attr('placeholder', 'введите вопрос');
+        $queryArea.val(currentQuery);
         $queryArea.focus();
-        smoke.init();
-        smoke.smokeGo();
         magicNormalPictures.show() ;
+
 
     } ;
     /**
@@ -86,6 +93,9 @@ function UserInterface() {
                     $queryArea.attr('placeholder', 'введите вопрос');
                     $queryArea.focus();
                     smoke.smokeGo();
+                    backgroundImg.stampShow() ;
+                    magicNormalPictures.show() ;
+
                     resizeGo = false;
                     resizeSteps = 0;
                     philosophyForm.resize() ;

@@ -27,6 +27,7 @@ function BackgroundImg() {
     var dirPictures ;
     var $centralCircleBlock = $('#centralCircle') ;
     var $centralCircleTextBlock = $('#centralCircleText') ;
+    var $stampBlock = $('#stamp') ;
     var animateStop = false ;
     var _this = this ;
     //------------------------------------//
@@ -42,10 +43,10 @@ function BackgroundImg() {
         centralCircle = {
             dir: dirMainImg,
             place: {
-                x1: 800, //808,
-                y1: 380,
+                x1: 800, //798, //808,
+                y1: 380, //381,
                 x2: 1130,
-                y2: 700
+                y2: 710 // 711
             },
             textArea: {
                 x1: 827,
@@ -56,7 +57,7 @@ function BackgroundImg() {
 
             query: {                               // ценральный круг при вводе запроса
                 idText : 'queryText',
-                ball: 'yellow_ball_clear.png',
+                ball: 'yellow_ball.png',
                 textArea: 'yellow_text_area.png',
                 color: 'black', //'#47d4d9', // 'blue',    // '#11f371',
                 readonly: false
@@ -72,13 +73,16 @@ function BackgroundImg() {
 
         } ;
         stamp = {
+            dir: dirMainImg,
             place: {
-                x1: 806,
-                y1: 682,
-                x2: 1104,
-                y2: 746
+                x1: 808,
+                y1: 678,
+                x2: 1111,
+                y2: 748
+            },
+            img: {
+                file: 'stamp.png'
             }
-
         } ;
 
        clouds = {
@@ -525,8 +529,17 @@ function BackgroundImg() {
     } ;
     this.getStamp = function() {
         var currentStamp = {} ;
+        currentStamp['dir'] = stamp['dir'] ;
         currentStamp['place'] = placeResize(stamp['place']) ;
+        currentStamp['img'] = stamp['img'] ;
         return currentStamp ;
+    } ;
+    this.stampShow = function() {
+        var currentStamp = _this.getStamp() ;
+        var place = currentStamp['place'] ;
+        var dir = currentStamp['dir'] ;
+        var stampPicture = dir +'/' + currentStamp['img']['file'] ;
+        _this.defineAbsolutePosition($stampBlock,place,stampPicture) ;
     } ;
     /**
      * выводит центральный круг по типу

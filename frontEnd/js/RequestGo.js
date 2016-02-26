@@ -47,8 +47,11 @@ function RequestGo() {
                     _this.automaticallyGo() ;
                 }
             }else {
-                var message = answ['message'];
-                ajax.errorMessage(message) ;
+                if (answ !== false) {
+                    var message = answ['message'];
+                    ajax.errorMessage(message) ;
+                }
+
             }
         }) ;
         ajax.go() ;

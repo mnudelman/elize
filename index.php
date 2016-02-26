@@ -90,6 +90,7 @@ $dirStyle = './frontEnd/styles';
     </div>
     <div id="centralCircleText"></div>
     <div id="smokeClouds"></div>
+    <div id="stamp"></div>
 </div>
 <div id="messages"></div>
 </body>

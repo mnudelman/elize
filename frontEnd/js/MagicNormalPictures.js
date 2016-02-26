@@ -7,6 +7,7 @@ function MagicNormalPictures() {
     var animateStop = false ;
     var $resultBlock = $('#resultBlockPhilosophy') ;
     var formShowFlag = false ;
+    var _this = this ;
     //----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
@@ -38,14 +39,17 @@ function MagicNormalPictures() {
         var items = pictures['items'] ;
         for (var itemKey in items) {
             var item = items[itemKey];
-            var $pictImg = showItem(dir, borderSize, item);
+            var $pictImg = _this.showItem(dir, borderSize, item, itemKey);
             var rotationBlock = rotationBlockPrepare($pictImg);
             rotationGo(rotationBlock);
         }
     } ;
-    var showItem = function(dir,borderSize,item) {
+    this.showItem = function(dir,borderSize,item,itemKey,substImageFile) {
         var place = item['place'] ;
         var pictureFile = dir + '/' + item['img']['file'] ;
+        if (typeof(substImageFile) === 'string' ) {
+            pictureFile = substImageFile ;
+        }
         var borderFile = dir + '/' + item['img']['border'] ;
         var top = place['y1'] ;
         var left =  place['x1'] ;
@@ -72,11 +76,13 @@ function MagicNormalPictures() {
 
         // для картинки нужен отдельный блок
         var $pictureBlock = $('<div/>') ;
+
         $block.append($pictureBlock) ;
         $pictureBlock.css('position','absolute') ;
         $pictureBlock.css('top',borderSize) ;
         $pictureBlock.css('left',borderSize) ;
         var $pictureImg = $('<img/>') ;
+        $pictureImg.attr('id',itemKey+'_img') ;
         $pictureImg.attr('src',pictureFile) ;
         $pictureImg.css('width',width - 2 * borderSize) ;
         $pictureImg.css('height',height - 2 * borderSize) ;
@@ -92,7 +98,7 @@ function MagicNormalPictures() {
            axis : 'y' ,
            scaleStep: 5,    // % от первоначального размера
            sizeMin : 5,       // мин размер при сжатии изображения - %
-           timeDelay: 50   // время задержки
+           timeDelay: 150   // время задержки
 
        } ;
     } ;
@@ -114,53 +120,33 @@ function MagicNormalPictures() {
         var scaleStep_0 =  rotationBlock.scaleStep ;
         var sizeMin =   rotationBlock.sizeMin ;
         var timeDelay =   rotationBlock.timeDelay;
+        var PI = Math.PI ;
         var scaleMax = 1 ;
-        var scaleMin = sizeMin / 100 ;
-        var scaleStep = scaleStep_0 / 100 ;
-        var currentScale = scaleMax ;
-        var currentScaleSign = -1 ;        // уменьшение размера
+        var phiStep = PI/10 ;
+        var phiMirrorChange = PI/2   ;         // смена отображения
+        var phiMax = PI ;
+        var phi = 0 ;
         var kMirror = 1 ;                  // отображение
+        var mirrorFlag = false ;
+        var currentScale = 1 ;
         var tmpTimer = setInterval(function () {
             if (animateStop) {        //  остановить цикл анимации)
                 clearInterval(tmpTimer);
             }
-            if (currentScaleSign ===  -1) {
-                if (currentScale - scaleStep >= scaleMin) {
-                    currentScale = currentScale - scaleStep ;
-                    $img.css('transform','scaleX(' + (kMirror * currentScale) +')') ;
-                }else {
-                    currentScaleSign  = +1 ;
-                    currentScale = scaleMin ;
-                    kMirror = (-1) * kMirror ;
-                    $img =  $img.css('transform','scaleX(' +
-                                             (kMirror * currentScale) +')') ;  // отображение
-                }
-            } else {
-                if (currentScale + scaleStep <= scaleMax) {
-                    currentScale = currentScale + scaleStep ;
-                    $img.css('transform','scaleX(' + (kMirror * currentScale) +')') ;
-                }else {
-                    currentScaleSign  = -1 ;
-                    currentScale = scaleMax ;
-                }
+            phi += phiStep ;
+            if (phi >= phiMirrorChange && !mirrorFlag  ) {
+                mirrorFlag = true ;
+                phi = phiMirrorChange + phiStep/2  ;
+                kMirror = (-1) * kMirror ;
+            }
+            currentScale =  kMirror * Math.abs(Math.cos(phi)) ;
+            $img.css('transform','scaleX(' + currentScale +')') ;
+            if (phi >= phiMax) {
+                phi = 0 ;
+                mirrorFlag = false ;
 
             }
-
-
         }, timeDelay);
-    } ;
-    var cycleShow = function() {
-        animateStop = false ;
-        var timeDelay = 3000;
-        var tmpTimer = setInterval(function () {
-            if (animateStop) {        //  остановить цикл анимации)
-                clearInterval(tmpTimer);
-            }
-
-            pictureRotate() ;
-        }, timeDelay);
-
-
     } ;
 
 }

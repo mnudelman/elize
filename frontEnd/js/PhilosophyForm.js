@@ -9,11 +9,15 @@ function PhilosophyForm() {
     var $resultBlock = $('#resultBlockPhilosophy') ;
     var $answerArea ;     // область вывода текста
     var formShowFlag = false ;
+    var magicNormalPictures ;
+    var _this = this ;
     //----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
         formAttr = new PhilosophyFormAttr() ;        // объект - атрибуты формы
         formAttr.init() ;
+        magicNormalPictures = paramSet.magicNormalPictures ;
+        formShowFlag = false ;
     } ;
      /**
      * изменить фразу
@@ -27,7 +31,9 @@ function PhilosophyForm() {
        formShowFlag = true ;
        responseShow() ;
     } ;
-
+    this.getFormShowFlag = function() {
+        return formShowFlag ;
+    } ;
     /**
      * прервать вывод
      */
@@ -35,8 +41,8 @@ function PhilosophyForm() {
 //        $resultBlock.empty() ;
         animateStop = true ;
         formShowFlag = false ;
-        magicNormalPictures = paramSet.magicNormalPictures ;
-        magicNormalPictures.show() ;
+
+ //       magicNormalPictures.show() ;
     } ;
     this.resize = function() {
         if (formShowFlag) {
@@ -56,11 +62,15 @@ function PhilosophyForm() {
         $resultBlock.empty() ;
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
-        var borderSize = pictures['borderSize'] ;
+        var borderSize = pictures['borderSize'] - 4 ;  // уменьшаем рамку, чтобы избежать просвет
         var items = pictures['items'] ;
         for (var itemKey in items) {
             var item = items[itemKey] ;
-            showItem(dir,item) ;
+            var substName = item['subst'] ;
+            var substFile = formAttr.getPictSubst(substName) ;
+            magicNormalPictures.showItem(dir,borderSize,item,itemKey,substFile) ;
+
+//            showItem(dir,item) ;
         }
         cycleShow() ;
     } ;
