@@ -181,7 +181,7 @@ function PhilosophyFormAttr() {
             dir : dirImages + '/animals',
             pictures : [
                 '1_as.jpg',
-                '2_as.jpg',
+                '2_as.jpeg',
                 '3_as.jpg',
                 '4_as.jpg',
                 '5_as.jpg',

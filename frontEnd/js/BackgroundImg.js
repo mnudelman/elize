@@ -15,7 +15,6 @@
  */
 function BackgroundImg() {
     var mainImg = {} ;          // главная кртинка( body {background-image}
-    var kHW = 0 ;               // отношение height/width для mainImg
     var clouds = {} ;           // облака
     var philosophyPictures = {} ; // картинки для иллюстрации
     var centralCircle = {} ;      // центральный круг
@@ -29,9 +28,11 @@ function BackgroundImg() {
     var $centralCircleTextBlock = $('#centralCircleText') ;
     var $stampBlock = $('#stamp') ;
     var animateStop = false ;
+    var centralCircleText ;       // объект поддержки размера области ввода
     var _this = this ;
     //------------------------------------//
     this.init = function() {
+        centralCircleText = new CentralCircleText() ;
         dirSmoke = dirImages + '/smoke' ;
         dirPictures =  dirImages + '/philosophy' ;
         dirMainImg =   dirImages + '/userInterface' ;
@@ -561,9 +562,6 @@ function BackgroundImg() {
         _this.defineAbsolutePosition($centralCircleBlock,place,ballPicture) ;
         defineTextArea($centralCircleTextBlock,textAreaPlace,textAreaBackGround,
             currentColor,0,readonly,idText) ;
-
- //           centralCircleRotate($centralCircleBlock) ;
-
     } ;
     this.defineAbsolutePosition = function($block,place,imgFile) {
         $block.css('position','absolute') ;
@@ -592,25 +590,31 @@ function BackgroundImg() {
         $block.css('left',x1) ;
         $block.css('color',color) ;
         if (readonly) {
-            $txt.attr('readonly','readonly') ;
+            return ;
         }else {
             $txt.removeAttr('readonly') ;
         }
+        var txtWidth = x2 - x1 ;
+        var txtHeight = y2 - y1 ;
+
+        $block.css('width',txtWidth) ;
+        $block.css('height',txtHeight) ;
+
         $txt.removeAttr('hidden') ;
-        $txt.css('width',x2 - x1) ;
-        $txt.attr('id',idText) ;
-        $txt.css('max-width',x2 - x1) ;
-        $txt.css('height',y2 - y1) ;
-        $txt.css('max-height',y2 - y1) ;
-        $block.css('background-image','url("'+imgFile +'")') ;
-        $block.css('background-repeat','no-repeat') ;
-        $block.css('background-size','100% 100%') ;
-        $block.css('overflow','hidden') ;
-        $txt.css('background-color','rgba(0,0,0,0)') ;
-        $txt.css('color',color) ;
-        $txt.css('border','0') ;
+
         $block.append($txt) ;
 
+        $txt.css('width',0.95*txtWidth) ;
+        //$txt.css('margin-left',5) ;
+        //$txt.css('margin-right',5) ;
+         $txt.attr('id',idText) ;
+        $txt.css('height',0.97 * txtHeight) ;
+        $txt.css('max-height',0.8 * txtHeight) ;
+        $block.css('overflow','hidden') ;
+        $txt.css('background','transparent') ;
+        $txt.css('color',color) ;
+
+        centralCircleText.init(txtWidth,txtHeight,$txt) ;
     } ;
     /**
      * ид области ввода текста
@@ -619,6 +623,9 @@ function BackgroundImg() {
      */
     this.getIdText = function(showType) {
         return centralCircle[showType]['idText'] ;
+    } ;
+    this.getTextAreaBlock = function() {
+        return $centralCircleTextBlock ;
     } ;
     this.centralCircleRotate = function(callback) {
         $centralCircleTextBlock.attr('hidden', 'hidden');

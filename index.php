@@ -11,6 +11,7 @@ $dirLib = './../lib';
 $dirJstree = $dirLib . '/jstree';
 $dirJquery_ui = $dirLib . '/jquery-ui/jquery-ui-1.11.4';
 $dirMousewheel = $dirLib.'/jquery-mousewheel/mousewheel-3.1.13' ;
+$dirAutoResize = $dirLib.'/textAreaAutoResize' ;
 $dirJs = './frontEnd/js';
 $dirStyle = './frontEnd/styles';
 ?>
@@ -35,7 +36,8 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJquery_ui; ?>/jquery-ui.js"></script>
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
     <script type="text/javascript" src="<?= $dirMousewheel; ?>/jquery.mousewheel.js"></script>
-
+    <script type="text/javascript" src="<?= $dirAutoResize; ?>/autoResize.js"></script>
+hj
     <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
@@ -48,16 +50,15 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/BackgroundImg.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ScrollBackground.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/testScrollBackground.js"></script>
 
     <script type="text/javascript" src="<?= $dirJs; ?>/SmokeClouds.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CircularMotion.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/ResultShow.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/UserInterface.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/RequestGo.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/AjaxRequest.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/MagicNormalPictures.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/CentralCircleText.js"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>

@@ -58,11 +58,11 @@ function UserInterface() {
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
-        normalQueryShow() ;
+
         smoke.init();
         smoke.smokeGo();
         backgroundImg.stampShow() ;
-
+        normalQueryShow() ;
 
     } ;
     var normalQueryShow = function() {
@@ -70,11 +70,11 @@ function UserInterface() {
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
         $queryArea.attr('placeholder', 'введите вопрос');
+
+
+        magicNormalPictures.show() ;
         $queryArea.val(currentQuery);
         $queryArea.focus();
-        magicNormalPictures.show() ;
-
-
     } ;
     /**
      * исполнитель изменения размера окна браузера

@@ -8,6 +8,7 @@ function PhilosophyForm() {
     var animateStop = false ;
     var $resultBlock = $('#resultBlockPhilosophy') ;
     var $answerArea ;     // область вывода текста
+    var $answerAreaBlock ;
     var formShowFlag = false ;
     var magicNormalPictures ;
     var _this = this ;
@@ -18,13 +19,19 @@ function PhilosophyForm() {
         formAttr.init() ;
         magicNormalPictures = paramSet.magicNormalPictures ;
         formShowFlag = false ;
+        $answerAreaBlock = backgroundImg.getTextAreaBlock() ;
+        $answerAreaBlock.empty() ;
+        $answerAreaBlock.css('text-align','center') ;
+        $answerAreaBlock.css('vertical-align','center') ;
     } ;
      /**
      * изменить фразу
      */
     var phraseChange = function() {
         currentPhrase = formAttr.getPhrase() ;
-         $answerArea.val(currentPhrase) ;
+        $answerAreaBlock.empty() ;
+         $answerAreaBlock.append('<p>' + currentPhrase + '</p>') ;
+//         $answerArea.val(currentPhrase) ;
      } ;
 
     this.queryGo = function() {
@@ -39,8 +46,10 @@ function PhilosophyForm() {
      */
     this.stopShow = function() {
 //        $resultBlock.empty() ;
+
         animateStop = true ;
         formShowFlag = false ;
+        $answerAreaBlock.empty() ;
 
  //       magicNormalPictures.show() ;
     } ;
@@ -117,8 +126,9 @@ function PhilosophyForm() {
         var tmpTimer = setInterval(function () {
             if (animateStop) {        //  остановить цикл анимации)
                 clearInterval(tmpTimer);
+            } else {
+                phraseChange() ;
             }
-            phraseChange() ;
         }, timeDelay);
 
 
