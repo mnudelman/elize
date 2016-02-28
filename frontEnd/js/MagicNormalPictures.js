@@ -24,6 +24,9 @@ function MagicNormalPictures() {
         animateStop = true ;
         formShowFlag = false ;
     } ;
+    /**
+     * изменение размера экрана
+     */
     this.resize = function() {
         if (formShowFlag) {
             animateStop = true ;
@@ -44,6 +47,15 @@ function MagicNormalPictures() {
             rotationGo(rotationBlock);
         }
     } ;
+    /**
+     * вывод рамки и картинки внутри
+     * @param dir
+     * @param borderSize
+     * @param item
+     * @param itemKey
+     * @param substImageFile    - другая картинка для вставки в рамку (используется для "философии")
+     * @returns {*|jQuery|HTMLElement}
+     */
     this.showItem = function(dir,borderSize,item,itemKey,substImageFile) {
         var place = item['place'] ;
         var pictureFile = dir + '/' + item['img']['file'] ;
@@ -89,6 +101,11 @@ function MagicNormalPictures() {
         $pictureBlock.append($pictureImg) ;
         return $pictureImg ;
     } ;
+    /**
+     * блок - параметры вращения картинки
+     * @param $img
+     * @returns {{$img: *, dx_0: number, dy_0: number, axis: string, scaleStep: number, sizeMin: number, timeDelay: number}}
+     */
     var rotationBlockPrepare = function($img) {
 
        return {
@@ -111,7 +128,12 @@ function MagicNormalPictures() {
         var n = strPixel.replace('px','') ;
         return n - 0 ;
     } ;
-
+    /**
+     * выполнение вращения - имитация вращения вокруг оси "y" с пересчётом
+     * проекции на плоскость экрана. при прожождении точки PI/2 изображение
+     * отображается зеркально
+     * @param rotationBlock
+     */
     var rotationGo = function(rotationBlock) {
         var $img  = rotationBlock.$img ;
         var dx_0 =  rotationBlock.dx_0 ;

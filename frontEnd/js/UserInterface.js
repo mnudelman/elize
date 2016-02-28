@@ -1,5 +1,5 @@
 /**
- * Контроллер для пользовательсконго предствления
+ * Контроллер для пользовательского предствления
  */
 function UserInterface() {
     var smoke = new SmokeClouds();      // движение облаков
@@ -7,15 +7,16 @@ function UserInterface() {
     var scrollBackground ;
     var philosophyForm ;
     var magicNormalPictures ;           // фоновые картинки
-    var centralCircle = {} ;            // центральный круг
+//    var centralCircle = {} ;            // центральный круг
     var stamp = {} ;                    // печать
-    var screenClosed = false ;
+//    var screenClosed = false ;
     var $queryArea ;                    // область ввовда текста
     var resizeGo = false ;
     var resizeSteps = 0 ;
     var RESIZE_TIME_DELAY = 200 ;        // задержка при контроле изменения размеров
     var RESIZE_TAKTS_MAX = 1;            // число тактов, после которых фиксируются изменения размера
-    var currentQuery = '' ;
+    var currentQuery = '' ;              // текст запроса
+    var $centralCircleBlock = $('#centralCircle') ;
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
@@ -23,16 +24,14 @@ function UserInterface() {
         scrollBackground = paramSet.scrollBackground;    // "свиток" - фоновое изображение результата
         philosophyForm = paramSet.philosophyForm;
         philosophyForm.init() ;
-        backgroundImg.init();
+        backgroundImg.init();                 // фоновое изображение
 
-        scrollBackground.init();
+        scrollBackground.init();              // свиток - фон для вывода результата запроса
         magicNormalPictures = paramSet.magicNormalPictures ;
-        magicNormalPictures.init() ;
+        magicNormalPictures.init() ;                  // подготовка фоновых картинок
         stampDefine();              // объект stamp   - планка для запуска запроса
-        centralCircleDefine();      // объект centralCircle - ценральный круг
+//        centralCircleDefine();      // объект centralCircle - ценральный круг
         $(document).click(function (e) {
-            if (isCentralCircleClick(e)) {
-            }
             if (isStampClick(e)) {                   // выполнение запроса
                 if (philosophyForm.getFormShowFlag() === true) {
                     philosophyForm.stopShow() ;
@@ -46,10 +45,8 @@ function UserInterface() {
                         requestGo.requestExecute(auto);
                     }) ;
                 }
-
-
-            } else {
-                if (philosophyForm.getFormShowFlag() === true) {
+           } else {
+                if (philosophyForm.getFormShowFlag() === true) { // click гасит форму
                     philosophyForm.stopShow();
                 }
                 normalQueryShow() ;
@@ -58,13 +55,15 @@ function UserInterface() {
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
-
-        smoke.init();
+        smoke.init();                 // подготовка и запуск облаков
         smoke.smokeGo();
-        backgroundImg.stampShow() ;
+        backgroundImg.stampShow() ;   // планка, запускающая выполнение запроса
         normalQueryShow() ;
 
     } ;
+    /**
+     * подготовить поле ввода запроса
+     */
     var normalQueryShow = function() {
         backgroundImg.centralCircleShow('query');
         var idText = backgroundImg.getIdText('query');
@@ -74,7 +73,11 @@ function UserInterface() {
 
         magicNormalPictures.show() ;
         $queryArea.val(currentQuery);
-        $queryArea.focus();
+        var $ball = $centralCircleBlock.children('img');
+        $ball.load(function() {
+            $queryArea.focus();
+        }) ;
+
     } ;
     /**
      * исполнитель изменения размера окна браузера
@@ -88,7 +91,7 @@ function UserInterface() {
                 if (++resizeSteps >= RESIZE_TAKTS_MAX) {    // конец изменения размера
                     clearInterval(tmpTimer);
                     stampDefine();              // объект stamp   - печать
-                    centralCircleDefine();      // объект centralCircle - ценральный круг
+//                    centralCircleDefine();      // объект centralCircle - ценральный круг
                     backgroundImg.centralCircleShow('query');
                     $queryArea.attr('placeholder', 'введите вопрос');
                     $queryArea.focus();
@@ -106,23 +109,7 @@ function UserInterface() {
             }, RESIZE_TIME_DELAY);
         }
     } ;
-     var centralCircleDefine = function() {
-        var block = backgroundImg.getCentralCircle() ;
-        var x1 = block['place']['x1'] ;
-        var y1 = block['place']['y1'] ;
-        var x2 = block['place']['x2'] ;
-        var y2 = block['place']['y2'] ;
-        var x0 = (x1 + x2) / 2;
-        var y0 = (y1 + y2) / 2;
-         var d = x2 - x1 ;
-        var r = 0.95 * (d / 2);
-        centralCircle = {
-            x0 : x0,       // координаты центра
-            y0 : y0,
-            r  : r         // радиус
-        } ;
-    } ;
-    var stampDefine = function() {
+     var stampDefine = function() {
         var block = backgroundImg.getStamp() ;
         var x1 = block['place']['x1'] ;
         var y1 = block['place']['y1'] ;
@@ -135,30 +122,8 @@ function UserInterface() {
            right: x2
         } ;
     } ;
-    /**
-     * click в центральном круге
-     * @returns {boolean}
-     */
-    var isCentralCircleClick = function(e) {
-        var x0 = centralCircle['x0'];
-        var y0 = centralCircle['y0'];
-        var r = centralCircle['r'];
-        var r2 = r * r;
-        var x = e.pageX;
-        var y = e.pageY;
-        var s = (x - x0) * (x - x0) + (y - y0) * (y - y0);
-       return (s <= r2) ;
-    } ;
-    /**
-     * область ввода запроса
-     */
-    var queryTextArea = function() {
-
-        $queryArea.focus() ;
-
-    } ;
-    /**
-     * click  по печати
+     /**
+     * click  по печати - планка ввода запроса
      * @returns {boolean}
      */
     var isStampClick = function(e) {

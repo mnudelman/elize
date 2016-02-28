@@ -37,7 +37,7 @@ function BackgroundImg() {
         dirPictures =  dirImages + '/philosophy' ;
         dirMainImg =   dirImages + '/userInterface' ;
 
-        mainImg = {
+        mainImg = {                         //  главное изображение - задаёт пропорции всех элементов
             file: "magic2_empty_serg.jpg",
             size : {w:1917, h:1074 ,u:'px'}
         } ;
@@ -73,7 +73,7 @@ function BackgroundImg() {
             }
 
         } ;
-        stamp = {
+        stamp = {                         // планка "далее" - ввод запроса
             dir: dirMainImg,
             place: {
                 x1: 808,
@@ -86,7 +86,7 @@ function BackgroundImg() {
             }
         } ;
 
-       clouds = {
+       clouds = {                    // облака
            dir: dirSmoke,
            items: {
                '141': {
@@ -256,6 +256,7 @@ function BackgroundImg() {
                }
            }
        } ;
+//   правые и левые элементы имеют одинаковые размеры -> можно использовать одни и те же рамки
 
         philosophyPictures = {
             dir: dirPictures,
@@ -272,7 +273,7 @@ function BackgroundImg() {
                         file: 'l1_1_o.jpg',
                         border:'l1_1_b.jpg'
                     },
-                    subst: 'cards'
+                    subst: 'cards'          // имя множества картинок в философском ответе
                 },
                 'l1_2': {                      // созвездия
                     place: {
@@ -348,7 +349,7 @@ function BackgroundImg() {
                     },
                     img: {
                         file: 'r1_1_o.jpg',
-                        border:'r1_1_b.jpg'
+                        border:'l1_1_b.jpg' // 'r1_1_b.jpg'
                     },
                     subst: 'animals'
                 },
@@ -361,7 +362,7 @@ function BackgroundImg() {
                     },
                     img: {
                         file: 'r1_2_o.jpg',
-                        border:'r1_2_b.jpg'
+                        border:'l1_2_b.jpg' // 'r1_2_b.jpg'
                     },
                     subst: 'trees'
                 },
@@ -374,7 +375,7 @@ function BackgroundImg() {
                     },
                     img: {
                         file: 'r1_3_o.jpg',
-                        border:'r1_3_b.jpg'
+                        border:'l1_3_b.jpg'  //'r1_3_b.jpg'
                     },
                     subst: 'money'
                 },
@@ -387,7 +388,7 @@ function BackgroundImg() {
                     },
                     img: {
                         file: 'r2_1_o.jpg',
-                        border:'r2_1_b.jpg'
+                        border:'l2_2_b.jpg'   //'r2_1_b.jpg'
                     },
                     subst: 'digits'
                 },
@@ -400,7 +401,7 @@ function BackgroundImg() {
                     },
                     img: {
                         file: 'r2_2_o.jpg',
-                        border:'r2_2_b.jpg'
+                        border:'l2_1_b.jpg'  //'r2_2_b.jpg'
                     },
                     subst: 'colors'
                 },
@@ -413,7 +414,7 @@ function BackgroundImg() {
                     },
                     img: {
                         file: 'r3_1_o.jpg',
-                        border:'r3_1_b.jpg'
+                        border:'l3_1_b.jpg' //'r3_1_b.jpg'
                     },
                     subst: 'countries'
                 }
@@ -479,6 +480,11 @@ function BackgroundImg() {
         var borderFile = itemImg['border'] ;
         return {file: file, border:borderFile} ;
     } ;
+    /**
+     * пересчёт координат для объекта place
+     * @param place
+     * @returns {{}}
+     */
     var placeResize = function(place) {
         var x1 = place['x1'] ;
         var y1 = place['y1'] ;
@@ -495,6 +501,10 @@ function BackgroundImg() {
         return newPlace ;
 
     } ;
+    /**
+     * получить "философские картинки" с пересчитанными координатами
+     * @returns {{}}
+     */
     this.getPhilosophyPictures = function() {
         var currentPictures = {} ;
         currentPictures['dir'] = philosophyPictures['dir'] ;
@@ -514,6 +524,10 @@ function BackgroundImg() {
         }
         return currentPictures ;
     };
+    /**
+     * получить ценктральный круг
+     * @returns {{}}
+     */
     this.getCentralCircle = function() {
         var currentCircle = {} ;
         currentCircle['dir'] = centralCircle['dir'] ;
@@ -528,6 +542,10 @@ function BackgroundImg() {
 
 
     } ;
+    /**
+     * планка "далее" - запуск выполнения запроса
+     * @returns {{}}
+     */
     this.getStamp = function() {
         var currentStamp = {} ;
         currentStamp['dir'] = stamp['dir'] ;
@@ -535,6 +553,7 @@ function BackgroundImg() {
         currentStamp['img'] = stamp['img'] ;
         return currentStamp ;
     } ;
+
     this.stampShow = function() {
         var currentStamp = _this.getStamp() ;
         var place = currentStamp['place'] ;
@@ -544,7 +563,8 @@ function BackgroundImg() {
     } ;
     /**
      * выводит центральный круг по типу
-     * @param showType = "query" | 'answer'
+     * внутри круга определяется область ввода запроса
+     * @param showType = "query" - ввод текста запроса | 'answer' - философский ответ
      */
     this.centralCircleShow = function(showType) {
         var currentCircle = _this.getCentralCircle() ;
@@ -560,9 +580,16 @@ function BackgroundImg() {
         var readonly = typeBlock['readonly'] ;
         var idText = typeBlock['idText'] ;
         _this.defineAbsolutePosition($centralCircleBlock,place,ballPicture) ;
+
         defineTextArea($centralCircleTextBlock,textAreaPlace,textAreaBackGround,
             currentColor,0,readonly,idText) ;
     } ;
+    /**
+     * позиционирование блока и вставка изображения
+     * @param $block
+     * @param place
+     * @param imgFile
+     */
     this.defineAbsolutePosition = function($block,place,imgFile) {
         $block.css('position','absolute') ;
         $block.empty() ;
@@ -578,6 +605,17 @@ function BackgroundImg() {
         $img.css('width',x2 - x1) ;
         $block.append($img) ;
     } ;
+    /**
+     * определение области ввода запроса
+     * запускается поддержка управления высотой области ввода
+     * @param $block
+     * @param place
+     * @param imgFile
+     * @param color
+     * @param fontSize
+     * @param readonly - true - признак что поле не нужно( для оформления "философии")
+     * @param idText
+     */
     var defineTextArea = function($block,place,imgFile,color,fontSize,readonly,idText) {
         $block.css('position','absolute') ;
         $block.empty() ;
@@ -605,8 +643,6 @@ function BackgroundImg() {
         $block.append($txt) ;
 
         $txt.css('width',0.95*txtWidth) ;
-        //$txt.css('margin-left',5) ;
-        //$txt.css('margin-right',5) ;
          $txt.attr('id',idText) ;
         $txt.css('height',0.97 * txtHeight) ;
         $txt.css('max-height',0.8 * txtHeight) ;
@@ -627,30 +663,36 @@ function BackgroundImg() {
     this.getTextAreaBlock = function() {
         return $centralCircleTextBlock ;
     } ;
+    /**
+     * вращение центрального круга - процесс "размышления оракула"
+     * @param callback   - возвращает управление при окончании "размышления"
+     */
     this.centralCircleRotate = function(callback) {
-        $centralCircleTextBlock.attr('hidden', 'hidden');
+        $centralCircleTextBlock.attr('hidden', 'hidden');  // убираем поле ввода
         var $block = $centralCircleBlock;
         var x0 = pixelToNumber($block.css('left')) + pixelToNumber($block.css('width')) / 2;
         var y0 = pixelToNumber($block.css('top')) + pixelToNumber($block.css('height')) / 2;
         var $img = $block.children('img');
-        var n = 0;
+        var n = 0;          //  счётчик шагов  - элементарных поворотов на угол alphaStep
+        var alphaStep = 30 ;   // шаг поворота (угловые градусы)
         var maxTime = 3000 ;
         animateStop = false;
         var time = 0 ;
 
         var timeDelay = 300;
         var tmpTimer = setInterval(function () {
-            if (time > maxTime) {        //  остановить цикл анимации)
+            if (time > maxTime) {        //  остановить цикл вращения)
                 clearInterval(tmpTimer);
-                $centralCircleTextBlock.removeAttr('hidden');
+                $centralCircleTextBlock.removeAttr('hidden');    // поле ввода - возврат
                 if (callback !== undefined) {
                     callback() ;
                 }
+            } else {
+                var alpha = ++n * alphaStep ;
+                $img.css('transform', 'rotate(' + alpha + 'deg)');
+                n = (n >= 6) ? 0 : n;
+                time += timeDelay ;
             }
-            var alpha = ++n * 30;
-            $img.css('transform', 'rotate(' + alpha + 'deg)');
-            n = (n >= 6) ? 0 : n;
-            time += timeDelay ;
         }, timeDelay);
 
 
