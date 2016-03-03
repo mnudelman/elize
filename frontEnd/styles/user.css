@@ -5,6 +5,18 @@ body {
     overflow: hidden;
     background-repeat: no-repeat;
 }
+@font-face {
+    font-family: palar; /* Гарнитура шрифта */
+    src: url('../../fonts/palar__.ttf'); /* Путь к файлу со шрифтом */
+}
+@font-face {
+    font-family: roboto; /* Гарнитура шрифта */
+    src: url('../../fonts/Roboto_Regular.ttf'); /* Путь к файлу со шрифтом */
+}
+@font-face {
+    font-family: northern; /* Гарнитура шрифта */
+    src: url('../../fonts/The_Northern_Block_Acrom.otf'); /* Путь к файлу со шрифтом */
+}
 /**--- представление результата --**/
 .result {
     /*background-image: url("../../images/userInterface/scroll_clear.png") ;*/

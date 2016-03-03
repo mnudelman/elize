@@ -8,24 +8,25 @@ form {margin:0;padding:0;display:inline}
 .box {
     /*background:#fff;*/
     background-color: transparent; /*rgba(217,189,143,1) ;*/
-    border:1px solid #ccc;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -khtml-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    box-shadow:0 0 4px #CCC;
-    -moz-box-shadow:0 0 4px #CCC;
-    -webkit-box-shadow:0 0 4px #CCC
+    font-family:northern, roboto , 'Times New Roman', Times, serif;
+    /*border:0px solid #ccc;*/
+    /*border-radius: 4px;*/
+    /*-moz-border-radius: 4px;*/
+    /*-khtml-border-radius: 4px;*/
+    /*-webkit-border-radius: 4px;*/
+    /*box-shadow:0 0 4px #CCC;*/
+    /*-moz-box-shadow:0 0 4px #CCC;*/
+    /*-webkit-box-shadow:0 0 4px #CCC*/
 }
 .data {
     margin-top: 8px;
 }
-.data ol{
+.data ul{
     margin-left:-54px;
     padding-left:0 ; /*54px;*/
 }
-.data ol li{
-    font-size:20px;
+.data ul li{
+    font-size:14px;
     color:#000; /*#999;*/
     padding:8px;
     margin-bottom: 6px;

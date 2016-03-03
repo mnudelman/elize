@@ -80,14 +80,26 @@ class SqlExecute extends Db_base {
         $sqlLines[] = [
             'text'   => 'SELECT * FROM request_tree',
             'name'   => 'SELECT']   ;
+
         $sqlLines[] = [
-            'text'   => 'SELECT * FROM ru_names',
-            'name'   => 'SELECT']   ;
-        $sqlLines[] = [
-            'text'   => 'SELECT * FROM ru_name_synonyms',
+            'text'   => 'SELECT * FROM add_signals_types',
             'name'   => 'SELECT']   ;
         $this->sqlLines = $sqlLines ;
         $this->storeParameters() ;
+        $sqlLines[] = [
+            'text'   => 'SELECT * FROM add_signals',
+            'name'   => 'SELECT']   ;
+        $this->sqlLines = $sqlLines ;
+        $this->storeParameters() ;
+
+//        $sqlLines[] = [
+//            'text'   => 'SELECT * FROM ru_names',
+//            'name'   => 'SELECT']   ;
+//        $sqlLines[] = [
+//            'text'   => 'SELECT * FROM ru_name_synonyms',
+//            'name'   => 'SELECT']   ;
+//        $this->sqlLines = $sqlLines ;
+//        $this->storeParameters() ;
 
     }
     public function getStat() {

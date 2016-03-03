@@ -257,7 +257,10 @@ function BackgroundImg() {
            }
        } ;
 //   правые и левые элементы имеют одинаковые размеры -> можно использовать одни и те же рамки
-
+// топология расположения:
+// l1_1 - l1_2 - l1_3       r1_1 - r1_2  - r1_3
+//    l2_1    l2_2             r2_1    r2_2
+//    l3_1    l2_2             r2_1    r3_1
         philosophyPictures = {
             dir: dirPictures,
             borderSize: 20,        // толщина рамки px
@@ -649,7 +652,8 @@ function BackgroundImg() {
         $block.css('overflow','hidden') ;
         $txt.css('background','transparent') ;
         $txt.css('color',color) ;
-
+        $txt.css('border','0px solid white') ;
+        $txt.css('autofocus','autofocus') ;
         centralCircleText.init(txtWidth,txtHeight,$txt) ;
     } ;
     /**

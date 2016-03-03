@@ -7,9 +7,7 @@ function UserInterface() {
     var scrollBackground ;
     var philosophyForm ;
     var magicNormalPictures ;           // фоновые картинки
-//    var centralCircle = {} ;            // центральный круг
     var stamp = {} ;                    // печать
-//    var screenClosed = false ;
     var $queryArea ;                    // область ввовда текста
     var resizeGo = false ;
     var resizeSteps = 0 ;
@@ -34,8 +32,9 @@ function UserInterface() {
         $(document).click(function (e) {
             if (isStampClick(e)) {                   // выполнение запроса
                 if (philosophyForm.getFormShowFlag() === true) {
-                    philosophyForm.stopShow() ;
-                    normalQueryShow() ;
+                    philosophyForm.scrollGo() ;       // развернуть свиток
+                    //philosophyForm.stopShow() ;
+                    //normalQueryShow() ;
                 } else {
                     backgroundImg.centralCircleRotate(function() {
                         currentQuery = $queryArea.val();
@@ -59,7 +58,6 @@ function UserInterface() {
         smoke.smokeGo();
         backgroundImg.stampShow() ;   // планка, запускающая выполнение запроса
         normalQueryShow() ;
-
     } ;
     /**
      * подготовить поле ввода запроса
@@ -68,6 +66,7 @@ function UserInterface() {
         backgroundImg.centralCircleShow('query');
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
+        $queryArea = $('#queryText');
         $queryArea.attr('placeholder', 'введите вопрос');
 
 

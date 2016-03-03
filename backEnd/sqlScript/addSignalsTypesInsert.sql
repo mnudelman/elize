@@ -1,0 +1,11 @@
+INSERT INTO add_signals_types(type_name,comment) VALUES('astrology','астрологические созвездия') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('moon_calendar','Лунно-Солнечный календарь') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('colors','Цвета') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('digits','цифры') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('months','года по месяцам') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('animals','Звери') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('trees','Деревья') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('taro','карты таро') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('cards','игральные карты');
+INSERT INTO add_signals_types(type_name,comment) VALUES('money','Валюта') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES('countries','страны') ;

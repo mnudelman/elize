@@ -37,7 +37,7 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
     <script type="text/javascript" src="<?= $dirMousewheel; ?>/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="<?= $dirAutoResize; ?>/autoResize.js"></script>
-hj
+
     <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
@@ -72,9 +72,9 @@ hj
         <p id="resultBoxError"></p>
 
         <p id="totalHuman" ></p>
-        <ol start="1" id="resultBoxDocs">
+        <ul  id="resultBoxDocs">
 
-        </ol>
+        </ul>
 <!--        <div id="resultCommands"></div>-->
     </div>
     <div id="resultBackground"  >
