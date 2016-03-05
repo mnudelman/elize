@@ -54,6 +54,13 @@ function UserInterface() {
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
+        $queryArea = $('#queryText');
+        $queryArea.load(function(){
+            $queryArea.focus();
+        }) ;
+        $(document).keypress(function(){
+            $queryArea.focus();
+        }) ;
         smoke.init();                 // подготовка и запуск облаков
         smoke.smokeGo();
         backgroundImg.stampShow() ;   // планка, запускающая выполнение запроса
@@ -73,10 +80,8 @@ function UserInterface() {
         magicNormalPictures.show() ;
         $queryArea.val(currentQuery);
         var $ball = $centralCircleBlock.children('img');
-        $ball.load(function() {
-            $queryArea.focus();
-        }) ;
-
+//        $ball.load(function() {
+        $queryArea.focus() ;
     } ;
     /**
      * исполнитель изменения размера окна браузера

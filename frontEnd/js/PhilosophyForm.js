@@ -2,6 +2,7 @@
  * Объект отображения философских мыслей
  */
 function PhilosophyForm() {
+    var ajax ;
     var formAttr ;        // объект - атрибуты формы
     var currentPhrase = '' ;          // текущая фраза
     var backgroundImg ; // объект - компоненты изображения
@@ -11,18 +12,24 @@ function PhilosophyForm() {
     var $answerAreaBlock ;
     var formShowFlag = false ;
     var magicNormalPictures ;
+    var addSignals = {} ;           // дополнительные сигналы
+    var addSignalsTable ;
+    var dirImages ;
     var _this = this ;
     //----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
         formAttr = new PhilosophyFormAttr() ;        // объект - атрибуты формы
         formAttr.init() ;
+        ajax = new AjaxRequest() ;         // исполнитель работы с ajax
+        dirImages = paramSet.dirImages ;
         magicNormalPictures = paramSet.magicNormalPictures ;
         formShowFlag = false ;
         $answerAreaBlock = backgroundImg.getTextAreaBlock() ;
         $answerAreaBlock.empty() ;
         $answerAreaBlock.css('text-align','center') ;
         $answerAreaBlock.css('vertical-align','center') ;
+        addSignalsTable = new AddSignalsTable() ;
     } ;
      /**
      * изменить фразу
@@ -33,7 +40,14 @@ function PhilosophyForm() {
          $answerAreaBlock.append('<p>' + currentPhrase + '</p>') ;
 //         $answerArea.val(currentPhrase) ;
      } ;
+    /**
+     * развернуть свиток
+     */
+    this.scrollGo = function() {
+        addSignalsTable.init(addSignals) ;
+        addSignalsTable.tableShow() ;
 
+    } ;
     this.queryGo = function() {
        formShowFlag = true ;
        responseShow() ;
@@ -69,14 +83,57 @@ function PhilosophyForm() {
 
 
         $resultBlock.empty() ;
+        //var pictures = backgroundImg.getPhilosophyPictures() ;
+        //var dir = pictures['dir'] ;
+        //var borderSize = pictures['borderSize'] - 4 ;  // уменьшаем рамку, чтобы избежать просвет
+        addSignals = getAddSignals() ;
+
+//        var items = pictures['items'] ;
+//        for (var itemKey in items) {
+//            var item = items[itemKey] ;
+//            var substName = item['subst'] ;
+////            var substFile = formAttr.getPictSubst(substName) ;
+//            var substFile = addSignals['substName']['file'] ;
+//            magicNormalPictures.showItem(dir,borderSize,item,itemKey,substFile) ;
+//
+////            showItem(dir,item) ;
+//        }
+//        cycleShow() ;
+    } ;
+    var getAddSignals = function() {
+        var goVect = {
+            'operation' : 'getAddSignals',
+            'successful' : false
+        } ;
+        ajax.setData(goVect) ;
+        ajax.setRequestFunc(function(answ){        // callback  при возврате ответа
+            if (answ['successful'] == true) {
+                goVect['successful'] = true;
+                addSignals = answ['result'] ;              // дерево результата
+                showItems() ;
+            }else {
+                if (answ !== false) {
+                    var message = answ['message'];
+                    ajax.errorMessage(message) ;
+                }
+
+            }
+        }) ;
+        ajax.go() ;
+    } ;
+
+    var showItems = function() {
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
         var borderSize = pictures['borderSize'] - 4 ;  // уменьшаем рамку, чтобы избежать просвет
+
         var items = pictures['items'] ;
         for (var itemKey in items) {
             var item = items[itemKey] ;
             var substName = item['subst'] ;
-            var substFile = formAttr.getPictSubst(substName) ;
+//            var substFile = formAttr.getPictSubst(substName) ;
+            var substFile = dirImages + '/' +addSignals[substName]['file'] ;
+
             magicNormalPictures.showItem(dir,borderSize,item,itemKey,substFile) ;
 
 //            showItem(dir,item) ;
@@ -104,7 +161,6 @@ function PhilosophyForm() {
        $resultBlock.append($block) ;
 
     } ;
-
 
 
 

@@ -95,6 +95,15 @@ switch($operation) {
         $answ = $mp->getResult() ;
         break ;
     }
+    case 'getAddSignals' : {        // дполнительные сигналы
+        $signal  = new AddSignals() ;
+        $result = $signal->getSignals() ;
+        $answ = [
+            'successful' => true,
+            'result' => $result
+        ] ;
+        break ;
+    }
     default : {    // весь $_GET отправиить обратно
 
     }

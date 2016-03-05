@@ -526,8 +526,8 @@ function ScrollBackground() {
      * при этом пересчитываются параметры прокрутки( неизветно является ли блок последним)
      * @param $liItem
      */
-    this.putAnswerItem = function($liItem) {
-
+    this.putAnswerItem = function($liItem,vinFlag) {
+        vinFlag = (vinFlag === undefined) ? true : vinFlag ;
         var $vinDiv = $('<div/>') ;
         var $img = $('<img/>') ;
         var pictFile = dirImg + '/' +vinjetka['img']['file'] ;
@@ -538,14 +538,27 @@ function ScrollBackground() {
         var height = kResize['ky'] * (place['y2'] - place['y1']) ;
         var left  = kResize['kx'] * place['x1'] ;
         var width = kResize['kx'] * (place['x2'] - place['x1']) ;
-        $img.css('top',0) ;
+
+        var dataWidth = $dataAreaDiv.width() ;
+
+        $vinDiv.css('width',dataWidth) ;
+        $vinDiv.css('height',place['y2'] + 20) ;
+
+        left  = (dataWidth - width)/2 ;
+
+
+        $img.css('top',10) ;
         $img.css('margin-left',left) ;
         $img.css('width',width) ;
         $img.css('height',place['y2']) ;
-        $liItem.append($vinDiv) ;
+//        $liItem.append($vinDiv) ;
 
 
         $dataList.append($liItem) ;
+        if (vinFlag) {
+            $dataList.append($vinDiv) ;
+        }
+
         dataAreaHiddenClc() ;
         scrollingShow() ;
         scrollingBegin() ;
@@ -556,6 +569,9 @@ function ScrollBackground() {
     this.answerEnd = function() {
 
     };
+    this.getDataAreaWidth = function() {
+       return $dataAreaDiv.width() ;
+    } ;
     /**
      *   перевывод при изменении размера окна браузера
      */

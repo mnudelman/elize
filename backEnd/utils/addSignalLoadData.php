@@ -14,17 +14,74 @@ class AddSignalLoad extends Db_base
 {
     public function getSignalTypeByComment($comment)
     {
+        $sql = 'SELECT typeid,type_name FROM add_signals_types
+                 WHERE comment = :comment' ;
+        $subst = [
+            'comment' => $comment
+        ] ;
+        $rows = $this->sqlExecute($sql, $subst, __METHOD__);
+        if (false === $rows) {
+            $this->errors[] = [
+                'successful' => false,
+                'sql' => $sql,
+                'subst' => $subst,
+                'message' => $this->msg->getMessages()];
+            return false;
+        }
+        $row = $rows[0] ;
+        return [
+            'typeid' => $row['typeid'],
+            'name' => $row['type_name'],
+            'comment' => $comment,
+        ];
 
     }
     public function putSignal($currentSignal) {
+        $sql = 'INSERT INTO add_signals (typeid, file_name,name,rang, text)
+                                 VALUES (:typeid, :fileName, :name, :rang, :text)' ;
+        $subst = [
+            'typeid' => $currentSignal['typeid'],
+            'fileName' => $currentSignal['file'],
+            'name' => $currentSignal['name'],
+            'rang' => $currentSignal['rang'],
+            'text' => $currentSignal['text'],
+        ] ;
+        $result = $this->sqlExecute($sql, $subst, __METHOD__);
+        if (false === $result) {
+            $this->errors[] = [
+                'successful' => false,
+                'sql' => $sql,
+                'subst' => $subst,
+                'message' => $this->msg->getMessages()];
+            return false;
+        }
+        return $result ;
 
     }
 }
-
 $currentDir = __DIR__ ;
 $sourceFile = $currentDir.'/addSignals.csv' ;
 $signalsLoad = new AddSignalLoad() ;
 $msg = Message::getInstace() ;
+
+function load($signalLoad,$type,$signal) {
+//    echo $signal['id'].'------'.
+//        $type['comment'].'-----'.
+//        $signal['name'].'-----'.
+//        $signal['file'].'-----'.
+//        mb_substr($signal['text'],0,50).'-----'.
+//        mb_strlen($signal['text']).
+//        '<br>'
+//    ;
+    $signal['typeid'] = $type['typeid'] ;
+    $sign = rand(0,1) ;
+    $sign = ($sign > 0) ? 1 : -1 ;
+    $signal['rang'] = rand(0,100) * $sign ;
+    $signalLoad->putSignal($signal) ;
+}
+
+
+
 $handle = fopen($sourceFile,"r") ;
 if ($handle < 0) {
     $msg->addMessage('ERROR: Ошибка открытия файла: '.$sourceFile) ;
@@ -41,6 +98,7 @@ $currentSignal = [
     'typeid' => '',
     'name' => '',
     'file' => '',
+    'rang' => 0,
     'text' => ''
 ] ;
 $signalLine = 0 ;             // 1 - имя 2 - текст 3 - файл
@@ -70,13 +128,7 @@ while (!feof($handle)) {
                 $currentSignal['name'] = $arr1[0] ;
                 $currentSignal['text'] = $arr1[1] ;
                 $iTot++  ;
-                echo $currentSignal['id'].'------'.
-                    $currentType['comment'].'-----'.
-                    $currentSignal['name'].'-----'.
-                    $currentSignal['file'].'-----'.
-                    mb_substr($currentSignal['text'],0,50).'-----'.
-                    mb_strlen($currentSignal['text']).
-                    '<br>' ;
+                load($signalsLoad,$currentType,$currentSignal) ;
                 $signalLine = 0 ;
             }else {
                 if (isset($arr[2]) && strpos($arr[2], '"') == 0) {
@@ -93,13 +145,7 @@ while (!feof($handle)) {
                 $currentSignal['file'] = $arr[1] ;
                 $signalLine = 0 ;
                 $iTot++  ;
-                echo $currentSignal['id'].'------'.
-                    $currentType['comment'].'-----'.
-                    $currentSignal['name'].'-----'.
-                    $currentSignal['file'].'-----'.
-                    mb_substr($currentSignal['text'],0,50).'-----'.
-                    mb_strlen($currentSignal['text']).
-                    '<br>' ;
+                load($signalsLoad,$currentType,$currentSignal) ;
             }else {
             $currentSignal['text'] = $line ;
             }
@@ -110,16 +156,8 @@ while (!feof($handle)) {
             if(isset($arr[1]) && $arr[0] === '"' ) {
                 $currentSignal['file'] = $arr[1] ;
                 $currentSignal['typeid'] = $currentType['typeid'] ;
-                $signalsLoad->putSignal($currentSignal) ;
                 $iTot++  ;
-                echo $currentSignal['id'].'------'.
-                    $currentType['comment'].'-----'.
-                    $currentSignal['name'].'-----'.
-                    $currentSignal['file'].'-----'.
-                    mb_substr($currentSignal['text'],0,50).'-----'.
-                    mb_strlen($currentSignal['text']).
-                    '<br>' ;
-
+                load($signalsLoad,$currentType,$currentSignal) ;
             }
             $signalLine = 0 ;
             break ;

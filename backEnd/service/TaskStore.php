@@ -7,6 +7,7 @@ class TaskStore {
     public static $dirTop = false ;             // корневой директорий
     public static $htmlDirTop = false ;         // относительный адрес для html
     public static $dirService = false ;         // сервисные функции
+    public static $dirProject = false ;
    //-----------------------------------//
 
     //-- параметры состояния --//
@@ -18,9 +19,10 @@ class TaskStore {
 
    const COOKIES_WORD = 'обучение в школе php' ;
 
-    public static function init($dirTop, $htmlDirTop) {
+    public static function init($dirTop, $htmlDirTop,$dirProject) {
         self::$dirTop = $dirTop;
         self::$htmlDirTop = $htmlDirTop;
+        self::$dirProject = $dirProject ;
 
         self::$dirService = self::$dirTop . '/service';
         // восстановить параметры //

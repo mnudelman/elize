@@ -50,6 +50,7 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/BackgroundImg.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ScrollBackground.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/AddSignalsTable.js"></script>
 
     <script type="text/javascript" src="<?= $dirJs; ?>/SmokeClouds.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CircularMotion.js"></script>
@@ -92,6 +93,10 @@ $dirStyle = './frontEnd/styles';
     <div id="centralCircleText"></div>
     <div id="smokeClouds"></div>
     <div id="stamp"></div>
+</div>
+<div id="addSignalBlock">
+    <div id="addSignalsTable"></div>
+    <div id="addSignalsTotal"></div>
 </div>
 <div id="messages"></div>
 </body>

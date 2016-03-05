@@ -43,3 +43,9 @@ body {
     background-color: transparent;
     border:none
 }
+.totalSignal {
+    font-family: palar ;
+    font-size : 20px ;
+    color : #6a2e02;
+
+}

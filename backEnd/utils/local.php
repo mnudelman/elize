@@ -21,13 +21,13 @@ if ( '/' !== $firstSymb ) {
     $topHtmlDir = '/'.$topHtmlDir ;
 }
 
-
+$dirProject = realpath(__DIR__ .'/../..' ) ;
 // подключаем класс TaskStore - общие параметры
 $dirService = $topDir .'/service' ;
 include_once $dirService . '/TaskStore.php' ;
 include_once $dirService . '/DbConnector.php' ;
 //------ подключение БД -------------//
-TaskStore::init($topDir,$topHtmlDir) ;
+TaskStore::init($topDir,$topHtmlDir,$dirProject) ;
 //  подключаем autoLoad  - авт подключение классов
 include_once $dirService . '/autoload.php' ;
 //-------------------------------------------//

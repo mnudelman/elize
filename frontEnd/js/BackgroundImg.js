@@ -626,7 +626,7 @@ function BackgroundImg() {
         var x2 = place['x2'] ;
         var y1 = place['y1'] ;
         var y2 = place['y2'] ;
-        var $txt = $('<textArea/>') ;
+        var $txt = $('<textarea/>') ;
         $block.css('top',y1) ;
         $block.css('left',x1) ;
         $block.css('color',color) ;
@@ -644,6 +644,7 @@ function BackgroundImg() {
         $txt.removeAttr('hidden') ;
 
         $block.append($txt) ;
+
 
         $txt.css('width',0.95*txtWidth) ;
          $txt.attr('id',idText) ;

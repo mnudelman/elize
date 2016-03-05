@@ -9,7 +9,7 @@ $currentDir = __DIR__ ;
 $topDir = realpath($currentDir) ;
 $pi = pathinfo($_SERVER['PHP_SELF']) ;
 $currentHtmlDir = $pi['dirname'] ; // относительный адрес для HTML-ссылок
-$topHtmlDir = $currentHtmlDir ;
+$topHtmlDir = realpath($currentHtmlDir.'/..') ;
 $firstSymb = $topHtmlDir[0] ;
 if ('/' !== $firstSymb) {
     $topHtmlDir = '/'.$topHtmlDir ;
@@ -27,7 +27,8 @@ $pdo = DbConnector::getConnect() ;
 if (!DbConnector::$isSuccessful) {
     die('EXIT');
 }
-TaskStore::init($topDir,$topHtmlDir) ;
+$dirProject = realpath(__DIR__ .'/..' ) ;
+TaskStore::init($topDir,$topHtmlDir,$dirProject) ;
 //  подключаем autoLoad  - авт подключение классов
 include_once $dirService . '/autoload.php' ;
 //-------------------------------------------//

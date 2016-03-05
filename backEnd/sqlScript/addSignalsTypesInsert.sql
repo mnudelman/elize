@@ -9,3 +9,5 @@ INSERT INTO add_signals_types(type_name,comment) VALUES('taro','карты та�
 INSERT INTO add_signals_types(type_name,comment) VALUES('cards','игральные карты');
 INSERT INTO add_signals_types(type_name,comment) VALUES('money','Валюта') ;
 INSERT INTO add_signals_types(type_name,comment) VALUES('countries','страны') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES ('domino','домино') ;
+INSERT INTO add_signals_types(type_name,comment) VALUES ('elements','Знаки стихии') ;
