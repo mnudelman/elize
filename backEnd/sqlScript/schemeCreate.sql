@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS add_signals_types (
 )ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 -- таблица  дополнительных сигналов
-
+DROP TABLE add_signals ;
 CREATE TABLE IF NOT EXISTS add_signals (
  id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
  typeid INTEGER REFERENCES add_signals_types(typeid),

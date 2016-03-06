@@ -29,7 +29,7 @@ function AddSignalsTable() {
             var substName = item['subst'] ;
             var signal = addSignals[substName] ;
             var substFile = dirImages + '/' +signal['file'] ;
-            var $row = signalRowBuild(signal,place) ;
+            var $row = signalRowBuild(signal,place,substName) ;
             $addSignalsTable.append($row) ;
             scrollBackground.putAnswerItem($row) ;
         }
@@ -38,7 +38,7 @@ function AddSignalsTable() {
         scrollBackground.putAnswerItem($totalRow,false) ;
 
     } ;
-    var signalRowBuild = function(signal,place) {
+    var signalRowBuild = function(signal,place,name) {
         var kResize = backgroundImg.getKResize()  ;
         var $tr = $('<tr/>') ;
         var $tdPict = $('<td/>') ;
@@ -47,9 +47,16 @@ function AddSignalsTable() {
         var signalName =  signal['name'] ;
         var widthTot = scrollBackground.getDataAreaWidth() ;
         var width = widthTot/4 - 20 ;
+
+
         var height = place['y2'] - place['y1'] ;
         var $img = $('<img/>') ;
+
         $img.attr('src',pictFile) ;
+
+
+        var imgId =  name + '_img' ;
+        $img.attr('id',imgId) ;
 
         //$img.css('height',height) ;
         $tdPict.css('width',width) ;
@@ -59,12 +66,16 @@ function AddSignalsTable() {
         $tdPict.append('<p>' +txt + '</p>') ;
         //------------//
         var $tdText1 = $('<td/>') ;
-        $tdText1.append('textCol1') ;
-        $tdText1.css('width',width) ;
+//        $tdText1.css('align','top') ;
+        $tdText1.css('width',2 * width) ;
+        $tdText1.css('vertical-align','top') ;
+        var text = signal['text'] ;
+        var h =  kImgRealSize(pictFile) * width ;
+        var $txt1 = textColumnBuild(text,width) ;
 
-        var $tdText2 = $('<td/>') ;
-        $tdText2.css('width',width) ;
-        $tdText2.append('textCol2') ;
+        $tdText1.append($txt1) ;
+
+
 
         var rang = signal['rang'] ;
         var $tdBalance = $('<td/>') ;
@@ -72,9 +83,15 @@ function AddSignalsTable() {
 
         $tr.append($tdPict) ;
         $tr.append($tdText1) ;
-        $tr.append($tdText2) ;
         $tr.append($tdBalance) ;
+
         return $tr ;
+    } ;
+    var kImgRealSize = function(pictFile) {
+        var img = new Image();
+
+        img.src = pictFile;
+        return img.height/img.width ;
     } ;
     var tdBalanceBuild = function($tdBalance,width,rang) {
 //        var $tdBalance = $('<td/>') ;
@@ -130,6 +147,16 @@ function AddSignalsTable() {
         return $rangBlock ;
 
     };
+    var textColumnBuild = function(text,width)  {
+        var $txtBlock = $('<div/>') ;
+        $txtBlock.css('padding','0 10px') ;
+        $txtBlock.css('column-count',2) ;
+        $txtBlock.css('column-gap','2em') ;
+        $txtBlock.css('column-width',width/2) ;
+        $txtBlock.append(text) ;
+        return $txtBlock ;
+
+    } ;
     var signalTotalRowBuild = function() {
         var dirBalance = dirImages + '/balance' ;
         var $tr = $('<tr/>') ;

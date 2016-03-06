@@ -126,7 +126,14 @@ while (!feof($handle)) {
                 $currentSignal['file'] = $arr[3] ;
                 $arr1 = explode('–',$arr[2]) ;
                 $currentSignal['name'] = $arr1[0] ;
-                $currentSignal['text'] = $arr1[1] ;
+                $text = $arr1[1] ;
+                for ($i = 2; $i < count($arr1); $i++) {
+                    $text .= ' – '.$arr1[$i] ;
+                }
+
+                $currentSignal['text'] = $text ;
+                // могут быть и др строки
+
                 $iTot++  ;
                 load($signalsLoad,$currentType,$currentSignal) ;
                 $signalLine = 0 ;
