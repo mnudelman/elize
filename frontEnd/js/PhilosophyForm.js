@@ -37,7 +37,10 @@ function PhilosophyForm() {
     var phraseChange = function() {
         currentPhrase = formAttr.getPhrase() ;
         $answerAreaBlock.empty() ;
-         $answerAreaBlock.append('<p>' + currentPhrase + '</p>') ;
+         var $p = $('<p/>') ;
+         $p.addClass('answerText') ;
+         $p.append(currentPhrase) ;
+         $answerAreaBlock.append($p) ;
 //         $answerArea.val(currentPhrase) ;
      } ;
     /**
@@ -75,6 +78,7 @@ function PhilosophyForm() {
     } ;
 
     var responseShow = function() {
+        backgroundImg.stampShow('answer') ;
         backgroundImg.centralCircleShow('answer') ;
         var idText = backgroundImg.getIdText('answer') ;
         $answerArea = $('#'+idText) ;
@@ -161,20 +165,6 @@ function PhilosophyForm() {
        $resultBlock.append($block) ;
 
     } ;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     var cycleShow = function() {
         animateStop = false ;

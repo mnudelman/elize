@@ -59,8 +59,11 @@ function MagicNormalPictures() {
     this.showItem = function(dir,borderSize,item,itemKey,substImageFile) {
         var place = item['place'] ;
         var pictureFile = dir + '/' + item['img']['file'] ;
+
+        var dy = (place['dy'] === undefined) ? 0 : place['dy'] ;
         if (typeof(substImageFile) === 'string' ) {
             pictureFile = substImageFile ;
+            dy = 0 ;        // поправка
         }
         var borderFile = dir + '/' + item['img']['border'] ;
         var top = place['y1'] ;
@@ -83,7 +86,7 @@ function MagicNormalPictures() {
         var $borderImg = $('<img/>') ;
         $borderImg.attr('src',borderFile) ;
         $borderImg.css('width',width) ;
-        $borderImg.css('height',height) ;
+        $borderImg.css('height',height ) ;
         $borderBlock.append($borderImg) ;
 
         // для картинки нужен отдельный блок
@@ -91,13 +94,13 @@ function MagicNormalPictures() {
 
         $block.append($pictureBlock) ;
         $pictureBlock.css('position','absolute') ;
-        $pictureBlock.css('top',borderSize) ;
+        $pictureBlock.css('top',borderSize + dy) ;
         $pictureBlock.css('left',borderSize) ;
         var $pictureImg = $('<img/>') ;
         $pictureImg.attr('id',itemKey+'_img') ;
         $pictureImg.attr('src',pictureFile) ;
         $pictureImg.css('width',width - 2 * borderSize) ;
-        $pictureImg.css('height',height - 2 * borderSize) ;
+        $pictureImg.css('height',height - 2 * borderSize -dy) ;
         $pictureBlock.append($pictureImg) ;
         return $pictureImg ;
     } ;

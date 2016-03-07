@@ -60,7 +60,7 @@ function BackgroundImg() {
                 idText : 'queryText',
                 ball: 'yellow_ball.png',
                 textArea: 'yellow_text_area.png',
-                color: 'black', //'#47d4d9', // 'blue',    // '#11f371',
+                color: '#fff', //'#47d4d9', // 'blue',    // '#11f371',
                 readonly: false
 
             },
@@ -81,8 +81,15 @@ function BackgroundImg() {
                 x2: 1111,
                 y2: 748
             },
-            img: {
-                file: 'stamp.png'
+            query: {
+                img: {
+                    file: 'stamp_ask.png'
+                }
+            },
+            answer: {
+                img: {
+                    file: 'stamp.png'
+                }
             }
         } ;
 
@@ -270,7 +277,8 @@ function BackgroundImg() {
                         x1: 344,
                         y1: 215,
                         x2: 514,
-                        y2: 358
+                        y2: 358,
+                        dy : 10      //  поправка
                     },
                     img: {
                         file: 'l1_1_o.jpg',
@@ -283,7 +291,9 @@ function BackgroundImg() {
                         x1: 536,
                         y1: 215,
                         x2: 706,
-                        y2: 362
+                        y2: 362,
+                        dy : 10      //  поправка
+
                     },
                     img: {
                         file: 'l1_2_o.jpg',
@@ -296,7 +306,8 @@ function BackgroundImg() {
                         x1: 732,
                         y1: 215,
                         x2: 899,
-                        y2: 361
+                        y2: 361,
+                        dy : 0      //  поправка
                     },
                     img: {
                         file: 'l1_3_o.jpg',
@@ -307,9 +318,10 @@ function BackgroundImg() {
                 'l2_1': {                      // лунно-солнечный календарь
                     place: {
                         x1: 344,
-                        y1: 377,
+                        y1: 377 ,
                         x2: 540,
-                        y2: 524
+                        y2: 524,
+                        dy : 10  + 5     //  поправка
                     },
                     img: {
                         file: 'l2_1_o.jpg',
@@ -322,7 +334,8 @@ function BackgroundImg() {
                         x1: 563,
                         y1: 377,
                         x2: 760,
-                        y2: 690
+                        y2: 690,
+                        dy : 10      //  поправка
                     },
                     img: {
                         file: 'l2_2_o.jpg',
@@ -335,7 +348,8 @@ function BackgroundImg() {
                         x1: 344,
                         y1: 542,
                         x2: 540,
-                        y2: 690
+                        y2: 690,
+                        dy : 10      //  поправка
                     },
                     img: {
                         file: 'l3_1_o.jpg',
@@ -348,7 +362,8 @@ function BackgroundImg() {
                         x1: 1023,
                         y1: 215,
                         x2: 1192,
-                        y2: 356
+                        y2: 356,
+                        dy : 10      //  поправка
                     },
                     img: {
                         file: 'r1_1_o.jpg',
@@ -361,7 +376,8 @@ function BackgroundImg() {
                         x1: 1217,
                         y1: 215,
                         x2: 1385,
-                        y2: 356
+                        y2: 356,
+                        dy : 10 + 5      //  поправка
                     },
                     img: {
                         file: 'r1_2_o.jpg',
@@ -374,7 +390,8 @@ function BackgroundImg() {
                         x1: 1409,
                         y1: 215,
                         x2: 1581,
-                        y2: 358
+                        y2: 358,
+                        dy : 10      //  поправка
                     },
                     img: {
                         file: 'r1_3_o.jpg',
@@ -387,7 +404,8 @@ function BackgroundImg() {
                         x1: 1164,
                         y1: 377,
                         x2: 1363,
-                        y2: 688
+                        y2: 688,
+                        dy : 10      //  поправка
                     },
                     img: {
                         file: 'r2_1_o.jpg',
@@ -400,7 +418,8 @@ function BackgroundImg() {
                         x1: 1381,
                         y1: 377,
                         x2: 1580,
-                        y2: 524
+                        y2: 524,
+                        dy : 10 + 5     //  поправка
                     },
                     img: {
                         file: 'r2_2_o.jpg',
@@ -413,7 +432,8 @@ function BackgroundImg() {
                         x1: 1381,
                         y1: 542,
                         x2: 1580,
-                        y2: 688
+                        y2: 688,
+                        dy : 0      //  поправка
                     },
                     img: {
                         file: 'r3_1_o.jpg',
@@ -493,6 +513,8 @@ function BackgroundImg() {
         var y1 = place['y1'] ;
         var x2 = place['x2'] ;
         var y2 = place['y2'] ;
+        var dy = (place['dy'] === undefined) ? 0 : place['dy'] ;
+
         var newPlace = {} ;
         var kResize = _this.getKResize()  ;
         var kx = kResize['kx']  ;
@@ -501,6 +523,7 @@ function BackgroundImg() {
         newPlace['y1'] = Math.round(ky * y1) ;
         newPlace['x2'] = Math.round(kx * x2) ;
         newPlace['y2'] = Math.round(ky * y2) ;
+        newPlace['dy'] = Math.round(ky * dy) ;
         return newPlace ;
 
     } ;
@@ -553,15 +576,17 @@ function BackgroundImg() {
         var currentStamp = {} ;
         currentStamp['dir'] = stamp['dir'] ;
         currentStamp['place'] = placeResize(stamp['place']) ;
-        currentStamp['img'] = stamp['img'] ;
+        currentStamp['query'] = stamp['query'] ;
+        currentStamp['answer'] = stamp['answer'] ;
         return currentStamp ;
     } ;
 
-    this.stampShow = function() {
+    this.stampShow = function(type) {
         var currentStamp = _this.getStamp() ;
         var place = currentStamp['place'] ;
         var dir = currentStamp['dir'] ;
-        var stampPicture = dir +'/' + currentStamp['img']['file'] ;
+        var imgFile = currentStamp[type]['img']['file'] ;
+        var stampPicture = dir +'/' + imgFile ;
         _this.defineAbsolutePosition($stampBlock,place,stampPicture) ;
     } ;
     /**
@@ -645,6 +670,7 @@ function BackgroundImg() {
 
         $block.append($txt) ;
 
+        $txt.addClass('queryText') ;
 
         $txt.css('width',0.95*txtWidth) ;
          $txt.attr('id',idText) ;
@@ -652,7 +678,7 @@ function BackgroundImg() {
         $txt.css('max-height',0.8 * txtHeight) ;
         $block.css('overflow','hidden') ;
         $txt.css('background','transparent') ;
-        $txt.css('color',color) ;
+//        $txt.css('color',color) ;
         $txt.css('border','0px solid white') ;
         $txt.css('autofocus','autofocus') ;
         centralCircleText.init(txtWidth,txtHeight,$txt) ;

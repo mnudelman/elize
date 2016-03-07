@@ -29,21 +29,9 @@ function UserInterface() {
         magicNormalPictures.init() ;                  // подготовка фоновых картинок
         stampDefine();              // объект stamp   - планка для запуска запроса
 //        centralCircleDefine();      // объект centralCircle - ценральный круг
-        $(document).click(function (e) {
+        $(window).click(function (e) {
             if (isStampClick(e)) {                   // выполнение запроса
-                if (philosophyForm.getFormShowFlag() === true) {
-                    philosophyForm.scrollGo() ;       // развернуть свиток
-                    //philosophyForm.stopShow() ;
-                    //normalQueryShow() ;
-                } else {
-                    backgroundImg.centralCircleRotate(function() {
-                        currentQuery = $queryArea.val();
-                        var requestGo = paramSet.requestGo;
-                        requestGo.setRequestText(currentQuery);
-                        var auto = true;
-                        requestGo.requestExecute(auto);
-                    }) ;
-                }
+                 stampClickGo() ;
            } else {
                 if (philosophyForm.getFormShowFlag() === true) { // click гасит форму
                     philosophyForm.stopShow();
@@ -63,25 +51,48 @@ function UserInterface() {
         }) ;
         smoke.init();                 // подготовка и запуск облаков
         smoke.smokeGo();
-        backgroundImg.stampShow() ;   // планка, запускающая выполнение запроса
+//        backgroundImg.stampShow() ;   // планка, запускающая выполнение запроса
+//        $(window).click() ;
         normalQueryShow() ;
     } ;
     /**
      * подготовить поле ввода запроса
      */
     var normalQueryShow = function() {
+        backgroundImg.stampShow('query') ;   // планка, запускающая выполнение запроса
+
         backgroundImg.centralCircleShow('query');
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
         $queryArea = $('#queryText');
         $queryArea.attr('placeholder', 'введите вопрос');
 
-
+        $queryArea.off('keydown') ;
+        $queryArea.on('keydown',function(e) {
+            if (e.keyCode === 13) {
+                stampClickGo() ;
+            }
+        }) ;
         magicNormalPictures.show() ;
         $queryArea.val(currentQuery);
         var $ball = $centralCircleBlock.children('img');
 //        $ball.load(function() {
         $queryArea.focus() ;
+    } ;
+    var stampClickGo = function() {
+        if (philosophyForm.getFormShowFlag() === true) {
+            philosophyForm.scrollGo() ;       // развернуть свиток
+            //philosophyForm.stopShow() ;
+            //normalQueryShow() ;
+        } else {
+            backgroundImg.centralCircleRotate(function() {
+                currentQuery = $queryArea.val();
+                var requestGo = paramSet.requestGo;
+                requestGo.setRequestText(currentQuery);
+                var auto = true;
+                requestGo.requestExecute(auto);
+            }) ;
+        }
     } ;
     /**
      * исполнитель изменения размера окна браузера
@@ -96,12 +107,14 @@ function UserInterface() {
                     clearInterval(tmpTimer);
                     stampDefine();              // объект stamp   - печать
 //                    centralCircleDefine();      // объект centralCircle - ценральный круг
-                    backgroundImg.centralCircleShow('query');
-                    $queryArea.attr('placeholder', 'введите вопрос');
-                    $queryArea.focus();
-                    smoke.smokeGo();
-                    backgroundImg.stampShow() ;
-                    magicNormalPictures.show() ;
+                    normalQueryShow() ;
+
+                    //backgroundImg.centralCircleShow('query');
+                    //$queryArea.attr('placeholder', 'введите вопрос');
+                    //$queryArea.focus();
+                    //smoke.smokeGo();
+                    //backgroundImg.stampShow() ;
+                    //magicNormalPictures.show() ;
 
                     resizeGo = false;
                     resizeSteps = 0;

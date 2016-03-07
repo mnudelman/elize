@@ -349,6 +349,12 @@ function ScrollBackground() {
         });
        // ------ закрытие формы   --------//
         captionClick() ;
+        $(window).off('keydown') ;
+        $(window).on('keydown',function(e) {
+            if (e.keyCode === 27) {
+                exit() ;
+            }
+        }) ;
     } ;
     /**
      * click по шапке для закрытия
@@ -366,15 +372,19 @@ function ScrollBackground() {
             var top = ky * mainBlock['place']['y1'] ;
             var height =  ky *(caption['place']['y2'] -  caption['place']['y1']) ;
             if ((x - left) >= 0.5 * width && (y - top) <= 0.7 * height) {
-
-                $mainBlockDiv.hide( "explode", 1000);
-                $mainBlockDiv.empty() ;
-                scrolling.stop = true ;
-                formShowFlag = false ;
-                $resultBackground.attr('hidden','hidden') ;
+                exit() ;
             }
         }) ;
 
+    } ;
+    var exit = function() {
+        $mainBlockDiv.hide( "explode", 1000);
+        $mainBlockDiv.empty() ;
+        scrolling.stop = true ;
+        formShowFlag = false ;
+        $resultBackground.attr('hidden','hidden') ;
+        $(window).off('keydown') ;
+        $(window).click() ;
     } ;
     /**
      * начальные атрибуты прокрутки (объект scrolling = {})
@@ -402,7 +412,7 @@ function ScrollBackground() {
     var scrollingGo = function(e) {
         if (!scrolling.stop ) {
             var wheelSteps = 10 ;    // число вращений колеса мыши
-            var maxDy = 20 ;
+            var maxDy = 10 ;//20 ;
             var minDy = 10 ;
             scrolling.pageY = e.pageY;
             var dyMin = Math.round(scrolling.dyHidden/wheelSteps) ;
@@ -431,7 +441,7 @@ function ScrollBackground() {
         var mainPlace = mainDataBlock.place ;
         var dataPlace = dataArea.place ;
         var dyShow = kResize['ky'] * (mainPlace['y2'] - mainPlace['y1'] - dataPlace['y1']) ;
-        var dyHidden = $dataAreaDiv.height() - dyShow + 100;
+        var dyHidden = $dataAreaDiv.height() - dyShow + 200;
         dyHidden = Math.max(0,dyHidden) ;
         scrolling.dyHidden = dyHidden ;
         return dyHidden ;

@@ -23,17 +23,22 @@ function AddSignalsTable() {
         $addSignalsTable.empty();
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var items = pictures['items'] ;
+        var n = 0 ;
+        var totalRang = 0 ;
         for (var itemKey in items) {
             var item = items[itemKey] ;
             var place = item['place'] ;
             var substName = item['subst'] ;
             var signal = addSignals[substName] ;
+            totalRang += signal['rang'] - 0 ;
+            n++ ;
             var substFile = dirImages + '/' +signal['file'] ;
             var $row = signalRowBuild(signal,place,substName) ;
             $addSignalsTable.append($row) ;
             scrollBackground.putAnswerItem($row) ;
         }
-        var $totalRow = signalTotalRowBuild() ;
+        totalRang = totalRang/n ;
+        var $totalRow = signalTotalRowBuild(totalRang) ;
         $addSignalsTable.append($totalRow) ;
         scrollBackground.putAnswerItem($totalRow,false) ;
 
@@ -59,6 +64,7 @@ function AddSignalsTable() {
         $img.attr('id',imgId) ;
 
         //$img.css('height',height) ;
+        $tdPict.addClass('textSignal') ;
         $tdPict.css('width',width) ;
         $tdPict.append($img) ;
         $img.css('width','100%') ;
@@ -149,6 +155,7 @@ function AddSignalsTable() {
     };
     var textColumnBuild = function(text,width)  {
         var $txtBlock = $('<div/>') ;
+        $txtBlock.addClass('textSignal') ;
         $txtBlock.css('padding','0 10px') ;
         $txtBlock.css('column-count',2) ;
         $txtBlock.css('column-gap','2em') ;
@@ -157,7 +164,10 @@ function AddSignalsTable() {
         return $txtBlock ;
 
     } ;
-    var signalTotalRowBuild = function() {
+    var signalTotalRowBuild = function(totalRang) {
+        var rangPro = 50 + Math.round(totalRang/2) ;
+        var rangContra = 100 - rangPro ;
+
         var dirBalance = dirImages + '/balance' ;
         var $tr = $('<tr/>') ;
         var kResize = backgroundImg.getKResize()  ;
@@ -183,25 +193,30 @@ function AddSignalsTable() {
         var $percBlock = $('<div/>') ;
         $percBlock.css('width',width) ;
 
-        $percBlock.css('font-size',20) ;
-        $percBlock.css('font-family','palar') ;
-        $percBlock.css('color','#6a2e02') ;
+        $percBlock.addClass('totalSignal') ;
+        //$percBlock.css('font-size',20) ;
+        //$percBlock.css('font-family','palar') ;
+        //$percBlock.css('color','#6a2e02') ;
 
-
+        var totatRang = totalRangClc() ;
         var $leftPers =  $('<div/>') ;
         $leftPers.css('float','left') ;
-        $leftPers.append('70%') ;
+        $leftPers.append(rangPro +'%') ;
         $leftPers.css('width',50) ;
         $percBlock.append($leftPers) ;
 
         var $rightPers =  $('<div/>') ;
         $rightPers.css('float','right') ;
         $rightPers.css('width',50) ;
-        $rightPers.append('30%') ;
+
+        $rightPers.append(rangContra +'%') ;
         $percBlock.append($rightPers) ;
         $totalBlock.append($percBlock) ;
         $totalBlock.css('margin-left',marginLeft) ;
         return $totalBlock ;
+    } ;
+    var totalRangClc = function() {
+
     } ;
 
 }
