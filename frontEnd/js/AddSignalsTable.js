@@ -103,7 +103,7 @@ function AddSignalsTable() {
 //        var $tdBalance = $('<td/>') ;
         $tdBalance.css('width',width) ;
         var dirBalance = dirImages + '/balance' ;
-        var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra.png' ;
+        var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra_1.png' ;
         balancePict =  (rang === 0) ? 'balance_equal.png' : balancePict ;
         var $imgB = $('<img/>') ;
         $imgB.attr('src',dirBalance + '/' +balancePict) ;

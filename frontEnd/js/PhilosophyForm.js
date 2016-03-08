@@ -142,6 +142,13 @@ function PhilosophyForm() {
 
 //            showItem(dir,item) ;
         }
+        $(window).keydown(function(e){
+            if (e.keyCode === 13) {
+                $(window).off('keydown') ;
+                _this.scrollGo() ;
+
+            }
+        }) ;
         cycleShow() ;
     } ;
     var showItem = function(dir,item) {

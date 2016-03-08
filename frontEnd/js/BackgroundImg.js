@@ -58,7 +58,7 @@ function BackgroundImg() {
 
             query: {                               // ценральный круг при вводе запроса
                 idText : 'queryText',
-                ball: 'yellow_ball.png',
+                ball: 'yellow_ball_2.png',
                 textArea: 'yellow_text_area.png',
                 color: '#fff', //'#47d4d9', // 'blue',    // '#11f371',
                 readonly: false
@@ -646,6 +646,8 @@ function BackgroundImg() {
      */
     var defineTextArea = function($block,place,imgFile,color,fontSize,readonly,idText) {
         $block.css('position','absolute') ;
+       $block.removeAttr('hidden') ;
+//        $block.css('border','3px solid red') ;
         $block.empty() ;
         var x1 = place['x1'] ;
         var x2 = place['x2'] ;
@@ -658,8 +660,9 @@ function BackgroundImg() {
         if (readonly) {
             return ;
         }else {
-            $txt.removeAttr('readonly') ;
+           $txt.removeAttr('readonly') ;
         }
+
         var txtWidth = x2 - x1 ;
         var txtHeight = y2 - y1 ;
 
@@ -671,16 +674,14 @@ function BackgroundImg() {
         $block.append($txt) ;
 
         $txt.addClass('queryText') ;
-
+        $txt.attr('placeholder','Введите вопрос') ;
         $txt.css('width',0.95*txtWidth) ;
          $txt.attr('id',idText) ;
         $txt.css('height',0.97 * txtHeight) ;
         $txt.css('max-height',0.8 * txtHeight) ;
         $block.css('overflow','hidden') ;
         $txt.css('background','transparent') ;
-//        $txt.css('color',color) ;
         $txt.css('border','0px solid white') ;
-        $txt.css('autofocus','autofocus') ;
         centralCircleText.init(txtWidth,txtHeight,$txt) ;
     } ;
     /**

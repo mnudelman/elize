@@ -15,6 +15,7 @@ function UserInterface() {
     var RESIZE_TAKTS_MAX = 1;            // число тактов, после которых фиксируются изменения размера
     var currentQuery = '' ;              // текст запроса
     var $centralCircleBlock = $('#centralCircle') ;
+    var $centralCircleTextBlock = $('#centralCircleText') ;
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
@@ -43,17 +44,22 @@ function UserInterface() {
             resize();
         });
         $queryArea = $('#queryText');
-        $queryArea.load(function(){
-            $queryArea.focus();
-        }) ;
+        //$queryArea.load(function(){
+        //    $queryArea.focus();
+        //}) ;
         $(document).keypress(function(){
             $queryArea.focus();
         }) ;
         smoke.init();                 // подготовка и запуск облаков
         smoke.smokeGo();
 //        backgroundImg.stampShow() ;   // планка, запускающая выполнение запроса
-//        $(window).click() ;
-        normalQueryShow() ;
+        var $ball = $centralCircleBlock.children('img');
+        $centralCircleBlock.ready(function() {
+//            alert ('ballLoad') ;
+            $(window).click() ;
+        }) ;
+
+//        normalQueryShow() ;
     } ;
     /**
      * подготовить поле ввода запроса
@@ -67,6 +73,12 @@ function UserInterface() {
         $queryArea = $('#queryText');
         $queryArea.attr('placeholder', 'введите вопрос');
 
+        //$queryArea.off('keydown') ;
+        //$queryArea.on('keydown',function(e) {
+        //    if (e.keyCode === 13) {
+        //        stampClickGo() ;
+        //    }
+        //}) ;
         $queryArea.off('keydown') ;
         $queryArea.on('keydown',function(e) {
             if (e.keyCode === 13) {
@@ -77,7 +89,10 @@ function UserInterface() {
         $queryArea.val(currentQuery);
         var $ball = $centralCircleBlock.children('img');
 //        $ball.load(function() {
-        $queryArea.focus() ;
+//        $queryArea.css('z-index',5) ;
+//        $centralCircleTextBlock.focus() ;
+          $queryArea.focus() ;
+
     } ;
     var stampClickGo = function() {
         if (philosophyForm.getFormShowFlag() === true) {
