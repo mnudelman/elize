@@ -94,8 +94,9 @@ function ResponseForm() {
         ul.addClass('passages') ;
         for (var i = 0; i < passages.length; i++) {
             var passage = passages[i] ;
+
             var ulli = $('<li/>') ;
-            ulli.append(passage) ;
+            ulli.append(passage.trim()) ;
             ul.append(ulli) ;
         }
         return ul ;

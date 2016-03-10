@@ -63,17 +63,17 @@ function ScrollBackground() {
         mainDataBlock = {
             place: {
                 x1:50 ,
-                y1:186,
-                x2: 1484 - 370 - 25 -20,
+                y1:150, //186,
+                x2: mainWidth - 50 , //1484 - 370 ,    //- 25 -20,
                 y2: mainHeight - 30
             }
 
         } ;
         dataArea = {
             place: {
-                x1:0,      //50 ,
+                x1:50,      //50 ,
                 y1:0,      //186,
-                x2: 1484 - 370 - 25 ,
+                x2: mainWidth - 50, /// 1484 - 370 ,
                 y2: undefined
             },
             data: {
@@ -82,27 +82,27 @@ function ScrollBackground() {
         } ;
         slider = {
             place: {
-                x1:1500 - 370 -50 + 5 +5 +3 +2 , //1484 - 370 -30 -5 ,
-                y1:126,
-                x2:1530 - 370 - 50 + 5 -5 -3, //1530 - 370 -30 -5 ,
-                y2: 422,
-                y1Max : mainHeight - (422 - 126) -10
+                x1:mainWidth - 50, //1500 - 370 -50 + 5 +5 +3 +2 , //1484 - 370 -30 -5 ,
+                y1:150 , //126,
+                x2:mainWidth - 50 + 6,   //1530 - 370 - 50 + 5 -5 -3, //1530 - 370 -30 -5 ,
+                y2: 126 + 277,
+                y1Max : mainHeight - 277 -10
             },
             img : {
-                file: 'slider.png'
+                file: 'slider_new.png'
             }
         } ;
         scrollLine = {
             place: {
-                x1:1500 - 370 -50 ,
+                x1:mainWidth - 50, //1500 - 370 -50 ,
                 y1:126,
-                x2: 1530 - 370 - 50 ,
-                y2: mainHeight - 30
+                x2: mainWidth - 50 + 6 , //1530 - 370 - 50 ,
+                y2: mainHeight - 10
 
             },
             background : {
                 img: {
-                    file: 'scroll_line.png'
+                    file: 'scroll_line_new.png'
                 },
                 repeat: 'repeat-y'
 
@@ -173,7 +173,7 @@ function ScrollBackground() {
          var mainBlockId = $mainBlockDiv.attr('id') ;
         $CaptionDiv = $('#' + mainBlockId +'_caption') ;
         $sliderDiv = $('#' + mainBlockId +'_slider') ;
-        $sliderDiv.css('opacity',0.15) ;
+//        $sliderDiv.css('opacity',0.15) ;
 //        $sliderDiv.attr('title','click в начале и в конце перемещения') ;
         $scrollLineDiv = $('#' + mainBlockId +'_scrollLine') ;
         $messageDiv = $('#' + mainBlockId +'_message') ;
@@ -252,7 +252,7 @@ function ScrollBackground() {
         $dataAreaDiv.addClass('data') ;
         var $pHuman = $('<p/>') ;
         $pHuman.attr('id','dataHuman') ;
-        $dataAreaDiv.append($pHuman) ;
+//        $dataAreaDiv.append($pHuman) ;
 
         $dataList = $('<ul/>') ;
   //      $dataList.attr('start',1) ;
@@ -378,7 +378,9 @@ function ScrollBackground() {
 
     } ;
     var exit = function() {
-        $mainBlockDiv.hide( "explode", 1000);
+        $mainBlockDiv.hide( "blind", 1000);
+
+//        $mainBlockDiv.toggle('blind') ;
         $mainBlockDiv.empty() ;
         scrolling.stop = true ;
         formShowFlag = false ;
@@ -403,7 +405,9 @@ function ScrollBackground() {
         scrolling.wheelMoving = 0 ;
         scrolling.kdyDataArea =
                    scrolling.dyHidden / (scrolling.sliderYMax - scrolling.sliderYMin) ;
-
+        var topData = scrolling.dataAreaY0 +
+            scrolling.kdyDataArea  ; //* (scrolling.sliderY - scrolling.sliderY0);
+        $dataAreaDiv.css('top',topData) ;
     } ;
     /**
      * реакция на 1 шаг вращения колеса мыши
@@ -529,7 +533,7 @@ function ScrollBackground() {
      * @param totalHumanText
      */
     this.putTotalHuman = function(totalHumanText) {
-        $dataHumanBox.append('<strong>'+totalHumanText + '</strong>') ;
+ //       $dataHumanBox.append('<strong>'+totalHumanText + '</strong>') ;
     } ;
     /**
      * вывод блока ответа - элемента списка
@@ -552,15 +556,15 @@ function ScrollBackground() {
         var dataWidth = $dataAreaDiv.width() ;
 
         $vinDiv.css('width',dataWidth) ;
-        $vinDiv.css('height',place['y2'] + 20) ;
+        $vinDiv.css('height',place['y2'] + 60) ;
 
         left  = (dataWidth - width)/2 ;
 
 
-        $img.css('top',10) ;
+        $img.css('margin-top',20) ;
         $img.css('margin-left',left) ;
         $img.css('width',width) ;
-        $img.css('height',place['y2']) ;
+        $img.css('height',place['y2'] + 10) ;
 //        $liItem.append($vinDiv) ;
 
 

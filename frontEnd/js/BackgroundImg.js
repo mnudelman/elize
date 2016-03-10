@@ -18,6 +18,7 @@ function BackgroundImg() {
     var clouds = {} ;           // облака
     var philosophyPictures = {} ; // картинки для иллюстрации
     var centralCircle = {} ;      // центральный круг
+    var centralCircleGlow = {};   // размытый шар
     var stamp = {} ;              // печать - ввод запроса
     var scroll = {} ;             // свиток - панель для вывода результата
     var dirImages = paramSet.dirImages ;
@@ -25,6 +26,7 @@ function BackgroundImg() {
     var dirSmoke ;
     var dirPictures ;
     var $centralCircleBlock = $('#centralCircle') ;
+    var $centralCircleGlowBlock = $('#centralCircleGlow') ;
     var $centralCircleTextBlock = $('#centralCircleText') ;
     var $stampBlock = $('#stamp') ;
     var animateStop = false ;
@@ -55,10 +57,9 @@ function BackgroundImg() {
                 x2: 1095,
                 y2: 625 //630 // 632
             },
-
             query: {                               // ценральный круг при вводе запроса
                 idText : 'queryText',
-                ball: 'yellow_ball_2.png',
+                ball: 'yellow_ball_3.png',
                 textArea: 'yellow_text_area.png',
                 color: '#fff', //'#47d4d9', // 'blue',    // '#11f371',
                 readonly: false
@@ -73,6 +74,21 @@ function BackgroundImg() {
             }
 
         } ;
+        centralCircleGlow = {     // размытый шар
+            dir: dirMainImg,
+            place: {
+                x1: 800 - 40, //798, //808,
+                y1: 380 - 40, //381,
+                x2: 1130 + 40,
+                y2: 710 +40 // 711
+                },
+            img: {
+                file :'yellow_ball_glow.png'
+            }
+        } ;
+
+
+
         stamp = {                         // планка "далее" - ввод запроса
             dir: dirMainImg,
             place: {
@@ -274,170 +290,257 @@ function BackgroundImg() {
             items: {
                 'l1_1': {                      // карты
                     place: {
-                        x1: 344,
-                        y1: 215,
-                        x2: 514,
-                        y2: 358,
+                        x1: 340,
+                        w: 178,
+                        y1: 211,
+                        h: 151,
                         dy : 10      //  поправка
                     },
+                    innerPlace: {
+                        x1: 358,
+                        w: 142,
+                        y1: 228,
+                        h: 117
+                    },
                     img: {
-                        file: 'l1_1_o.jpg',
-                        border:'l1_1_b.jpg'
+                        file: 'l1_1_o.png',
+                        border:'l1_1_b.png',
+                        text: 'l1_1_t.png'
                     },
                     subst: 'cards'          // имя множества картинок в философском ответе
                 },
                 'l1_2': {                      // созвездия
                     place: {
-                        x1: 536,
-                        y1: 215,
-                        x2: 706,
-                        y2: 362,
+                        x1: 537,
+                        w: 178,
+                        y1: 211,
+                        h: 151,
                         dy : 10      //  поправка
 
                     },
+                    innerPlace: {
+                        x1: 551,
+                        w: 142,
+                        y1: 228,
+                        h: 117
+                    },
+
                     img: {
-                        file: 'l1_2_o.jpg',
-                        border:'l1_2_b.jpg'
+                        file: 'l1_2_o.png',
+                        border:'l1_1_b.png',
+                        text: 'l1_2_t.png'
+
                     },
                     subst: 'astrology'
                 },
                 'l1_3': {                     // домино
                     place: {
-                        x1: 732,
-                        y1: 215,
-                        x2: 899,
-                        y2: 361,
+                        x1: 727,
+                        w: 178,
+                        y1: 211,
+                        h: 151,
                         dy : 0      //  поправка
                     },
+                    innerPlace: {
+                        x1: 745,
+                        w: 142,
+                        y1: 228,
+                        h: 117
+                    },
+
                     img: {
-                        file: 'l1_3_o.jpg',
-                        border:'l1_3_b.jpg'
+                        file: 'l1_3_o.png',
+                        border:'l1_1_b.png',
+                        text: 'l1_3_t.png'
                     },
                     subst: 'domino'
                 },
                 'l2_1': {                      // лунно-солнечный календарь
                     place: {
-                        x1: 344,
-                        y1: 377 ,
-                        x2: 540,
-                        y2: 524,
+                        x1: 340,
+                        w: 207,
+                        y1: 374,
+                        h: 153,
                         dy : 10  + 5     //  поправка
                     },
+                    innerPlace: {
+                        x1: 358,
+                        w: 171,
+                        y1: 392,
+                        h: 119
+                    },
                     img: {
-                        file: 'l2_1_o.jpg',
-                        border:'l2_1_b.jpg'
+                        file: 'l2_1_o.png',
+                        border:'l2_1_b.png',
+                        text: 'l2_1_t.png'
                     },
                     subst: 'moon_calendar'
                 },
                 'l2_2': {                      // карты таро
                     place: {
-                        x1: 563,
-                        y1: 377,
-                        x2: 760,
-                        y2: 690,
+                        x1: 560,
+                        w: 205,
+                        y1: 374,
+                        h: 317,
                         dy : 10      //  поправка
                     },
+                    innerPlace: {
+                        x1: 578,
+                        w: 171,
+                        y1: 392,
+                        h: 284
+                    },
                     img: {
-                        file: 'l2_2_o.jpg',
-                        border:'l2_2_b.jpg'
+                        file: 'l2_2_o.png',
+                        border:'l2_2_b.png',
+                        text: 'l2_2_t.png'
                     },
                     subst: 'taro'
                 },
                 'l3_1': {                      // стихии
                     place: {
-                        x1: 344,
-                        y1: 542,
-                        x2: 540,
-                        y2: 690,
+                        x1: 340,
+                        w: 207,
+                        y1: 539,
+                        h: 153,
                         dy : 10      //  поправка
                     },
+                    innerPlace: {
+                        x1: 358,
+                        w: 171,
+                        y1: 556,
+                        h: 119
+                    },
                     img: {
-                        file: 'l3_1_o.jpg',
-                        border:'l3_1_b.jpg'
+                        file: 'l3_1_o.png',
+                        border:'l2_1_b.png',
+                        text: 'l3_1_t.png'
                     },
                     subst: 'elements'
                 },
                 'r1_1': {                         // звери
                     place: {
-                        x1: 1023,
-                        y1: 215,
-                        x2: 1192,
-                        y2: 356,
+                        x1: 1019,
+                        w: 178,
+                        y1: 211,
+                        h: 151,
                         dy : 10      //  поправка
                     },
+                    innerPlace: {
+                        x1: 1037,
+                        w: 142,
+                        y1: 228,
+                        h: 117
+                    },
                     img: {
-                        file: 'r1_1_o.jpg',
-                        border:'l1_1_b.jpg' // 'r1_1_b.jpg'
+                        file: 'r1_1_o.png',
+                        border:'l1_1_b.png',
+                        text: 'r1_1_t.png'
                     },
                     subst: 'animals'
                 },
                 'r1_2': {                         // деревья
                     place: {
-                        x1: 1217,
-                        y1: 215,
-                        x2: 1385,
-                        y2: 356,
+                        x1: 1212,
+                        w: 178,
+                        y1: 211,
+                        h: 151,
                         dy : 10 + 5      //  поправка
                     },
+                    innerPlace: {
+                        x1: 1230,
+                        w: 142,
+                        y1: 228,
+                        h: 117
+                    },
                     img: {
-                        file: 'r1_2_o.jpg',
-                        border:'l1_2_b.jpg' // 'r1_2_b.jpg'
+                        file: 'r1_2_o.png',
+                        border:'l1_1_b.png',
+                        text: 'r1_2_t.png'
                     },
                     subst: 'trees'
                 },
                 'r1_3': {                        // валюта
                     place: {
-                        x1: 1409,
-                        y1: 215,
-                        x2: 1581,
-                        y2: 358,
+                        x1: 1406,
+                        w: 178,
+                        y1: 211,
+                        h: 151,
                         dy : 10      //  поправка
                     },
+                    innerPlace: {
+                        x1: 1424,
+                        w: 142,
+                        y1: 228,
+                        h: 117
+                    },
                     img: {
-                        file: 'r1_3_o.jpg',
-                        border:'l1_3_b.jpg'  //'r1_3_b.jpg'
+                        file: 'r1_3_o.png',
+                        border:'l1_1_b.png',
+                        text: 'r1_3_t.png'
                     },
                     subst: 'money'
                 },
                 'r2_1': {                       // цифры
                     place: {
-                        x1: 1164,
-                        y1: 377,
-                        x2: 1363,
-                        y2: 688,
+                        x1: 1160,
+                        w: 205,
+                        y1: 374,
+                        h: 317,
                         dy : 10      //  поправка
                     },
+                    innerPlace: {
+                        x1: 1178,
+                        w: 171,
+                        y1: 391,
+                        h: 284
+                    },
                     img: {
-                        file: 'r2_1_o.jpg',
-                        border:'l2_2_b.jpg'   //'r2_1_b.jpg'
+                        file: 'r2_1_o.png',
+                        border:'l2_2_b.png',
+                        text: 'r2_1_t.png'
                     },
                     subst: 'digits'
                 },
                 'r2_2': {                     // цвета
                     place: {
-                        x1: 1381,
-                        y1: 377,
-                        x2: 1580,
-                        y2: 524,
+                        x1: 1377,
+                        w: 207,
+                        y1: 374,
+                        h: 153,
                         dy : 10 + 5     //  поправка
                     },
+                    innerPlace: {
+                        x1: 1396,
+                        w: 171,
+                        y1: 392,
+                        h: 119
+                    },
                     img: {
-                        file: 'r2_2_o.jpg',
-                        border:'l2_1_b.jpg'  //'r2_2_b.jpg'
+                        file: 'r2_2_o.png',
+                        border:'l2_1_b.png',
+                        text: 'r2_2_t.png'
                     },
                     subst: 'colors'
                 },
                 'r3_1': {                    // страны
                     place: {
-                        x1: 1381,
-                        y1: 542,
-                        x2: 1580,
-                        y2: 688,
+                        x1: 1377,
+                        w: 207,
+                        y1: 539,
+                        h: 153,
                         dy : 0      //  поправка
                     },
+                    innerPlace: {
+                        x1: 1396,
+                        w: 171,
+                        y1: 556,
+                        h: 119
+                    },
                     img: {
-                        file: 'r3_1_o.jpg',
-                        border:'l3_1_b.jpg' //'r3_1_b.jpg'
+                        file: 'r3_1_o.png',
+                        border:'l2_1_b.png',
+                        text: 'r3_1_t.png'
                     },
                     subst: 'countries'
                 }
@@ -493,6 +596,10 @@ function BackgroundImg() {
     var newImgItem = function(item) {
         var currentItem = {} ;
         var place = item['place'] ;
+        var innerPlace = item['innerPlace'] ;
+        if (innerPlace !== undefined) {
+            currentItem['innerPlace'] = placeResize(innerPlace) ;
+        }
         currentItem['place'] = placeResize(place) ;
         currentItem['img'] = newItemImg(item['img']) ;
         currentItem['subst'] = item['subst'] ;
@@ -501,7 +608,8 @@ function BackgroundImg() {
     var newItemImg = function(itemImg) {
         var file = itemImg['file'] ;
         var borderFile = itemImg['border'] ;
-        return {file: file, border:borderFile} ;
+        var textFile =  itemImg['text'] ;
+        return {file: file, border:borderFile, text:textFile } ;
     } ;
     /**
      * пересчёт координат для объекта place
@@ -513,6 +621,8 @@ function BackgroundImg() {
         var y1 = place['y1'] ;
         var x2 = place['x2'] ;
         var y2 = place['y2'] ;
+        var w =  place['w'] ;
+        var h =  place['h'] ;
         var dy = (place['dy'] === undefined) ? 0 : place['dy'] ;
 
         var newPlace = {} ;
@@ -521,8 +631,21 @@ function BackgroundImg() {
         var ky = kResize['ky']  ;
         newPlace['x1'] = Math.round(kx * x1) ;
         newPlace['y1'] = Math.round(ky * y1) ;
-        newPlace['x2'] = Math.round(kx * x2) ;
-        newPlace['y2'] = Math.round(ky * y2) ;
+        if (x2 !== undefined) {
+            newPlace['x2'] = Math.round(kx * x2) ;
+        }
+        if (y2 !== undefined) {
+            newPlace['y2'] = Math.round(ky * y2) ;
+        }
+        if (w !== undefined) {
+            newPlace['x2'] = newPlace['x1'] + Math.round(kx * w) ;
+        }
+
+        if (h !== undefined) {
+            newPlace['y2'] = newPlace['y1'] + Math.round(ky * h) ;
+        }
+
+
         newPlace['dy'] = Math.round(ky * dy) ;
         return newPlace ;
 
@@ -563,6 +686,17 @@ function BackgroundImg() {
         currentCircle['answer'] = centralCircle['answer'] ;
         return currentCircle ;
     } ;
+    /**
+     * размытый шар
+     * @returns {{}}
+     */
+    this.getCentralCircleGlow = function() {
+        var currentGlow = {} ;
+        currentGlow['dir'] = centralCircleGlow['dir'] ;
+        currentGlow['place'] =  placeResize(centralCircleGlow['place']) ;
+        currentGlow['img'] =  centralCircleGlow['img'];
+        return currentGlow ;
+    } ;
     var newTextArea = function(alpha,newPlace) {
        var textArea = {} ;
 
@@ -588,6 +722,17 @@ function BackgroundImg() {
         var imgFile = currentStamp[type]['img']['file'] ;
         var stampPicture = dir +'/' + imgFile ;
         _this.defineAbsolutePosition($stampBlock,place,stampPicture) ;
+    } ;
+    /**
+     * вывод размытого шара
+     */
+    _this.centralCircleGlowShow = function() {
+        var currentGlow = _this.getCentralCircleGlow() ;
+        var place = currentGlow['place'] ;
+        var dir = currentGlow['dir'] ;
+        var glowPicture = dir +'/' + currentGlow['img']['file'] ;
+        _this.defineAbsolutePosition($centralCircleGlowBlock,place,glowPicture) ;
+
     } ;
     /**
      * выводит центральный круг по типу
@@ -630,7 +775,7 @@ function BackgroundImg() {
         $block.css('top',y1) ;
         $block.css('left',x1) ;
         $img.css('width',x2 - x1) ;
-        $img.css('width',x2 - x1) ;
+        $img.css('height',y2 - y1) ;
         $block.append($img) ;
     } ;
     /**
@@ -654,6 +799,7 @@ function BackgroundImg() {
         var y1 = place['y1'] ;
         var y2 = place['y2'] ;
         var $txt = $('<textarea/>') ;
+
         $block.css('top',y1) ;
         $block.css('left',x1) ;
         $block.css('color',color) ;
@@ -670,7 +816,7 @@ function BackgroundImg() {
         $block.css('height',txtHeight) ;
 
         $txt.removeAttr('hidden') ;
-
+        $txt.attr("spellcheck","false") ;
         $block.append($txt) ;
 
         $txt.addClass('queryText') ;

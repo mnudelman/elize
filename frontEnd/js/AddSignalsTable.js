@@ -9,7 +9,7 @@ function AddSignalsTable() {
     var dirImages;
     var scrollBackground ;
     var totalFontSize = 0 ;
-
+    var PICT_MAX_WIDTH = 230 ;   // 09.03.2016
     var _this = this ;
     this.init = function(signals) {
         addSignals = signals ;
@@ -62,12 +62,15 @@ function AddSignalsTable() {
 
         var imgId =  name + '_img' ;
         $img.attr('id',imgId) ;
-
+        var imgWidth = Math.min(width,PICT_MAX_WIDTH) ;
         //$img.css('height',height) ;
         $tdPict.addClass('textSignal') ;
-        $tdPict.css('width',width) ;
+
+        $tdPict.css('width',imgWidth) ;
         $tdPict.append($img) ;
-        $img.css('width','100%') ;
+
+
+        $img.css('width','95%') ;
         var txt = typeComment + '. ' + signalName ;
         $tdPict.append('<p>' +txt + '</p>') ;
         //------------//
@@ -103,8 +106,8 @@ function AddSignalsTable() {
 //        var $tdBalance = $('<td/>') ;
         $tdBalance.css('width',width) ;
         var dirBalance = dirImages + '/balance' ;
-        var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra_1.png' ;
-        balancePict =  (rang === 0) ? 'balance_equal_1.png' : balancePict ;
+        var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra.png' ;
+        balancePict =  (rang === 0) ? 'balance_equal.png' : balancePict ;
         var $imgB = $('<img/>') ;
         $imgB.attr('src',dirBalance + '/' +balancePict) ;
         $tdBalance.append($imgB) ;

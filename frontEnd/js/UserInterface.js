@@ -66,7 +66,7 @@ function UserInterface() {
      */
     var normalQueryShow = function() {
         backgroundImg.stampShow('query') ;   // планка, запускающая выполнение запроса
-
+        backgroundImg.centralCircleGlowShow() ;
         backgroundImg.centralCircleShow('query');
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
@@ -85,7 +85,12 @@ function UserInterface() {
                 stampClickGo() ;
             }
         }) ;
-        magicNormalPictures.show() ;
+        $queryArea.off('blur') ;
+        $queryArea.blur(function(e) {
+            currentQuery = $queryArea.val();
+        }) ;
+        var staticShow = true ;
+        magicNormalPictures.show(staticShow) ;
         $queryArea.val(currentQuery);
         var $ball = $centralCircleBlock.children('img');
 //        $ball.load(function() {
@@ -100,7 +105,13 @@ function UserInterface() {
             //philosophyForm.stopShow() ;
             //normalQueryShow() ;
         } else {
+            var staticShow = false ;
+            magicNormalPictures.show(staticShow) ;
+
             backgroundImg.centralCircleRotate(function() {
+                var staticShow = true ;
+//                magicNormalPictures.show(true) ;
+
                 currentQuery = $queryArea.val();
                 var requestGo = paramSet.requestGo;
                 requestGo.setRequestText(currentQuery);
@@ -130,7 +141,7 @@ function UserInterface() {
                     //smoke.smokeGo();
                     //backgroundImg.stampShow() ;
                     //magicNormalPictures.show() ;
-
+                    smoke.smokeGo();
                     resizeGo = false;
                     resizeSteps = 0;
                     philosophyForm.resize() ;

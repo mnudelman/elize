@@ -7,14 +7,16 @@ function MagicNormalPictures() {
     var animateStop = false ;
     var $resultBlock = $('#resultBlockPhilosophy') ;
     var formShowFlag = false ;
+    var currentStaticFlag = true ;  // статическая картинка(
     var _this = this ;
     //----------------------------------//
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
     } ;
-    this.show = function() {
+    this.show = function(staticFlag) {
+        currentStaticFlag = staticFlag ;
         formShowFlag = true ;
-        picturesShow() ;
+        picturesShow(staticFlag) ;
     } ;
 
     /**
@@ -43,8 +45,10 @@ function MagicNormalPictures() {
         for (var itemKey in items) {
             var item = items[itemKey];
             var $pictImg = _this.showItem(dir, borderSize, item, itemKey);
-            var rotationBlock = rotationBlockPrepare($pictImg);
-            rotationGo(rotationBlock);
+            if (!currentStaticFlag) {
+                var rotationBlock = rotationBlockPrepare($pictImg);
+                rotationGo(rotationBlock);
+            }
         }
     } ;
     /**
@@ -58,12 +62,17 @@ function MagicNormalPictures() {
      */
     this.showItem = function(dir,borderSize,item,itemKey,substImageFile) {
         var place = item['place'] ;
-        var pictureFile = dir + '/' + item['img']['file'] ;
-
+        var innerPlace = item['innerPlace'] ;
+        var imgFile = (currentStaticFlag) ? item['img']['text'] :
+            item['img']['file'] ;
+        var pictureFile = dir + '/' + imgFile ;
         var dy = (place['dy'] === undefined) ? 0 : place['dy'] ;
+        dy = (currentStaticFlag) ? 0 : dy ;
         if (typeof(substImageFile) === 'string' ) {
             pictureFile = substImageFile ;
             dy = 0 ;        // поправка
+        } else if(currentStaticFlag) {
+            pictureFile  = dir + '/' + item['img']['text'] ;
         }
         var borderFile = dir + '/' + item['img']['border'] ;
         var top = place['y1'] ;
@@ -89,21 +98,28 @@ function MagicNormalPictures() {
         $borderImg.css('height',height ) ;
         $borderBlock.append($borderImg) ;
 
+
+
         // для картинки нужен отдельный блок
         var $pictureBlock = $('<div/>') ;
-
+        var pictTop = innerPlace['y1'] - place['y1'] ;
+        var pictLeft = innerPlace['x1'] - place['x1'] ;
+        var pictWidth = innerPlace['x2'] - innerPlace['x1'] ;
+        var pictHeight = innerPlace['y2'] - innerPlace['y1'] ;
         $block.append($pictureBlock) ;
         $pictureBlock.css('position','absolute') ;
-        $pictureBlock.css('top',borderSize + dy) ;
-        $pictureBlock.css('left',borderSize) ;
+        $pictureBlock.css('top',pictTop + dy) ;
+        $pictureBlock.css('left',pictLeft) ;
         var $pictureImg = $('<img/>') ;
         $pictureImg.attr('id',itemKey+'_img') ;
         $pictureImg.attr('src',pictureFile) ;
-        $pictureImg.css('width',width - 2 * borderSize) ;
-        $pictureImg.css('height',height - 2 * borderSize -dy) ;
+        $pictureImg.css('width',pictWidth) ;
+        $pictureImg.css('height',pictHeight - dy) ;
         $pictureBlock.append($pictureImg) ;
         return $pictureImg ;
     } ;
+
+
     /**
      * блок - параметры вращения картинки
      * @param $img

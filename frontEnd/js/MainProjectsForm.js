@@ -90,7 +90,7 @@ function MainProjectsForm() {
             for (var i = 0; i < results.length; i++) {
                 var result = results[i] ;
                 var li = liCreate(result) ;
-                li.css('list-style-image','url('+icon+')') ;
+//                li.css('list-style-image','url('+icon+')') ;
                 scrollBackground.putAnswerItem(li) ;   // вывод элемента ответа
             }
         } ;
@@ -121,7 +121,7 @@ function MainProjectsForm() {
             for (var i = 0; i < passages.length; i++) {
                 var passage = passages[i] ;
                 var ulli = $('<li/>') ;
-                ulli.append(passage) ;
+                ulli.append(passage.trim()) ;
                 ul.append(ulli) ;
             }
             return ul ;

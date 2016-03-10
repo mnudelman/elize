@@ -1,14 +1,22 @@
-a { color: #FF3300; outline: none; }
-a:focus { outline: none; }
-.title { color: #FF3300;}
+a {
+    color: #000;
+    font-family:roboto , 'Times New Roman', Times, serif;
+    font-size:18px ;
+    /*outline: none; */
+     }
+/*a:focus { outline: none; }*/
+/*.title { color: #FF3300;}*/
 
 img {border:0}
-p {margin:16px}
+
+/*p {margin:16px}*/
+
+
 form {margin:0;padding:0;display:inline}
 .box {
     /*background:#fff;*/
     background-color: transparent; /*rgba(217,189,143,1) ;*/
-    font-family:northern, roboto , 'Times New Roman', Times, serif;
+    font-family:roboto , 'Times New Roman', Times, serif;
     /*border:0px solid #ccc;*/
     /*border-radius: 4px;*/
     /*-moz-border-radius: 4px;*/
@@ -22,36 +30,26 @@ form {margin:0;padding:0;display:inline}
     margin-top: 8px;
 }
 .data ul{
-    margin-left:-54px;
+    margin-left: 50px ; /*-54px;*/
     padding-left:0 ; /*54px;*/
 }
 .data ul li{
     font-size:14px;
     color:#000; /*#999;*/
-    padding:8px;
+    /*padding:8px;*/
     margin-bottom: 6px;
-    margin-left: 10% ; /*40px; */
+    /*margin-left: 10% ; *//*40px; */
     margin-right: 10%
 }
-.data ol li * {
-    font-size:14px !important;
-}
-.data ol li li {
-    color:#333333;
-    font-size:14px !important;
-}
-.data ol li:hover{
-    /*background-color:#FFFFDD;*/
-}
-.data ol li a{
-    display:block;
-    text-indent:8px;
-    font-size:1.2em;
-}
-.data ol li a.host{
-    color:#999;
-    font-size:0.6em;
-    display:inline;
+/*.data ul li a{*/
+    /*display:block;*/
+    /*text-indent:8px;*/
+    /*font-size:1.2em;*/
+/*}*/
+.data ul li a.host{
+    /*color:#999;*/
+    /*font-size:0.6em;*/
+    /*display:inline;*/
     padding-left:8px;
 }
 

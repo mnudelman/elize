@@ -90,6 +90,10 @@ $dirStyle = './frontEnd/styles';
     <div id="centralCircle">
 
     </div>
+    <div id="centralCircleGlow">
+
+    </div>
+
     <div id="centralCircleText">
 
     </div>

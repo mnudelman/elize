@@ -11,6 +11,7 @@ function PhilosophyForm() {
     var $answerArea ;     // область вывода текста
     var $answerAreaBlock ;
     var formShowFlag = false ;
+    var scrollGoFlag = false;
     var magicNormalPictures ;
     var addSignals = {} ;           // дополнительные сигналы
     var addSignalsTable ;
@@ -47,13 +48,15 @@ function PhilosophyForm() {
      * развернуть свиток
      */
     this.scrollGo = function() {
+        scrollGoFlag = true ;
         addSignalsTable.init(addSignals) ;
         addSignalsTable.tableShow() ;
 
     } ;
     this.queryGo = function() {
        formShowFlag = true ;
-       responseShow() ;
+       scrollGoFlag = false ;
+      responseShow() ;
     } ;
     this.getFormShowFlag = function() {
         return formShowFlag ;
@@ -74,6 +77,9 @@ function PhilosophyForm() {
         if (formShowFlag) {
             animateStop = true ;
             responseShow() ;
+            if (scrollGoFlag) {
+                addSignalsTable.tableShow() ;
+            }
         }
     } ;
 
