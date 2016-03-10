@@ -148,6 +148,11 @@ function PhilosophyForm() {
                 _this.scrollGo() ;
 
             }
+            if (e.keyCode === 27) {
+                $(window).off('keydown') ;
+                _this.stopShow() ;
+                $(window).click() ;
+            }
         }) ;
         cycleShow() ;
     } ;

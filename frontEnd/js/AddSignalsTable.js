@@ -104,7 +104,7 @@ function AddSignalsTable() {
         $tdBalance.css('width',width) ;
         var dirBalance = dirImages + '/balance' ;
         var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra_1.png' ;
-        balancePict =  (rang === 0) ? 'balance_equal.png' : balancePict ;
+        balancePict =  (rang === 0) ? 'balance_equal_1.png' : balancePict ;
         var $imgB = $('<img/>') ;
         $imgB.attr('src',dirBalance + '/' +balancePict) ;
         $tdBalance.append($imgB) ;
@@ -146,9 +146,13 @@ function AddSignalsTable() {
         $imgContra.attr('src',contraPict) ;
         $rangBlock.append($imgPro) ;
         $rangBlock.append($imgContra) ;
+
         $imgPro.css('width',rangPro + '%') ;
+
+//        $imgPro.css('width','50%') ;
         $imgPro.css('height',3) ;
         $imgContra.css('width',rangContra + '%') ;
+//        $imgContra.css('width','50%') ;
         $imgContra.css('height',3) ;
         return $rangBlock ;
 
@@ -174,7 +178,6 @@ function AddSignalsTable() {
         var widthTot = scrollBackground.getDataAreaWidth() ;
         var width = (widthTot/4 - 20) *1.5 ;
 
-        var rang = 30 ;
         var $totalBlock = $('<div/>') ;
         var $totalTextBlock = $('<div/>') ;
         var $imgText = $('<img/>') ;
@@ -187,7 +190,8 @@ function AddSignalsTable() {
         var $balanceBlock = $('<div/>') ;
 
         var marginLeft = (widthTot - width)/2 ;
-        tdBalanceBuild($balanceBlock,width,rang) ;
+        tdBalanceBuild($balanceBlock,width,totalRang) ;
+
         $totalBlock.append($balanceBlock) ;
         //--- значение ранга //
         var $percBlock = $('<div/>') ;
