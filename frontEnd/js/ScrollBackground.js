@@ -72,7 +72,7 @@ function ScrollBackground() {
         dataArea = {
             place: {
                 x1:50,      //50 ,
-                y1:0,      //186,
+                y1:40,      //186,
                 x2: mainWidth - 50, /// 1484 - 370 ,
                 y2: undefined
             },
@@ -83,7 +83,7 @@ function ScrollBackground() {
         slider = {
             place: {
                 x1:mainWidth - 50, //1500 - 370 -50 + 5 +5 +3 +2 , //1484 - 370 -30 -5 ,
-                y1:150 , //126,
+                y1:126,
                 x2:mainWidth - 50 + 6,   //1530 - 370 - 50 + 5 -5 -3, //1530 - 370 -30 -5 ,
                 y2: 126 + 277,
                 y1Max : mainHeight - 277 -10
@@ -120,10 +120,10 @@ function ScrollBackground() {
 
         vinjetka = {
             place: {
-                x1: (mainWidth - 374)/2 ,
+                x1: (mainWidth - 333)/2 ,
                 y1: 0,
-                x2: (mainWidth - 374)/2 + 374,
-                y2: 27
+                x2: (mainWidth - 333)/2 + 333,
+                y2: 42
             },
             img : {
                 file: 'vinjetka.png'
@@ -169,7 +169,7 @@ function ScrollBackground() {
         internalBlockDefine('scrollLine',scrollLine) ;
         internalBlockDefine('slider',slider) ;
         internalBlockDefine('caption',caption) ;
-        internalBlockDefine('message',message) ;
+//        internalBlockDefine('message',message) ;
          var mainBlockId = $mainBlockDiv.attr('id') ;
         $CaptionDiv = $('#' + mainBlockId +'_caption') ;
         $sliderDiv = $('#' + mainBlockId +'_slider') ;
@@ -378,13 +378,19 @@ function ScrollBackground() {
 
     } ;
     var exit = function() {
-        $mainBlockDiv.hide( "blind", 1000);
+//        $mainBlockDiv.hide( "blind", 1000);
+        $mainBlockDiv.hide( "blind", 1000,function()  {
+            setTimeout(function() {
+                $mainBlockDiv.removeAttr( "style" ).hide().fadeIn();
+                $resultBackground.attr('hidden','hidden') ;
+            }), 1000});
+
 
 //        $mainBlockDiv.toggle('blind') ;
         $mainBlockDiv.empty() ;
         scrolling.stop = true ;
         formShowFlag = false ;
-        $resultBackground.attr('hidden','hidden') ;
+ //       $resultBackground.attr('hidden','hidden') ;
         $(window).off('keydown') ;
         $(window).click() ;
     } ;
@@ -542,40 +548,56 @@ function ScrollBackground() {
      */
     this.putAnswerItem = function($liItem,vinFlag) {
         vinFlag = (vinFlag === undefined) ? true : vinFlag ;
-        var $vinDiv = $('<div/>') ;
-        var $img = $('<img/>') ;
-        var pictFile = dirImg + '/' +vinjetka['img']['file'] ;
-        $img.attr('src',pictFile) ;
-        var place = vinjetka['place'] ;
- //       $vinDiv.css('position','absolute') ;
-        $vinDiv.append($img) ;
-        var height = kResize['ky'] * (place['y2'] - place['y1']) ;
-        var left  = kResize['kx'] * place['x1'] ;
-        var width = kResize['kx'] * (place['x2'] - place['x1']) ;
-
-        var dataWidth = $dataAreaDiv.width() ;
-
-        $vinDiv.css('width',dataWidth) ;
-        $vinDiv.css('height',place['y2'] + 60) ;
-
-        left  = (dataWidth - width)/2 ;
-
-
-        $img.css('margin-top',20) ;
-        $img.css('margin-left',left) ;
-        $img.css('width',width) ;
-        $img.css('height',place['y2'] + 10) ;
-//        $liItem.append($vinDiv) ;
-
-
         $dataList.append($liItem) ;
         if (vinFlag) {
+            var $vinDiv = vinjetkaShow() ;
             $dataList.append($vinDiv) ;
         }
 
         dataAreaHiddenClc() ;
         scrollingShow() ;
         scrollingBegin() ;
+    } ;
+    var vinjetkaShow = function(classFlag) {
+        classFlag = (classFlag === undefined) ? false : classFlag ;
+        if (!classFlag) {
+            var $vinDiv = $('<div class="vinjetka_div"/>') ;
+            var $img = $('<img class="vinjetka_img"/>') ;
+            var pictFile = dirImg + '/' +vinjetka['img']['file'] ;
+            $img.attr('src',pictFile) ;
+            //       $vinDiv.css('position','absolute') ;
+            $vinDiv.append($img) ;
+        }else {
+            $vinDiv = $('.vinjetka_div') ;
+            $img = $('.vinjetka_img') ;
+        }
+
+        var place = vinjetka['place'] ;
+        var height = kResize['ky'] * (place['y2'] - place['y1']) ;
+        var left  = kResize['kx'] * place['x1'] ;
+        var width = kResize['kx'] * (place['x2'] - place['x1']) ;
+
+        var dataWidth = $dataAreaDiv.width() ;
+        left  = ((dataWidth - 80)- width)/2 ;
+        $vinDiv.css('width',dataWidth) ;
+
+        var vinDivHeight = place['y2'] + 60 ;
+        $vinDiv.css('height',vinDivHeight) ;
+        var height = place['y2'] ;
+        var top = (vinDivHeight - height)/2 ;
+
+        $img.css('margin-top',top) ;
+        $img.css('margin-left',left) ;
+        $img.css('width',width) ;
+        $img.css('height',height) ;
+//        $liItem.append($vinDiv) ;
+        if (!classFlag) {
+            return $vinDiv ;
+        }
+
+    } ;
+    var vinjetkaPlace = function() {
+
     } ;
     /**
      * конец вывода ответа
@@ -618,6 +640,8 @@ function ScrollBackground() {
             internalBlockDefine('scrollLine', scrollLine);
             internalBlockDefine('slider', slider);
             internalBlockDefine('caption', caption);
+            var classFLag = true ;
+            vinjetkaShow(classFLag) ;
 
         }
     }

@@ -66,7 +66,7 @@ body {
 .textSignal {
     font-family: roboto ;
     font-size : 14px ;
-    /*color : #6a2e02;*/
+    color : #6a2e02;
 
 }
 .totalSignal {
@@ -75,24 +75,31 @@ body {
     color : #6a2e02;
 
 }
-
-::-webkit-input-placeholder {
-    font-family: northern ;
-    font-size : 15px ;
-    color: #fff ;
-    font-weight: 900 ;
-
-}
-::-moz-placeholder          {
-    font-family: northern ;
+textarea::-moz-placeholder {
+    font-family: roboto ;
     font-size : 15px ;
     color: #fff ;
     font-weight: 900 ;
 
 }/* Firefox 19+ */
 
+::-webkit-input-placeholder {
+    font-family: roboto ;
+    font-size : 15px ;
+    color: #fff ;
+    font-weight: 900 ;
+
+}
+/*textarea:-moz-placeholder {*/
+    /*font-family: roboto ;*/
+    /*font-size : 15px ;*/
+    /*color: #fff ;*/
+    /*font-weight: 900 ;*/
+
+/*}*//* Firefox 19+ */
+
 :-ms-input-placeholder      {
-    font-family: northern ;
+    font-family: roboto ;
     font-size : 15px ;
     color: #fff ;
     font-weight: 900 ;

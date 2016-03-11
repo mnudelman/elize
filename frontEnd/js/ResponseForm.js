@@ -76,7 +76,8 @@ function ResponseForm() {
         var a = $('<a/>') ;
         a.attr('href',url) ;
         a.attr('target','_blank') ;
-        a.append('<span class="title">'+title+'</span>') ;
+        //a.append('<span class="title">'+title+'</span>') ;
+        a.append(title) ;
      //   a.addClass('title') ;
         li.append(a) ;
         var divHeadline = $('<div/>') ;
