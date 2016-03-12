@@ -1,6 +1,13 @@
 /**
- * Фоновые картинки в нормальном виде
- *
+ * Фоновые картинки
+ * Объект отвечает за вывод картинок на экран
+ * координаты м возможные варианты заполнения берутся из
+ * backgroundImg.getPhilosophyPictures() ;
+ *  Возможные варианты следующие:
+ *   - основные фоновые изображения с подписями
+ *   - фоновые изображения без подписей вращающиеся вокруг оси Y
+ *   - дополнителные сигналы - форма ответа на запрос пользователя
+ *  вращение определяется атрибутом  currentStaticFlag
  */
 function MagicNormalPictures() {
     var backgroundImg ; // объект - компоненты изображения
@@ -13,6 +20,10 @@ function MagicNormalPictures() {
     this.init = function() {
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
     } ;
+    /**
+     * вывод изображения
+     * @param staticFlag
+     */
     this.show = function(staticFlag) {
         currentStaticFlag = staticFlag ;
         formShowFlag = true ;
@@ -35,16 +46,18 @@ function MagicNormalPictures() {
             picturesShow() ;
         }
     } ;
-
+    /**
+     * если установлен флаг currentStaticFlag === false ->
+     * запускается вращение картинки, иначе - неподвижно
+     */
     var picturesShow = function() {
         $resultBlock.empty() ;
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
-        var borderSize = pictures['borderSize'] ;
         var items = pictures['items'] ;
         for (var itemKey in items) {
             var item = items[itemKey];
-            var $pictImg = _this.showItem(dir, borderSize, item, itemKey);
+            var $pictImg = _this.showItem(dir, item, itemKey);
             if (!currentStaticFlag) {
                 var rotationBlock = rotationBlockPrepare($pictImg);
                 rotationGo(rotationBlock);
@@ -53,6 +66,9 @@ function MagicNormalPictures() {
     } ;
     /**
      * вывод рамки и картинки внутри
+     * положение рамки определяется объектом place{x1: ,y1: ,x2: ,y2:}
+     * внутренняя область(куда помещается картинка) - innerPlace{}
+     * dy - параметр для центрирования изображения по вертикали
      * @param dir
      * @param borderSize
      * @param item
@@ -60,20 +76,19 @@ function MagicNormalPictures() {
      * @param substImageFile    - другая картинка для вставки в рамку (используется для "философии")
      * @returns {*|jQuery|HTMLElement}
      */
-    this.showItem = function(dir,borderSize,item,itemKey,substImageFile) {
+    this.showItem = function(dir,item,itemKey,substImageFile) {
         var place = item['place'] ;
         var innerPlace = item['innerPlace'] ;
-        var imgFile = (currentStaticFlag) ? item['img']['text'] :
-            item['img']['file'] ;
+        var imgFile = (currentStaticFlag) ?
+                      item['img']['text'] : item['img']['file'] ;
         var pictureFile = dir + '/' + imgFile ;
         var dy = (place['dy'] === undefined) ? 0 : place['dy'] ;
         dy = (currentStaticFlag) ? 0 : dy ;
         if (typeof(substImageFile) === 'string' ) {
             pictureFile = substImageFile ;
             dy = 0 ;        // поправка
-        } else if(currentStaticFlag) {
-            pictureFile  = dir + '/' + item['img']['text'] ;
         }
+        //-- рамка  -- //
         var borderFile = dir + '/' + item['img']['border'] ;
         var top = place['y1'] ;
         var left =  place['x1'] ;
@@ -129,23 +144,8 @@ function MagicNormalPictures() {
 
        return {
            $img : $img ,    // изображение для трансформации
-           dx_0 : pixelToNumber($img.css('width')) ,       // начальный размер
-           dy_0 : pixelToNumber($img.css('height')) ,
-           axis : 'y' ,
-           scaleStep: 5,    // % от первоначального размера
-           sizeMin : 5,       // мин размер при сжатии изображения - %
            timeDelay: 150   // время задержки
-
        } ;
-    } ;
-    /**
-     * преобразовать строку вида 230px в число 230
-     * @param strPixel
-     * @returns {number}
-     */
-    var pixelToNumber = function(strPixel) {
-        var n = strPixel.replace('px','') ;
-        return n - 0 ;
     } ;
     /**
      * выполнение вращения - имитация вращения вокруг оси "y" с пересчётом
@@ -155,16 +155,10 @@ function MagicNormalPictures() {
      */
     var rotationGo = function(rotationBlock) {
         var $img  = rotationBlock.$img ;
-        var dx_0 =  rotationBlock.dx_0 ;
-        var dy_0 =  rotationBlock.dy_0 ;
-        var axis =  rotationBlock.axis ;
-        var scaleStep_0 =  rotationBlock.scaleStep ;
-        var sizeMin =   rotationBlock.sizeMin ;
         var timeDelay =   rotationBlock.timeDelay;
         var PI = Math.PI ;
-        var scaleMax = 1 ;
         var phiStep = PI/10 ;
-        var phiMirrorChange = PI/2   ;         // смена отображения
+        var phiMirrorChange = PI/2   ;     // смена отображения
         var phiMax = PI ;
         var phi = 0 ;
         var kMirror = 1 ;                  // отображение

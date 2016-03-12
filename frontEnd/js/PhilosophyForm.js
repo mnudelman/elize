@@ -1,5 +1,15 @@
 /**
- * Объект отображения философских мыслей
+ * Объект - контроллер результата запроса "философия"
+ * addSignals выбирается из Бд
+ * addSignals - содержит имена файлов-картинок и сопровождающее
+ * описание.
+ * Картинки выводятся на экран через объект magicNormalPictures
+ * Вместе с картинками выводится центральный круг вместе с текстом
+ * пожелания и планка "далее"
+ * * дополнительная форма вывода через addSignalsTable - таблица дополнительных
+ * сигналов, куда вместе с картинкой выводится дополнительная информация
+ * Дополнительная форма запускается по click на планку "далее" или клавишей
+ * enter. Возврат в исходное состояние по  esc  или click по экрану.
  */
 function PhilosophyForm() {
     var ajax ;
@@ -16,6 +26,8 @@ function PhilosophyForm() {
     var addSignals = {} ;           // дополнительные сигналы
     var addSignalsTable ;
     var dirImages ;
+    var signalTypes = [] ;          //  список типов сигналов в порядке
+                                    // их вывода на экран
     var _this = this ;
     //----------------------------------//
     this.init = function() {
@@ -31,6 +43,8 @@ function PhilosophyForm() {
         $answerAreaBlock.css('text-align','center') ;
         $answerAreaBlock.css('vertical-align','center') ;
         addSignalsTable = new AddSignalsTable() ;
+//
+
     } ;
      /**
      * изменить фразу
@@ -42,17 +56,20 @@ function PhilosophyForm() {
          $p.addClass('answerText') ;
          $p.append(currentPhrase) ;
          $answerAreaBlock.append($p) ;
-//         $answerArea.val(currentPhrase) ;
      } ;
     /**
-     * развернуть свиток
+     * развернуть свиток и
+     * вывести таблицу дополнительных сигналов
      */
     this.scrollGo = function() {
         scrollGoFlag = true ;
-        addSignalsTable.init(addSignals) ;
+        addSignalsTable.init(addSignals,signalTypes) ;
         addSignalsTable.tableShow() ;
 
     } ;
+    /**
+     * выполнить запрос
+     */
     this.queryGo = function() {
        formShowFlag = true ;
        scrollGoFlag = false ;
@@ -70,8 +87,6 @@ function PhilosophyForm() {
         animateStop = true ;
         formShowFlag = false ;
         $answerAreaBlock.empty() ;
-
- //       magicNormalPictures.show() ;
     } ;
     this.resize = function() {
         if (formShowFlag) {
@@ -88,28 +103,13 @@ function PhilosophyForm() {
         backgroundImg.centralCircleShow('answer') ;
         var idText = backgroundImg.getIdText('answer') ;
         $answerArea = $('#'+idText) ;
-
-
-
-
         $resultBlock.empty() ;
-        //var pictures = backgroundImg.getPhilosophyPictures() ;
-        //var dir = pictures['dir'] ;
-        //var borderSize = pictures['borderSize'] - 4 ;  // уменьшаем рамку, чтобы избежать просвет
         addSignals = getAddSignals() ;
-
-//        var items = pictures['items'] ;
-//        for (var itemKey in items) {
-//            var item = items[itemKey] ;
-//            var substName = item['subst'] ;
-////            var substFile = formAttr.getPictSubst(substName) ;
-//            var substFile = addSignals['substName']['file'] ;
-//            magicNormalPictures.showItem(dir,borderSize,item,itemKey,substFile) ;
-//
-////            showItem(dir,item) ;
-//        }
-//        cycleShow() ;
     } ;
+    /**
+     * обращение к БД за массивом addSignals
+     * и запуск showItems() - вывод на экран
+     */
     var getAddSignals = function() {
         var goVect = {
             'operation' : 'getAddSignals',
@@ -131,59 +131,43 @@ function PhilosophyForm() {
         }) ;
         ajax.go() ;
     } ;
-
+    /**
+     * координаты картинок через объект
+     * backgroundImg.getPhilosophyPictures() ;
+     * для вывода используется magicNormalPictures.showItem
+     * для "вставки в рамку" изображение берётся изображение из
+     * addSignal
+     */
     var showItems = function() {
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
-        var borderSize = pictures['borderSize'] - 4 ;  // уменьшаем рамку, чтобы избежать просвет
-
+        var signalTypesOrder = 0 ;
         var items = pictures['items'] ;
         for (var itemKey in items) {
             var item = items[itemKey] ;
             var substName = item['subst'] ;
-//            var substFile = formAttr.getPictSubst(substName) ;
+            signalTypes[signalTypesOrder++] = substName ;
             var substFile = dirImages + '/' +addSignals[substName]['file'] ;
 
-            magicNormalPictures.showItem(dir,borderSize,item,itemKey,substFile) ;
-
-//            showItem(dir,item) ;
+            magicNormalPictures.showItem(dir,item,itemKey,substFile) ;
         }
-        $(window).keydown(function(e){
+        $(window).keydown(function(e){      // запуск по клавише
             if (e.keyCode === 13) {
                 $(window).off('keydown') ;
                 _this.scrollGo() ;
-
             }
-            if (e.keyCode === 27) {
+            if (e.keyCode === 27) {         // выход по esc
                 $(window).off('keydown') ;
                 _this.stopShow() ;
-                $(window).click() ;
+                $(window).click() ;     // возврат в исходное состояние
             }
         }) ;
+
         cycleShow() ;
     } ;
-    var showItem = function(dir,item) {
-       var place = item['place'] ;
-       var substName = item['subst'] ;
-       var substFile = formAttr.getPictSubst(substName) ;
-       var imgFile =  substFile ;
-       var top = place['y1'] ;
-       var left =  place['x1'] ;
-       var width =  place['x2'] - place['x1'] ;
-       var height =  place['y2'] - place['y1'] ;
-       var $img = $('<img/>') ;
-       $img.attr('src',imgFile) ;
-       $img.css('width',width) ;
-       $img.css('height',height) ;
-       var $block = $('<div/>') ;
-       $block.append($img) ;
-        $block.css('position','absolute') ;
-        $block.css('top',top) ;
-        $block.css('left',left) ;
-       $resultBlock.append($block) ;
-
-    } ;
-
+    /**
+     * смена фраз в центральном круге
+     */
     var cycleShow = function() {
         animateStop = false ;
         var timeDelay = 3000;

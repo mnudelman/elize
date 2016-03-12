@@ -12,6 +12,8 @@
  *  пересчёт коэффициентов под реальный размер окна браузера
  *  в основе пересчёта отношение ширины_окна_браузера к размеру фонового изображения
  *  getter'ы для соответствующих объектов выдают клоны с пересчитанными кординатами объектов
+ * вывод двух элементов изображения: планки ввода запроса и
+ * центрального круга в статическом режиме и при вращении
  */
 function BackgroundImg() {
     var mainImg = {} ;          // главная кртинка( body {background-image}
@@ -20,7 +22,6 @@ function BackgroundImg() {
     var centralCircle = {} ;      // центральный круг
     var centralCircleGlow = {};   // размытый шар
     var stamp = {} ;              // печать - ввод запроса
-    var scroll = {} ;             // свиток - панель для вывода результата
     var dirImages = paramSet.dirImages ;
     var dirMainImg ;
     var dirSmoke ;
@@ -46,26 +47,26 @@ function BackgroundImg() {
         centralCircle = {
             dir: dirMainImg,
             place: {
-                x1: 800, //798, //808,
-                y1: 380, //381,
+                x1: 800,
+                y1: 380,
                 x2: 1130,
-                y2: 710 // 711
+                y2: 710
             },
             textArea: {
                 x1: 827,
                 y1: 460,
                 x2: 1095,
-                y2: 625 //630 // 632
+                y2: 625
             },
-            query: {                               // ценральный круг при вводе запроса
+            query: {     // ценральный круг при вводе запроса
                 idText : 'queryText',
                 ball: 'yellow_ball_3.png',
                 textArea: 'yellow_text_area.png',
-                color: '#fff', //'#47d4d9', // 'blue',    // '#11f371',
+                color: '#fff',
                 readonly: false
 
             },
-            answer: {                             // центральный круг при "философском" ответе
+            answer: {      // центральный круг при "философском" ответе
                 idText : 'answerText',
                 ball: 'blue_ball.png',
                 textArea: 'blue_text_area.png',
@@ -74,13 +75,13 @@ function BackgroundImg() {
             }
 
         } ;
-        centralCircleGlow = {     // размытый шар
+        centralCircleGlow = {   // размытый шар
             dir: dirMainImg,
             place: {
-                x1: 800 - 40, //798, //808,
-                y1: 380 - 40, //381,
+                x1: 800 - 40,
+                y1: 380 - 40,
                 x2: 1130 + 40,
-                y2: 710 +40 // 711
+                y2: 710 +40
                 },
             img: {
                 file :'yellow_ball_glow.png'
@@ -89,7 +90,7 @@ function BackgroundImg() {
 
 
 
-        stamp = {                         // планка "далее" - ввод запроса
+        stamp = {       // планка "далее" - ввод запроса
             dir: dirMainImg,
             place: {
                 x1: 808,
@@ -108,8 +109,9 @@ function BackgroundImg() {
                 }
             }
         } ;
-
-       clouds = {                    // облака
+       //-- имена элементов облаков совпадают с элементами шаблона
+       //   добавлены индексы l - левая половина, r - правая
+        clouds = {                    // облака
            dir: dirSmoke,
            items: {
                '141': {
@@ -279,14 +281,23 @@ function BackgroundImg() {
                }
            }
        } ;
-//   правые и левые элементы имеют одинаковые размеры -> можно использовать одни и те же рамки
+//   картинки основного фона
+//   правые и левые элементы имеют одинаковые размеры ->
+//           можно использовать одни и те же рамки
+//  атрибут subst определяет типСигнала для картинки
+//  place.dy - поправка для обеспечение центрирования по вертикали
+// изображение задаётся тремя файлами:
+//  text: <статическое изображение основного фона с подписью>
+//  border: <файл - рамка с чёрным фоном>
+//  file: <изображение - основа для имитации кругового вращения>
+//  область place - это расположение рамки с фоном
+//  область innerPlace - бласть внутри рамки - собственно само изображение
 // топология расположения:
 // l1_1 - l1_2 - l1_3       r1_1 - r1_2  - r1_3
 //    l2_1    l2_2             r2_1    r2_2
 //    l3_1    l2_2             r2_1    r3_1
         philosophyPictures = {
             dir: dirPictures,
-            borderSize: 20,        // толщина рамки px
             items: {
                 'l1_1': {                      // карты
                     place: {
@@ -307,7 +318,7 @@ function BackgroundImg() {
                         border:'l1_1_b.png',
                         text: 'l1_1_t.png'
                     },
-                    subst: 'cards'          // имя множества картинок в философском ответе
+                    subst: 'cards'    // имя множества картинок в философском ответе
                 },
                 'l1_2': {                      // созвездия
                     place: {
@@ -613,6 +624,9 @@ function BackgroundImg() {
     } ;
     /**
      * пересчёт координат для объекта place
+     * place может в качестве альтернативы содержать
+     * крайние точки: x2,y2 или w - ширину и h - высоту области
+     * но на выходе всё приводится к {x1: , y1: , x2: , y2: }
      * @param place
      * @returns {{}}
      */
@@ -644,8 +658,6 @@ function BackgroundImg() {
         if (h !== undefined) {
             newPlace['y2'] = newPlace['y1'] + Math.round(ky * h) ;
         }
-
-
         newPlace['dy'] = Math.round(ky * dy) ;
         return newPlace ;
 
@@ -661,9 +673,6 @@ function BackgroundImg() {
         var kResize = _this.getKResize()  ;
         var kx = kResize['kx']  ;
         var ky = kResize['ky']  ;
-       // оставим одну толщину
-        currentPictures['borderSize'] = philosophyPictures['borderSize'] * kx ;
-
         currentPictures['items'] = {} ;
         var currentItems = currentPictures['items'] ;
         var items = philosophyPictures['items'] ;
@@ -714,7 +723,10 @@ function BackgroundImg() {
         currentStamp['answer'] = stamp['answer'] ;
         return currentStamp ;
     } ;
-
+    /**
+     * показать планку
+     * @param type
+     */
     this.stampShow = function(type) {
         var currentStamp = _this.getStamp() ;
         var place = currentStamp['place'] ;
@@ -792,7 +804,6 @@ function BackgroundImg() {
     var defineTextArea = function($block,place,imgFile,color,fontSize,readonly,idText) {
         $block.css('position','absolute') ;
        $block.removeAttr('hidden') ;
-//        $block.css('border','3px solid red') ;
         $block.empty() ;
         var x1 = place['x1'] ;
         var x2 = place['x2'] ;
@@ -848,6 +859,7 @@ function BackgroundImg() {
     this.centralCircleRotate = function(callback) {
         $centralCircleTextBlock.attr('hidden', 'hidden');  // убираем поле ввода
         var $block = $centralCircleBlock;
+        //--- центр круга
         var x0 = pixelToNumber($block.css('left')) + pixelToNumber($block.css('width')) / 2;
         var y0 = pixelToNumber($block.css('top')) + pixelToNumber($block.css('height')) / 2;
         var $img = $block.children('img');

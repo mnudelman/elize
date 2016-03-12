@@ -75,14 +75,6 @@ body {
     color : #6a2e02;
 
 }
-textarea::-moz-placeholder {
-    font-family: roboto ;
-    font-size : 15px ;
-    color: #fff ;
-    font-weight: 900 ;
-
-}/* Firefox 19+ */
-
 ::-webkit-input-placeholder {
     font-family: roboto ;
     font-size : 15px ;
@@ -90,13 +82,13 @@ textarea::-moz-placeholder {
     font-weight: 900 ;
 
 }
-/*textarea:-moz-placeholder {*/
-    /*font-family: roboto ;*/
-    /*font-size : 15px ;*/
-    /*color: #fff ;*/
-    /*font-weight: 900 ;*/
+:-moz-placeholder {        /* старый firefox */
+    font-family: roboto ;
+    font-size : 15px ;
+    color: #fff ;
+    font-weight: 900 ;
 
-/*}*//* Firefox 19+ */
+}
 
 :-ms-input-placeholder      {
     font-family: roboto ;
@@ -104,4 +96,10 @@ textarea::-moz-placeholder {
     color: #fff ;
     font-weight: 900 ;
 }
-
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    font-family: roboto ;
+    font-size : 15px ;
+    font-weight: 900 ;
+    color: #ffffff;
+    opacity:  1;         /* обязательно !! */
+}

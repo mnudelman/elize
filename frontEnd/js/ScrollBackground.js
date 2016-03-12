@@ -49,7 +49,7 @@ function ScrollBackground() {
             }
         } ;
         mainSizes() ;
-        caption = {
+        caption = {            // блок заголовок
             place: {
                 x1: 0 ,
                 y1:-10,
@@ -60,31 +60,31 @@ function ScrollBackground() {
                 file: 'scroll_caption.png'
             }
         } ;
-        mainDataBlock = {
+        mainDataBlock = {           // блок вывода данных
             place: {
                 x1:50 ,
-                y1:150, //186,
-                x2: mainWidth - 50 , //1484 - 370 ,    //- 25 -20,
+                y1:150,
+                x2: mainWidth - 50 ,
                 y2: mainHeight - 30
             }
 
         } ;
-        dataArea = {
+        dataArea = {              // область вывода
             place: {
-                x1:50,      //50 ,
-                y1:40,      //186,
-                x2: mainWidth - 50, /// 1484 - 370 ,
+                x1:50,
+                y1:40,
+                x2: mainWidth - 50,
                 y2: undefined
             },
             data: {
 
             }
         } ;
-        slider = {
+        slider = {             // бегунок - индикатор скроллирование
             place: {
-                x1:mainWidth - 50, //1500 - 370 -50 + 5 +5 +3 +2 , //1484 - 370 -30 -5 ,
+                x1:mainWidth - 50,
                 y1:126,
-                x2:mainWidth - 50 + 6,   //1530 - 370 - 50 + 5 -5 -3, //1530 - 370 -30 -5 ,
+                x2:mainWidth - 50 + 6,
                 y2: 126 + 277,
                 y1Max : mainHeight - 277 -10
             },
@@ -92,11 +92,11 @@ function ScrollBackground() {
                 file: 'slider_new.png'
             }
         } ;
-        scrollLine = {
+        scrollLine = {         // линия скроллирования
             place: {
-                x1:mainWidth - 50, //1500 - 370 -50 ,
+                x1:mainWidth - 50,
                 y1:126,
-                x2: mainWidth - 50 + 6 , //1530 - 370 - 50 ,
+                x2: mainWidth - 50 + 6 ,
                 y2: mainHeight - 10
 
             },
@@ -118,7 +118,7 @@ function ScrollBackground() {
             }
         } ;
 
-        vinjetka = {
+        vinjetka = {                // разделитель блоков вывода результата
             place: {
                 x1: (mainWidth - 333)/2 ,
                 y1: 0,
@@ -161,6 +161,9 @@ function ScrollBackground() {
         mainHeight = place['y2'] - place['y1'] ;
         rightMargin = 80 ;
     } ;
+    /**
+     * топология - порядок вывода блоков имеет значение
+     */
     var defineTopology = function() {
         $mainBlockDiv.empty() ;
         mainBlockDefine() ;
@@ -169,12 +172,10 @@ function ScrollBackground() {
         internalBlockDefine('scrollLine',scrollLine) ;
         internalBlockDefine('slider',slider) ;
         internalBlockDefine('caption',caption) ;
-//        internalBlockDefine('message',message) ;
+//        internalBlockDefine('message',message) ;  // только для отладки
          var mainBlockId = $mainBlockDiv.attr('id') ;
         $CaptionDiv = $('#' + mainBlockId +'_caption') ;
         $sliderDiv = $('#' + mainBlockId +'_slider') ;
-//        $sliderDiv.css('opacity',0.15) ;
-//        $sliderDiv.attr('title','click в начале и в конце перемещения') ;
         $scrollLineDiv = $('#' + mainBlockId +'_scrollLine') ;
         $messageDiv = $('#' + mainBlockId +'_message') ;
         scrollEvents() ;
@@ -221,10 +222,8 @@ function ScrollBackground() {
         $mainBlockDiv.css('background-image','url("' + imgFile +'")') ;
         $mainBlockDiv.css('background-repeat','no-repeat') ;
         $mainBlockDiv.css('background-size','100% 100%') ;
-      //  $mainBlockDiv.css('background-color','black') ;
         $mainBlockDiv.css('z-index',10) ;
         $mainBlockDiv.css('overflow','hidden') ;
-        //$mainBlockDiv.removeAttr('hidden') ;
         $resultBackground.removeAttr('hidden') ;
         $mainBlockDiv.show( "blind", 1000);
         formShowFlag = true ;
@@ -232,6 +231,9 @@ function ScrollBackground() {
     } ;
     /**
      * Блок для вывода результата
+     * для корректной прокрутки результата
+     * потребовался промежуточный уровень mainDataBlock  в
+     * дополнение к области вывода dataArea
      */
     var dataBlockDefine = function() {
         internalBlockDefine('mainDataBlock',mainDataBlock) ;
@@ -245,17 +247,12 @@ function ScrollBackground() {
 
         $dataAreaDiv = $('#' + mainBlockId +'_dataArea') ;
         $dataAreaDiv.css('background-color','rgba(0,0,0,0)') ;   // прозрачный
-        //var $pError = $('<p/>') ;
-        //$pError.attr('id','dataErrorBox') ;
-        //$dataAreaDiv.append($pError) ;
-
         $dataAreaDiv.addClass('data') ;
         var $pHuman = $('<p/>') ;
         $pHuman.attr('id','dataHuman') ;
-//        $dataAreaDiv.append($pHuman) ;
+//        $dataAreaDiv.append($pHuman) ;  // отказались
 
         $dataList = $('<ul/>') ;
-  //      $dataList.attr('start',1) ;
         $dataList.attr('id','dataList') ;
         $dataAreaDiv.append($dataList) ;
 
@@ -265,16 +262,18 @@ function ScrollBackground() {
 
     } ;
     /**
-     * внутренние блоки
+     * по умолчанию внутренние блоки вкладываются в mainBlock
+     * за исключением случая прямого указания $otherMainBlock
      * @param blockName
      * @param block
+     * @param $otherMainBlock - альтернативный внешний блок
      */
     var internalBlockDefine = function(blockName,block,$otherMainBlock) {
         var mainId = $mainBlockDiv.attr('id') ;
         var place = block['place'] ;
         var blkId = mainId+'_'+blockName ;
         var $blk = $('#' + blkId) ;
-        if ($blk.length === 0) {
+        if ($blk.length === 0) {       // что бы повторно не создавать
             $blk = $('<div/>') ;
             $blk.attr('id',blkId) ;
             if ($otherMainBlock !== undefined) {
@@ -312,8 +311,6 @@ function ScrollBackground() {
             if (height !== undefined) {
                 $img.css('height', height);
             }
-
-
         } else {
             $blk.css('width', width);
             $blk.css('height', height);
@@ -333,12 +330,7 @@ function ScrollBackground() {
                 $blk.css('background-repeat','no-repeat') ;
                 $blk.css('background-size','100% 100%') ;
             }
-
-
-
         }
-
-
     } ;
     /**
      * события прокрутки
@@ -378,21 +370,16 @@ function ScrollBackground() {
 
     } ;
     var exit = function() {
-//        $mainBlockDiv.hide( "blind", 1000);
         $mainBlockDiv.hide( "blind", 1000,function()  {
             setTimeout(function() {
                 $mainBlockDiv.removeAttr( "style" ).hide().fadeIn();
                 $resultBackground.attr('hidden','hidden') ;
             }), 1000});
-
-
-//        $mainBlockDiv.toggle('blind') ;
         $mainBlockDiv.empty() ;
         scrolling.stop = true ;
         formShowFlag = false ;
- //       $resultBackground.attr('hidden','hidden') ;
         $(window).off('keydown') ;
-        $(window).click() ;
+        $(window).click() ;           // возврат в исходное состояние
     } ;
     /**
      * начальные атрибуты прокрутки (объект scrolling = {})
@@ -402,8 +389,8 @@ function ScrollBackground() {
         var height = slider.place['y2'] - slider.place['y1'];
         scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
         scrolling.sliderYMax = kResize['ky'] * (mainHeight - height);
-        scrolling.pageY = 0 ; //e.pageY;
-        scrolling.pageY0 = 0 ; //e.pageY;
+        scrolling.pageY = 0 ;
+        scrolling.pageY0 = 0 ;
         scrolling.sliderY = pixelToNumber($sliderDiv.css('top'));
         scrolling.sliderY0 = pixelToNumber($sliderDiv.css('top'));
         scrolling.dataAreaY0 = pixelToNumber($dataAreaDiv.css('top'));
@@ -536,6 +523,7 @@ function ScrollBackground() {
     } ;
     /**
      * количество найденных ответов
+     * отказались от вывода
      * @param totalHumanText
      */
     this.putTotalHuman = function(totalHumanText) {
@@ -558,6 +546,12 @@ function ScrollBackground() {
         scrollingShow() ;
         scrollingBegin() ;
     } ;
+    /**
+     * разделитель блоков ответа
+     * может использоваться для перевывода с classFlag === true
+     * @param classFlag
+     * @returns {*|jQuery|HTMLElement}
+     */
     var vinjetkaShow = function(classFlag) {
         classFlag = (classFlag === undefined) ? false : classFlag ;
         if (!classFlag) {
@@ -567,7 +561,7 @@ function ScrollBackground() {
             $img.attr('src',pictFile) ;
             //       $vinDiv.css('position','absolute') ;
             $vinDiv.append($img) ;
-        }else {
+        }else {                           // для класса
             $vinDiv = $('.vinjetka_div') ;
             $img = $('.vinjetka_img') ;
         }
@@ -594,9 +588,6 @@ function ScrollBackground() {
         if (!classFlag) {
             return $vinDiv ;
         }
-
-    } ;
-    var vinjetkaPlace = function() {
 
     } ;
     /**
