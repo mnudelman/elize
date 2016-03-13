@@ -104,6 +104,16 @@ switch($operation) {
         ] ;
         break ;
     }
+    case 'getThoughts' : {        // мысли
+        $thoughts  = new Thoughts() ;
+        $result = $thoughts->getThoughts() ;
+        $answ = [
+            'successful' => true,
+            'result' => $result
+        ] ;
+        break ;
+    }
+
     default : {    // весь $_GET отправиить обратно
 
     }

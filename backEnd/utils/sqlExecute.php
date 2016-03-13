@@ -91,6 +91,11 @@ class SqlExecute extends Db_base {
             'name'   => 'SELECT']   ;
         $this->sqlLines = $sqlLines ;
         $this->storeParameters() ;
+        $sqlLines[] = [
+            'text'   => 'SELECT * FROM thoughts',
+            'name'   => 'SELECT']   ;
+        $this->sqlLines = $sqlLines ;
+        $this->storeParameters() ;
 
 //        $sqlLines[] = [
 //            'text'   => 'SELECT * FROM ru_names',
