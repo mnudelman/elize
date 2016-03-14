@@ -52,7 +52,7 @@ class AddSignals {
         $signalDb = $this->db->getSignalByFile($pictFile) ;
 
         return [
-            'file' => $type.'/'.$pictFile,
+            'file' => $this->htmlDirImages.'/'.$type.'/'.$pictFile,
             'name' => $signalDb['name'],
             'rang' => $signalDb['rang'],
             'text' => $signalDb['text'],

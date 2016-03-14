@@ -147,8 +147,8 @@ function PhilosophyForm() {
             var item = items[itemKey] ;
             var substName = item['subst'] ;
             signalTypes[signalTypesOrder++] = substName ;
-            var substFile = dirImages + '/' +addSignals[substName]['file'] ;
-
+//            var substFile = dirImages + '/' +addSignals[substName]['file'] ;
+            var substFile = addSignals[substName]['file'] ;
             magicNormalPictures.showItem(dir,item,itemKey,substFile) ;
         }
         $(window).keydown(function(e){      // запуск по клавише

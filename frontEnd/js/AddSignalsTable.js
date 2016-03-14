@@ -104,7 +104,7 @@ function AddSignalsTable() {
      */
     var pictColumnBuild = function(signal,typeName,width) {
         var $tdPict = $('<td/>') ;
-        var pictFile =  dirImages + '/' +signal['file'] ;
+        var pictFile = signal['file'] ;            // содержит полный адрес
         var typeComment = signal['typeComment'] ;  // коментарий к типу
         var signalName =  signal['name'] ;         // имя сигнала
 

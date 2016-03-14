@@ -4,17 +4,36 @@
 */
 ?>
 <?php
+/**
+ * @param $dir
+ * @param $level
+ * @return bool|string
+ */
+function subDir($dir,$level)
+{
+    $dir = trim($dir) ;
+    $arr = explode(DIRECTORY_SEPARATOR, $dir);
+    $n = count($arr) + $level;
+    if ($level > 0 || $n <= 0  ) {
+        return false ;
+    }
+
+    $subDir = ($dir[0] === DIRECTORY_SEPARATOR) ? '/':'';
+    for ($i = 0; $i < $n; $i++) {
+        $item = $arr[$i];
+        $subDir .= ((strlen($subDir) === 0 || $subDir === '/') ? '' : '/') . $item;
+    }
+
+    return $subDir;
+}
+
 $currentDir = __DIR__ ;
 // определяем верхний уровень
 $topDir = realpath($currentDir) ;
-$pi = pathinfo($_SERVER['PHP_SELF']) ;
-$currentHtmlDir = $pi['dirname'] ; // относительный адрес для HTML-ссылок
-$topHtmlDir = realpath($currentHtmlDir.'/..') ;
+$dirProject = subDir($topDir,-1) ;    // голова проекта
+// -1 - убираем php - файл . -2 - ещё на уровень выше
+$topHtmlDir = subDir($_SERVER['PHP_SELF'],-2) ;
 $firstSymb = $topHtmlDir[0] ;
-if ('/' !== $firstSymb) {
-    $topHtmlDir = '/'.$topHtmlDir ;
-}
-
 // подключаем класс TaskStore - общие параметры
 $dirService = $topDir .'/service' ;
 include_once $dirService . '/TaskStore.php' ;
@@ -27,8 +46,10 @@ $pdo = DbConnector::getConnect() ;
 if (!DbConnector::$isSuccessful) {
     die('EXIT');
 }
-$dirProject = realpath(__DIR__ .'/..' ) ;
+
+
 TaskStore::init($topDir,$topHtmlDir,$dirProject) ;
+
 //  подключаем autoLoad  - авт подключение классов
 include_once $dirService . '/autoload.php' ;
 //-------------------------------------------//
