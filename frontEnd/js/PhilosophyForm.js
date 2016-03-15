@@ -163,7 +163,8 @@ function PhilosophyForm() {
             }
         }) ;
 
-        cycleShow() ;
+//        cycleShow() ;
+        phraseChange() ;
     } ;
     /**
      * смена фраз в центральном круге

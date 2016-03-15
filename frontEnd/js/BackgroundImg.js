@@ -765,9 +765,14 @@ function BackgroundImg() {
         var readonly = typeBlock['readonly'] ;
         var idText = typeBlock['idText'] ;
         _this.defineAbsolutePosition($centralCircleBlock,place,ballPicture) ;
-
-        defineTextArea($centralCircleTextBlock,textAreaPlace,textAreaBackGround,
-            currentColor,0,readonly,idText) ;
+        if (showType == 'answer') {
+            $centralCircleGlowBlock.attr('hidden','hidden') ;
+        }
+        if (showType == 'query') {
+            $centralCircleGlowBlock.removeAttr('hidden') ;
+            defineTextArea($centralCircleTextBlock, textAreaPlace, textAreaBackGround,
+                currentColor, 0, readonly, idText);
+        }
     } ;
     /**
      * позиционирование блока и вставка изображения
@@ -831,7 +836,7 @@ function BackgroundImg() {
         $block.append($txt) ;
 
         $txt.addClass('queryText') ;
-        $txt.attr('placeholder','Введите вопрос') ;
+        $txt.attr('placeholder','ВВЕДИТЕ ВОПРОС') ;
         $txt.css('width',0.95*txtWidth) ;
          $txt.attr('id',idText) ;
         $txt.css('height',0.97 * txtHeight) ;

@@ -79,11 +79,20 @@ function MagicNormalPictures() {
     this.showItem = function(dir,item,itemKey,substImageFile) {
         var place = item['place'] ;
         var innerPlace = item['innerPlace'] ;
-        var imgFile = (currentStaticFlag) ?
-                      item['img']['text'] : item['img']['file'] ;
+        //var imgFile = (currentStaticFlag) ?
+        //              item['img']['text'] : item['img']['file'] ;
+
+        var imgFile = item['img']['text'] ;
+
+
+
         var pictureFile = dir + '/' + imgFile ;
         var dy = (place['dy'] === undefined) ? 0 : place['dy'] ;
         dy = (currentStaticFlag) ? 0 : dy ;
+
+        dy = 0 ;
+
+
         if (typeof(substImageFile) === 'string' ) {
             pictureFile = substImageFile ;
             dy = 0 ;        // поправка

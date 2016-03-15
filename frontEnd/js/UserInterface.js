@@ -8,6 +8,7 @@ function UserInterface() {
     var philosophyForm ;
     var magicNormalPictures ;           // фоновые картинки
     var stamp = {} ;                    // планка - ввод запроса
+
     var $queryArea ;                    // область ввовда текста
     var resizeGo = false ;
     var resizeSteps = 0 ;
@@ -29,14 +30,30 @@ function UserInterface() {
         magicNormalPictures = paramSet.magicNormalPictures ;
         magicNormalPictures.init() ;                  // подготовка фоновых картинок
         stampDefine();              // объект stamp   - планка для запуска запроса
+        $('*').off('mousedown') ;
+        $('*').on('mousedown',function(e){
+            var targetId = e.currentTarget.id;
+ //           alert('targetId:' + target.id) ;
+            if (targetId == 'smokeClouds') {
+                currentQuery = $queryArea.val();
+                e.preventDefault();
+            }else {
+//                e.preventDefault();
+            }
+        }) ;
+
         $(window).click(function (e) {
-            if (isStampClick(e)) {                   // выполнение запроса
-                 stampClickGo() ;
-           } else {
-                if (philosophyForm.getFormShowFlag() === true) { // click гасит форму
-                    philosophyForm.stopShow();
+            if (isTextClick(e)) {
+
+            }else {
+                if (isStampClick(e)) {                   // выполнение запроса
+                    stampClickGo();
+                } else {
+                    if (philosophyForm.getFormShowFlag() === true) { // click гасит форму
+                        philosophyForm.stopShow();
+                    }
+                    normalQueryShow();
                 }
-                normalQueryShow() ;
             }
         });
         $(window).on('resize', function () {      // размеры окна браузера
@@ -63,7 +80,7 @@ function UserInterface() {
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
         $queryArea = $('#queryText');
-        $queryArea.attr('placeholder', 'введите вопрос');
+        $queryArea.attr('placeholder', 'ВВЕДИТЕ ВОПРОС');
 
         $queryArea.off('keydown') ;
         $queryArea.on('keydown',function(e) {
@@ -71,6 +88,7 @@ function UserInterface() {
                 stampClickGo() ;
             }
         }) ;
+        $queryArea.css('z-index',10) ;
         $queryArea.off('blur') ;
         $queryArea.blur(function(e) {
             currentQuery = $queryArea.val();
@@ -149,4 +167,24 @@ function UserInterface() {
         var y = e.pageY;
         return (x >= btXLeft && x <= btXRight && y >= btYTop && y <= btYBottom)  ;
     } ;
+    var isTextClick = function(e) {
+        var $block = backgroundImg.getTextAreaBlock() ;
+        var top = pixelToNumber($block.css('top')) ;
+        var left = pixelToNumber($block.css('left')) ;
+        var w = $block.width() ;
+        var h = $block.height() ;
+        var x = e.pageX;
+        var y = e.pageY;
+        var result = (x >= left && x <= left + w && y >= top && y <= top + h)  ;
+        return (x >= left && x <= left + w && y >= top && y <= top + h)  ;
+     } ;
+    /**
+     * преобразовать строку вида 230px в число 230
+     * @param strPixel
+     * @returns {number}
+     */
+    var pixelToNumber = function (strPixel) {
+        var n = strPixel.replace('px', '');
+        return n - 0;
+    };
 }
