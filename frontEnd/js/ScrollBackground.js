@@ -86,7 +86,7 @@ function ScrollBackground() {
                 y1:126,
                 x2:mainWidth - 50 + 6,
                 y2: 126 + 277,
-                y1Max : mainHeight - 277 -10
+                y1Max : mainHeight - 277 -10 - 100
             },
             img : {
                 file: 'slider_new.png'
@@ -344,7 +344,7 @@ function ScrollBackground() {
         $(window).off('keydown') ;
         $(window).on('keydown',function(e) {
             if (e.keyCode === 27) {
-                exit() ;
+                _this.exit() ;
             }
         }) ;
     } ;
@@ -364,12 +364,12 @@ function ScrollBackground() {
             var top = ky * mainBlock['place']['y1'] ;
             var height =  ky *(caption['place']['y2'] -  caption['place']['y1']) ;
             if ((x - left) >= 0.5 * width && (y - top) <= 0.7 * height) {
-                exit() ;
+                _this.exit() ;
             }
         }) ;
 
     } ;
-    var exit = function() {
+    this.exit = function() {
         $mainBlockDiv.hide( "blind", 1000,function()  {
             setTimeout(function() {
                 $mainBlockDiv.removeAttr( "style" ).hide().fadeIn();
@@ -388,7 +388,7 @@ function ScrollBackground() {
         scrolling.stop = (scrolling.dyHidden <= 0) ;
         var height = slider.place['y2'] - slider.place['y1'];
         scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
-        scrolling.sliderYMax = kResize['ky'] * (mainHeight - height);
+        scrolling.sliderYMax = kResize['ky'] * (mainHeight - height) - 30;
         scrolling.pageY = 0 ;
         scrolling.pageY0 = 0 ;
         scrolling.sliderY = pixelToNumber($sliderDiv.css('top'));
@@ -438,7 +438,7 @@ function ScrollBackground() {
         var mainPlace = mainDataBlock.place ;
         var dataPlace = dataArea.place ;
         var dyShow = kResize['ky'] * (mainPlace['y2'] - mainPlace['y1'] - dataPlace['y1']) ;
-        var dyHidden = $dataAreaDiv.height() - dyShow + 200;
+        var dyHidden = $dataAreaDiv.height() - dyShow + 100;
         dyHidden = Math.max(0,dyHidden) ;
         scrolling.dyHidden = dyHidden ;
         return dyHidden ;

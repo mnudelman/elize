@@ -21,6 +21,7 @@ function AddSignalsTable() {
     var scrollBackground ;     // объект - фоновое изображение для вывода
    var PICT_MAX_WIDTH = 230 ;   // max ширина картинки 09.03.2016
     var CSS_TEXT_SIGNAL = 'textSignal' ; // класс - текстовое оформление сигнала
+    var CSS_TEXT_SIGNAL1 = 'textSignal1' ; // класс - подпись под картинкой
     var CSS_TOTAL_SIGNAL = 'totalSignal' ; // класс для итоговой подписи
     var _this = this ;
     //---------------------------------------------------//
@@ -113,7 +114,7 @@ function AddSignalsTable() {
         var imgId =  typeName + '_img' ;
         $img.attr('id',imgId) ;
         var imgWidth = Math.min(width,PICT_MAX_WIDTH) ;
-        $tdPict.addClass(CSS_TEXT_SIGNAL) ;
+        $tdPict.addClass(CSS_TEXT_SIGNAL1) ;
         $tdPict.css('width',imgWidth) ;
         $tdPict.append($img) ;
         //-- подпись под картинкой --//
@@ -131,22 +132,43 @@ function AddSignalsTable() {
      * @param rang
      * @returns {*}
      */
-    var tdBalanceBuild = function($tdBalance,width,rang) {
+    var tdBalanceBuild = function($tdBalance,width,rang,kIncr) {
+        kIncr = (kIncr === undefined) ? 1 : kIncr ;
         $tdBalance.css('width',width) ;
         var dirBalance = dirImages + '/balance' ;
-        var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra.png' ;
+//        var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra.png' ;
+
+        var balancePict =  'balance_contra_3.png' ;
         balancePict =  (rang === 0) ? 'balance_equal.png' : balancePict ;
         var $imgB = $('<img/>') ;
         $imgB.attr('src',dirBalance + '/' +balancePict) ;
         $tdBalance.append($imgB) ;
-
+        if (rang > 0) {
+            $imgB.css('transform','scaleX(-1)') ;
+        }
+//        $imgB.css('position','relative') ;
         $tdBalance.css('vertical-align','top') ;
-        $imgB.css('width','100%') ;
+        $imgB.css('width',142 * kIncr) ;
+        $imgB.css('height',117 * kIncr) ;
+        var left = ($tdBalance.width() - 142*kIncr)/2 ;
+//        $imgB.css('top',-117/2) ;
+        $imgB.css('margin-left',left) ;
+
+
 
         var $proContra = textProContraBuild() ;    // подпись "за"       "против"
-
+ //       $proContra.css('width',142) ;
+//        $proContra.css('position','relative') ;
+//        $proContra.css('top',-117/2) ;
+//        $proContra.css('margin-left',left) ;
         $tdBalance.append($proContra) ;
         var $rangDiagram  = rangDiagramBuild(rang) ;  // линейная диаграмма
+
+//        $rangDiagram.css('width',142) ;
+//        $rangDiagram.css('position','relative') ;
+//        $rangDiagram.css('top',-117/2)
+//        $rangDiagram.css('margin-left',left) ;
+
         $tdBalance.append($rangDiagram) ;
         return $tdBalance ;
     } ;
@@ -162,6 +184,7 @@ function AddSignalsTable() {
         $imgProContra.attr('src',proContraPict) ;
         $textProContra.append($imgProContra) ;
         $imgProContra.css('width','100%') ;
+    ;
         return $textProContra ;
     } ;
     /**
@@ -216,13 +239,16 @@ function AddSignalsTable() {
      * @returns {*|jQuery|HTMLElement}
      */
     var signalTotalRowBuild = function(totalRang) {
+        var kIncr = 1.62 ;
         var rangPro = 50 + Math.round(totalRang/2) ;
         var rangContra = 100 - rangPro ;
+        // -- корректировать при 50% --//
+        totalRang = (rangPro === rangContra) ? 0 : totalRang ;
 
         var dirBalance = dirImages + '/balance' ;
         var $tr = $('<tr/>') ;
         var widthTot = scrollBackground.getDataAreaWidth() ;
-        var width = (widthTot/4 - 20) *1.5 ;
+        var width = (widthTot/4 - 20) * kIncr ;
 
         var $totalBlock = $('<div/>') ;
         var $totalTextBlock = $('<div/>') ;
@@ -235,8 +261,11 @@ function AddSignalsTable() {
 
         var $balanceBlock = $('<div/>') ;
 
-        var marginLeft = (widthTot - width)/2 ;
-        tdBalanceBuild($balanceBlock,width,totalRang) ;
+        var marginLeft = ((widthTot - 80) - width)/2 ;
+
+
+
+        tdBalanceBuild($balanceBlock,width,totalRang,kIncr) ;
 
         $totalBlock.append($balanceBlock) ;
         //--- значение ранга //

@@ -45,6 +45,16 @@ function ResponseForm() {
                 responseShow() ;
             }else {
                 var message = answ['message'];
+                if (message['@attributes'] !== undefined) {
+                    var code = message['@attributes']['code'] ;
+                    if (code === '15') {        // yandex не нашёл
+                        scrollBackground.exit() ;
+                        var philosophyForm = paramSet.philosophyForm ;
+                        philosophyForm.queryGo() ;
+                        return true ;
+
+                    }
+                }
                 ajax.errorMessage(message) ;
             }
         }) ;
