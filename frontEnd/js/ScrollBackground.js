@@ -30,6 +30,7 @@ function ScrollBackground() {
     var dirImg ;
     var scrolling = {} ;         // текущая прокрутка
     var formShowFlag = false ;
+    var scrollingFlag = false ;     // во избежании слишком бытрой прокрутки
     //---------------------//
     var _this = this ;
     //---------------------//
@@ -72,7 +73,7 @@ function ScrollBackground() {
         dataArea = {              // область вывода
             place: {
                 x1:50,
-                y1:40,
+                y1:100, // 40,
                 x2: mainWidth - 50,
                 y2: undefined
             },
@@ -146,7 +147,8 @@ function ScrollBackground() {
             wheelMoving :0 ,
            sliderYMin : caption['place']['y2'],
            sliderYMax: mainHeight - (slider['place']['y2'] - slider['place']['y1']) ,
-            stop : true
+            stop : true,
+            scrollingFlag : false
         } ;
 
         kResizeClc() ;
@@ -172,7 +174,9 @@ function ScrollBackground() {
         internalBlockDefine('scrollLine',scrollLine) ;
         internalBlockDefine('slider',slider) ;
         internalBlockDefine('caption',caption) ;
+
 //        internalBlockDefine('message',message) ;  // только для отладки
+
          var mainBlockId = $mainBlockDiv.attr('id') ;
         $CaptionDiv = $('#' + mainBlockId +'_caption') ;
         $sliderDiv = $('#' + mainBlockId +'_slider') ;
@@ -346,6 +350,17 @@ function ScrollBackground() {
             if (e.keyCode === 27) {
                 _this.exit() ;
             }
+            switch (e.keyCode) {
+                case 27 :
+                    _this.exit() ;
+                    break ;
+                case 40 :
+                    scrollingGo(e,-1) ;
+                    break ;
+                case 38 :
+                    scrollingGo(e,+1) ;
+                    break ;
+            }
         }) ;
     } ;
     /**
@@ -386,6 +401,7 @@ function ScrollBackground() {
      */
     var scrollingBegin = function() {
         scrolling.stop = (scrolling.dyHidden <= 0) ;
+        scrolling.scrollingFlag = false ;
         var height = slider.place['y2'] - slider.place['y1'];
         scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
         scrolling.sliderYMax = kResize['ky'] * (mainHeight - height) - 30;
@@ -398,24 +414,37 @@ function ScrollBackground() {
         scrolling.wheelMoving = 0 ;
         scrolling.kdyDataArea =
                    scrolling.dyHidden / (scrolling.sliderYMax - scrolling.sliderYMin) ;
-        var topData = scrolling.dataAreaY0 +
-            scrolling.kdyDataArea  ; //* (scrolling.sliderY - scrolling.sliderY0);
+        var topData = scrolling.dataAreaY0  ; //+
+//            scrolling.kdyDataArea  ; //* (scrolling.sliderY - scrolling.sliderY0);
         $dataAreaDiv.css('top',topData) ;
     } ;
     /**
      * реакция на 1 шаг вращения колеса мыши
      * @param e
      */
-    var scrollingGo = function(e) {
+    var scrollingGo = function(e,yDirection) {
         if (!scrolling.stop ) {
+            if (scrolling.scrollingFlag) {
+                return ;
+            }
+            scrolling.scrollingFlag = true ;
             var wheelSteps = 10 ;    // число вращений колеса мыши
             var maxDy = 10 ;//20 ;
             var minDy = 10 ;
-            scrolling.pageY = e.pageY;
+ //           scrolling.pageY = e.pageY;
             var dyMin = Math.round(scrolling.dyHidden/wheelSteps) ;
             dyMin = Math.min(dyMin,maxDy) ;
             dyMin = Math.max(dyMin,minDy) ;
-            var eDy = e.deltaY * dyMin ;
+
+            if (scrolling.kdyDataArea * dyMin > 50) {
+                dyMin  = 50/scrolling.kdyDataArea ;
+            }
+
+
+            if (yDirection === undefined) {
+                yDirection = Math.sign(e.deltaY) ;
+            }
+            var eDy = yDirection * dyMin ;
             var newMoving = scrolling.wheelMoving + eDy ;
             var top = scrolling.sliderY0 - newMoving ;
 
@@ -427,9 +456,23 @@ function ScrollBackground() {
             scrolling.sliderY = pixelToNumber($sliderDiv.css('top')) ;
             var topData = scrolling.dataAreaY0 -
                 scrolling.kdyDataArea * (scrolling.sliderY - scrolling.sliderY0);
-            $dataAreaDiv.css('top',topData) ;
-        }
 
+            if (yDirection > 0 ) {     // вверх
+                if (topData > scrolling.dataAreaY0 ) {
+                    topData = scrolling.dataAreaY0 ;
+                }
+            }
+            if (yDirection < 0 ) {     // вниз
+                var bottom = topData + $dataAreaDiv.height() ;
+                if (bottom  < 30)  {
+                    topData  = 30 - $dataAreaDiv.height() ;
+                }
+            }
+
+            $dataAreaDiv.css('top',topData) ;
+            scrolling.scrollingFlag = false ;
+        }
+//        scrollingDebug() ;
     } ;
     /**
      * расчёт не видимой части выведенных данных
@@ -438,7 +481,7 @@ function ScrollBackground() {
         var mainPlace = mainDataBlock.place ;
         var dataPlace = dataArea.place ;
         var dyShow = kResize['ky'] * (mainPlace['y2'] - mainPlace['y1'] - dataPlace['y1']) ;
-        var dyHidden = $dataAreaDiv.height() - dyShow + 100;
+        var dyHidden = $dataAreaDiv.height() - dyShow +50; //100;
         dyHidden = Math.max(0,dyHidden) ;
         scrolling.dyHidden = dyHidden ;
         return dyHidden ;
@@ -605,6 +648,11 @@ function ScrollBackground() {
     this.resize = function() {
         if (formShowFlag) {
             kResizeClc();
+
+            internalBlockDefine('mainDataBlock',mainDataBlock) ;
+            internalBlockDefine('dataArea',dataArea,$mainDataBlockDiv) ;
+
+
             var screenWidth = $(window).width();
             var place = mainBlock.place;
             var x1 = place['x1'];
