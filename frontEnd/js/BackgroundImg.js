@@ -92,6 +92,7 @@ function BackgroundImg() {
 
         stamp = {       // планка "далее" - ввод запроса
             dir: dirMainImg,
+            css: 'stamp',
             place: {
                 x1: 808,
                 y1: 678,
@@ -322,7 +323,7 @@ function BackgroundImg() {
                 },
                 'l1_2': {                      // созвездия
                     place: {
-                        x1: 537,
+                        x1: 533, // 537,
                         w: 178,
                         y1: 211,
                         h: 151,
@@ -732,6 +733,8 @@ function BackgroundImg() {
         var place = currentStamp['place'] ;
         var dir = currentStamp['dir'] ;
         var imgFile = currentStamp[type]['img']['file'] ;
+        $stampBlock.removeClass() ;
+        $stampBlock.addClass(stamp.css) ;
         var stampPicture = dir +'/' + imgFile ;
         _this.defineAbsolutePosition($stampBlock,place,stampPicture) ;
     } ;

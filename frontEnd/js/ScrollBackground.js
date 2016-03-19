@@ -10,7 +10,10 @@ function ScrollBackground() {
     var slider = {} ;              // бегунок
     var message = {} ;             // сообщения (для отладки)
     var vinjetka = {} ;
-    var mainWidth ;
+    var scrollType ;        // тип свитка задаёт текст шапки(ответ | предсказание)
+    var SCROLL_TYPE_ANSWER = 'answer' ;
+    var SCROLL_TYPE_ORACLE = 'oracle' ;
+     var mainWidth ;
     var mainHeight ;
     var rightMargin ;
     var $mainBlockDiv = $('#resultBlockNew') ;
@@ -50,15 +53,25 @@ function ScrollBackground() {
             }
         } ;
         mainSizes() ;
+
         caption = {            // блок заголовок
             place: {
                 x1: 0 ,
                 y1:-10,
                 x2: mainWidth + 10 ,
-                y2: 186
+                y2: 192  //186
+            },
+            captionsTypes: {
+                answer: {
+                    file:'scroll_caption_answer.png'
+                },
+                oracle: {
+                    file:'scroll_caption_oracle.png'
+                }
             },
             img : {
-                file: 'scroll_caption.png'
+                file: 'scroll_caption.png',
+                fileAnswer:'scroll_caption_answer.png'
             }
         } ;
         mainDataBlock = {           // блок вывода данных
@@ -98,7 +111,7 @@ function ScrollBackground() {
                 x1:mainWidth - 50,
                 y1:126,
                 x2: mainWidth - 50 + 6 ,
-                y2: mainHeight - 10
+                y2: mainHeight - 30 //20 // 10
 
             },
             background : {
@@ -173,6 +186,8 @@ function ScrollBackground() {
         dataBlockDefine() ;
         internalBlockDefine('scrollLine',scrollLine) ;
         internalBlockDefine('slider',slider) ;
+       //--- подстановка шапки  ---///
+        caption.img['file'] = caption.captionsTypes[scrollType]['file'] ;
         internalBlockDefine('caption',caption) ;
 
 //        internalBlockDefine('message',message) ;  // только для отладки
@@ -206,6 +221,9 @@ function ScrollBackground() {
     var mainBlockDefine = function(){
         var screenWidth = $(window).width() ;
         $mainBlockDiv.css('position','absolute') ;
+
+        $mainBlockDiv.attr('hidden','hidden') ;
+
         var place = mainBlock.place ;
         var x1 = place['x1'] ;
         var x2 = place['x2'] ;
@@ -229,7 +247,20 @@ function ScrollBackground() {
         $mainBlockDiv.css('z-index',10) ;
         $mainBlockDiv.css('overflow','hidden') ;
         $resultBackground.removeAttr('hidden') ;
-        $mainBlockDiv.show( "blind", 1000);
+
+        $mainBlockDiv.show( "blind", 500);
+
+
+        //$mainBlockDiv.show( "blind", 3000,function()  {
+        //    setTimeout(function() {
+        //$mainBlockDiv.removeAttr( "style" ).show() ;
+        //    }), 1000});
+
+
+
+
+
+
         formShowFlag = true ;
 
     } ;
@@ -340,8 +371,20 @@ function ScrollBackground() {
      * события прокрутки
      */
     var scrollEvents = function() {
+        $mainBlockDiv.off('mousewheel') ;
         $mainBlockDiv.mousewheel(function(event, delta) {     //  колесо мыши (jquery plagin)
-           scrollingGo(event) ;
+            var direct = Math.sign(event.deltaY) ;
+            var mouseFlag = true ;
+            scrollingGo(direct,mouseFlag) ;
+            //var timeout_id = setTimeout( function() {
+            //    scrollingGo(direct) ;
+            //    clearTimeout(timeout_id) ;} , 1000) ;
+
+
+
+
+
+
         });
        // ------ закрытие формы   --------//
         captionClick() ;
@@ -355,10 +398,10 @@ function ScrollBackground() {
                     _this.exit() ;
                     break ;
                 case 40 :
-                    scrollingGo(e,-1) ;
+                    scrollingGo(-1) ;
                     break ;
                 case 38 :
-                    scrollingGo(e,+1) ;
+                    scrollingGo(+1) ;
                     break ;
             }
         }) ;
@@ -368,28 +411,61 @@ function ScrollBackground() {
      */
     var captionClick = function() {
         // ------ закрытие формы   --------//
-        $CaptionDiv.off('click') ;
+        $CaptionDiv.off('mousemove') ;
+        $CaptionDiv.mousemove(function(e){
+            var x = e.pageX;
+            var y = e.pageY;
+            if (isExitArea(x,y)) {
+                $CaptionDiv.css('cursor','pointer') ;
+            } else {
+                $CaptionDiv.css('cursor','auto') ;
+            }
+        }) ;
+            $CaptionDiv.off('click') ;
         $CaptionDiv.click(function(e) {
             var x = e.pageX;
             var y = e.pageY;
-            var ky = kResize['ky'] ;
-            var kx = kResize['kx'] ;
-            var left = kx * mainBlock['place']['x1'] ;
-            var width = kx *(mainBlock['place']['x2'] -  mainBlock['place']['x1']) ;
-            var top = ky * mainBlock['place']['y1'] ;
-            var height =  ky *(caption['place']['y2'] -  caption['place']['y1']) ;
-            if ((x - left) >= 0.5 * width && (y - top) <= 0.7 * height) {
+            if (isExitArea(x,y)) {
                 _this.exit() ;
             }
         }) ;
 
     } ;
+    /**
+     * область закрытия свитка (символ "X")
+     * @param x
+     * @param y
+     * @returns {boolean}
+     */
+    var isExitArea = function(x,y) {
+        var ky = kResize['ky'] ;
+        var kx = kResize['kx'] ;
+        var left = kx * mainBlock['place']['x1'] ;
+        var width = kx *(mainBlock['place']['x2'] -  mainBlock['place']['x1']) ;
+        var top = ky * mainBlock['place']['y1'] ;
+        var height =  ky *(caption['place']['y2'] -  caption['place']['y1']) ;
+        return ((x - left) >= 0.7 * width && (y - top) <= 0.6 * height) ;
+
+    } ;
     this.exit = function() {
-        $mainBlockDiv.hide( "blind", 1000,function()  {
+        $mainBlockDiv.hide( "blind", 500,function()  {
             setTimeout(function() {
                 $mainBlockDiv.removeAttr( "style" ).hide().fadeIn();
-                $resultBackground.attr('hidden','hidden') ;
+//-- фон тает после исчезновения свитки
+                $resultBackground.hide( "fade", 1000,function()  {
+                    setTimeout(function() {
+                        $resultBackground.removeAttr( "style" );   // .hide();       //.fadeIn();
+                        $resultBackground.attr( "hidden",'hidden') ;
+                    }), 1000});
             }), 1000});
+
+
+
+
+
+        //$resultBackground.hide( "fade", 1000) ;
+
+
         $mainBlockDiv.empty() ;
         scrolling.stop = true ;
         formShowFlag = false ;
@@ -422,11 +498,19 @@ function ScrollBackground() {
      * реакция на 1 шаг вращения колеса мыши
      * @param e
      */
-    var scrollingGo = function(e,yDirection) {
+    var scrollingGo = function(yDirection,mouseFlag) {
         if (!scrolling.stop ) {
-            if (scrolling.scrollingFlag) {
-                return ;
+            //if (scrolling.scrollingFlag) {
+            //    return ;
+            //}
+            if (mouseFlag !== undefined && mouseFlag) {
+                if (scrolling.scrollingFlag) {
+                    return  ;
+                }
+                var timeout_id = setTimeout( function() {
+                    clearTimeout(timeout_id) ;} , 2000) ;
             }
+
             scrolling.scrollingFlag = true ;
             var wheelSteps = 10 ;    // число вращений колеса мыши
             var maxDy = 10 ;//20 ;
@@ -441,9 +525,9 @@ function ScrollBackground() {
             }
 
 
-            if (yDirection === undefined) {
-                yDirection = Math.sign(e.deltaY) ;
-            }
+            //if (yDirection === undefined) {
+            //    yDirection = Math.sign(e.deltaY) ;
+            //}
             var eDy = yDirection * dyMin ;
             var newMoving = scrolling.wheelMoving + eDy ;
             var top = scrolling.sliderY0 - newMoving ;
@@ -470,6 +554,15 @@ function ScrollBackground() {
             }
 
             $dataAreaDiv.css('top',topData) ;
+//            var timeDelay = 300;
+//            var steps = 0 ;
+//            var tmpTimer = setInterval(function () {
+//                    if(steps++ >= 1) {
+//                        scrolling.scrollingFlag = false ;
+//                        clearInterval(tmpTimer);
+//
+//                    }
+//            }, timeDelay);
             scrolling.scrollingFlag = false ;
         }
 //        scrollingDebug() ;
@@ -544,8 +637,11 @@ function ScrollBackground() {
     } ;
     /**
      * начало вывода пустая форма
+     * type - определяет текст шапки
      */
-    this.answerInit = function() {
+    this.answerInit = function(type) {
+        type = (type === undefined) ? SCROLL_TYPE_ANSWER : type ;
+        scrollType = type ;
         kResizeClc() ;
         defineTopology() ;
         // запустить диаграмму
@@ -678,6 +774,7 @@ function ScrollBackground() {
 
             internalBlockDefine('scrollLine', scrollLine);
             internalBlockDefine('slider', slider);
+
             internalBlockDefine('caption', caption);
             var classFLag = true ;
             vinjetkaShow(classFLag) ;

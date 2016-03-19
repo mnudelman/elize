@@ -73,12 +73,18 @@ body {
 .textSignal1 {
     font-size : 18px ;
 }
-.totalSignal {
+.totalSignal,.proContraText,.proContraBigText {
     font-family: palar ;
-    font-size : 20px ;
+    font-size : 22px ;
     color : #6a2e02;
 
 }
+
+.proContraText {
+    font-size : 18px ;
+}
+
+
 ::-webkit-input-placeholder {
     font-family: roboto ;
     font-size : 15px ;
@@ -110,6 +116,6 @@ body {
     opacity:  1;         /* обязательно !! */
     cursor:  none ;
 }
-/*textarea {*/
-    /*cursor: none ;*/
-/*}*/
+.stamp:hover {
+    cursor: pointer;
+}

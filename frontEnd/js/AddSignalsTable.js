@@ -19,10 +19,14 @@ function AddSignalsTable() {
     var backgroundImg ;
     var dirImages;             // папка изображений
     var scrollBackground ;     // объект - фоновое изображение для вывода
-   var PICT_MAX_WIDTH = 230 ;   // max ширина картинки 09.03.2016
+    var imgBalance = {} ;      // элементы изображения весов в таблице сигналов
+    var tabColumnWidth ;          // ширина колонки таблицы сигналов
+    var PICT_MAX_WIDTH = 230 ;   // max ширина картинки 09.03.2016
     var CSS_TEXT_SIGNAL = 'textSignal' ; // класс - текстовое оформление сигнала
     var CSS_TEXT_SIGNAL1 = 'textSignal1' ; // класс - подпись под картинкой
     var CSS_TOTAL_SIGNAL = 'totalSignal' ; // класс для итоговой подписи
+    var CSS_PRO_CONTRA_TEXT = 'proContraText' ;    // подпись на диаграмме ЗА    - ПРОТИВ
+    var CSS_BIG_PRO_CONTRA_TEXT = 'proContraBigText' ; // подпись на итоговой диаграмме
     var _this = this ;
     //---------------------------------------------------//
     /**
@@ -37,6 +41,33 @@ function AddSignalsTable() {
         dirImages = paramSet.dirImages ;
         scrollBackground = paramSet.scrollBackground ; // объект для вывода
                                                        // результата
+
+        imgBalance = {
+            dir : dirImages + '/balance',
+            normal : {
+                pictContra:'balance_contra_3.png',
+                pictEqual: 'balance_equal.png',
+                w: 142 ,
+                h: 117,
+                css: CSS_PRO_CONTRA_TEXT
+            },
+            big: {
+                pictContra:'balance_big_contra.png',
+                pictEqual: 'balance_big_equal.png',
+                w: 223 ,
+                h: 176 ,
+                css: CSS_BIG_PRO_CONTRA_TEXT,
+                kIncr: 1.62
+            },
+            diagram: {
+                linePro: 'green_line.png',
+                lineContra: 'red_line.png'
+            },
+            text: {
+                pro: 'За',
+                contra: 'Против'
+            }
+        } ;
     } ;
     /**
      * вывод таблицы
@@ -44,7 +75,7 @@ function AddSignalsTable() {
      * как таковая таблица не формируется. Строки передаются на вывод
      */
     this.tableShow = function() {
-        scrollBackground.answerInit() ;        // вывод пустой формы
+        scrollBackground.answerInit('oracle') ;        // вывод пустой формы
         scrollBackground.answerBegin() ;        // начало вывода
         var n = 0 ;
         var totalRang = 0 ;                    // суммарная оценка
@@ -61,6 +92,9 @@ function AddSignalsTable() {
         scrollBackground.putAnswerItem($totalRow,false) ;
 
     } ;
+    var getColumnWidth = function() {
+        tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 13 ; //20 ;  // колонка  таблицы
+    } ;
     /**
      * построитель строки таблицы
      * графа1 - картинка, графа2,3 - текст-описатель, графа4 - весы
@@ -74,8 +108,10 @@ function AddSignalsTable() {
         var kResize = backgroundImg.getKResize()  ; // коэффициенты для пересчёта
                                                     // на размер окна браузера
         // ширина столбцов из общей ширины области
-        var widthTot = scrollBackground.getDataAreaWidth() ;
-        var width = widthTot/4 - 20 ;
+ //       if (tabColumnWidth === undefined) {
+            getColumnWidth() ;
+ //       }
+        var width = tabColumnWidth ;
 
         var $tr = $('<tr/>') ;
         // графа1 - картинка
@@ -124,68 +160,83 @@ function AddSignalsTable() {
         return $tdPict ;
     } ;
     /**
-     * графа 4 - весы - ранг сигнала
-     * три вида весов в зависимости от ранга
-     * > 50% - весы ЗА(pro), <50% - ПРОТИВ(contra), =50% -(equal)
-     * @param $tdBalance
-     * @param width
-     * @param rang
+     *  клетка с весами
+     * @param $tdBalance   - обрамляющий блок
+     * @param width        - ширина блока
+     * @param rang         -
+     * @param bigFlag      - true -> использовать imgBalance.big
      * @returns {*}
      */
-    var tdBalanceBuild = function($tdBalance,width,rang,kIncr) {
-        kIncr = (kIncr === undefined) ? 1 : kIncr ;
-        $tdBalance.css('width',width) ;
-        var dirBalance = dirImages + '/balance' ;
-//        var balancePict =  (rang > 0) ? 'balance_pro.png' : 'balance_contra.png' ;
+    var tdBalanceBuild = function($tdBalance,tdWidth,rang,bigFlag) {
+        bigFlag = (bigFlag === undefined) ? false : bigFlag ;
+        var currentImg = (bigFlag) ? imgBalance.big : imgBalance.normal ;
+        $tdBalance.css('width',tdWidth) ;
+        var dirBalance = imgBalance['dir'] ;
 
-        var balancePict =  'balance_contra_3.png' ;
-        balancePict =  (rang === 0) ? 'balance_equal.png' : balancePict ;
+        var balancePict =  currentImg['pictContra'];
+        balancePict =  (rang === 0) ? currentImg['pictEqual'] : balancePict ;
         var $imgB = $('<img/>') ;
         $imgB.attr('src',dirBalance + '/' +balancePict) ;
         $tdBalance.append($imgB) ;
         if (rang > 0) {
             $imgB.css('transform','scaleX(-1)') ;
         }
-//        $imgB.css('position','relative') ;
         $tdBalance.css('vertical-align','top') ;
-        $imgB.css('width',142 * kIncr) ;
-        $imgB.css('height',117 * kIncr) ;
-        var left = ($tdBalance.width() - 142*kIncr)/2 ;
-//        $imgB.css('top',-117/2) ;
+
+        var imgW = currentImg['w'] ;
+        var imgH = currentImg['h'] ;
+        if (tdWidth > imgW ) {
+            $imgB.css('width',imgW) ;
+            $imgB.css('height',imgH) ;
+        }else {
+            $imgB.css('width',tdWidth) ;
+            imgW = tdWidth ;
+        }
+
+        var left = ($tdBalance.width() - imgW)/2 ;
         $imgB.css('margin-left',left) ;
+        //-- подпись над диаграммой -- //
+        var textLeft = imgBalance.text['pro'] ;
+        var textRight = imgBalance.text['contra'] ;
+
+        var $proContra = textBalanceBuild(currentImg,tdWidth,textLeft,textRight) ;
 
 
-
-        var $proContra = textProContraBuild() ;    // подпись "за"       "против"
- //       $proContra.css('width',142) ;
-//        $proContra.css('position','relative') ;
-//        $proContra.css('top',-117/2) ;
-//        $proContra.css('margin-left',left) ;
         $tdBalance.append($proContra) ;
         var $rangDiagram  = rangDiagramBuild(rang) ;  // линейная диаграмма
 
-//        $rangDiagram.css('width',142) ;
-//        $rangDiagram.css('position','relative') ;
-//        $rangDiagram.css('top',-117/2)
-//        $rangDiagram.css('margin-left',left) ;
 
         $tdBalance.append($rangDiagram) ;
+        $rangDiagram.css('width',tdWidth) ;
         return $tdBalance ;
     } ;
     /**
      * подпись под весами (ЗА        ПОТИВ)
      * @returns {*|jQuery|HTMLElement}
      */
-    var textProContraBuild = function() {
-        var dirBalance = dirImages + '/balance' ;
-        var $textProContra = $('<div/>') ;
-        var $imgProContra  = $('<img/>') ;
-        var proContraPict  = dirBalance + '/text_pro_contra.png' ;
-        $imgProContra.attr('src',proContraPict) ;
-        $textProContra.append($imgProContra) ;
-        $imgProContra.css('width','100%') ;
-    ;
-        return $textProContra ;
+    var textBalanceBuild = function(currentImg,tdWidth,textLeft,textRight) {
+
+        var $textBlock = $('<div/>') ;
+        var textCss = currentImg['css'] ;
+        $textBlock.css('width',tdWidth) ;
+//        $textBlock.css('width','100%') ;
+        $textBlock.addClass(textCss) ;
+        //-- левый край  - текст
+        var $textLeft =  $('<div/>') ;
+        $textLeft.css('float','left') ;
+        $textLeft.append(textLeft) ;
+        $textLeft.css('width','50%') ;
+        $textLeft.css('text-align','left') ;
+        $textBlock.append($textLeft) ;
+        //-- правый край - текст
+        var $textRight =  $('<div/>') ;
+        $textRight.css('float','right') ;
+        $textRight.css('width','40%') ;
+        $textRight.css('text-align','right') ;
+
+        $textRight.append(textRight) ;
+        $textBlock.append($textRight) ;
+        return $textBlock ;
     } ;
     /**
      * линейная диаграмма под весами
@@ -196,11 +247,13 @@ function AddSignalsTable() {
      */
     var rangDiagramBuild = function(rang) {
         var $rangBlock = $('<div/>') ;
+        $rangBlock.css('clear','both') ;
         var rangPro = Math.round(50 + rang/2) ;
         var rangContra = 100 - rangPro ;
-        var dirBalance = dirImages + '/balance' ;
-        var proPict = dirBalance +'/green_line.png' ;
-        var contraPict = dirBalance +'/red_line.png' ;
+        var dirBalance = imgBalance.dir ;
+        var diagram = imgBalance.diagram ;
+        var proPict = dirBalance +'/' + diagram['linePro'] ;
+        var contraPict = dirBalance +'/' + diagram['lineContra'] ;
         var $imgPro  = $('<img/>') ;
         $imgPro.attr('src',proPict) ;
         var $imgContra  = $('<img/>') ;
@@ -208,7 +261,7 @@ function AddSignalsTable() {
         $rangBlock.append($imgPro) ;
         $rangBlock.append($imgContra) ;
 
-        $imgPro.css('width',rangPro + '%') ;
+        $imgPro.css('width',rangPro  + '%') ;
         $imgPro.css('height',3) ;
         $imgContra.css('width',rangContra + '%') ;
         $imgContra.css('height',3) ;
@@ -239,16 +292,15 @@ function AddSignalsTable() {
      * @returns {*|jQuery|HTMLElement}
      */
     var signalTotalRowBuild = function(totalRang) {
-        var kIncr = 1.62 ;
+        var kIncr = imgBalance.big['kIncr'] ;      // увеличение ширины по отношению к обычной
         var rangPro = 50 + Math.round(totalRang/2) ;
         var rangContra = 100 - rangPro ;
         // -- корректировать при 50% --//
         totalRang = (rangPro === rangContra) ? 0 : totalRang ;
 
-        var dirBalance = dirImages + '/balance' ;
+        var dirBalance = imgBalance['dir'] ;
         var $tr = $('<tr/>') ;
-        var widthTot = scrollBackground.getDataAreaWidth() ;
-        var width = (widthTot/4 - 20) * kIncr ;
+        var width = tabColumnWidth * kIncr ;
 
         var $totalBlock = $('<div/>') ;
         var $totalTextBlock = $('<div/>') ;
@@ -261,30 +313,18 @@ function AddSignalsTable() {
 
         var $balanceBlock = $('<div/>') ;
 
-        var marginLeft = ((widthTot - 80) - width)/2 ;
+        var marginLeft = (4 * tabColumnWidth - width)/2 ;
 
 
+        var bigFlag = true ;
 
-        tdBalanceBuild($balanceBlock,width,totalRang,kIncr) ;
-
+        tdBalanceBuild($balanceBlock,width,totalRang,bigFlag) ;
         $totalBlock.append($balanceBlock) ;
         //--- значение ранга //
-        var $percBlock = $('<div/>') ;
-        $percBlock.css('width',width) ;
-        $percBlock.addClass(CSS_TOTAL_SIGNAL) ;
-        //-- левый край % - за
-        var $leftPers =  $('<div/>') ;
-        $leftPers.css('float','left') ;
-        $leftPers.append(rangPro +'%') ;
-        $leftPers.css('width',50) ;
-        $percBlock.append($leftPers) ;
-        //-- правый край % - за
-        var $rightPers =  $('<div/>') ;
-        $rightPers.css('float','right') ;
-        $rightPers.css('width',50) ;
-
-        $rightPers.append(rangContra +'%') ;
-        $percBlock.append($rightPers) ;
+        var currentImg = imgBalance.big ;
+        var textLeft = rangPro + '%';
+        var textRight = rangContra + '%';
+        var $percBlock = textBalanceBuild(currentImg,width,textLeft,textRight) ;
         $totalBlock.append($percBlock) ;
         $totalBlock.css('margin-left',marginLeft) ;
         return $totalBlock ;

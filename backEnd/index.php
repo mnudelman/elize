@@ -91,7 +91,7 @@ switch($operation) {
 
         $mp = new MainProjects() ;
         $mp->setQuery($query) ;
-        $mp->queryGo() ;
+        $mp->projectsGo() ;
         $answ = $mp->getResult() ;
         break ;
     }
@@ -118,5 +118,5 @@ switch($operation) {
 
     }
 }
+    echo json_encode($answ) ;
 
-echo json_encode($answ) ;
