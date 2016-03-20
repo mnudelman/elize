@@ -9,9 +9,13 @@
               typeComment: <имя типа>
              }
   каждый  addSignal выводится как строка таблицы
+ колонки : -изображение с подписью,
+           -текстовое опимание,
+           -весы с диаграммой, иллюстрирующие ранг
  в конце таблицы выводится условная средняя оценка по всем сигналам
  таблица для вывода передаётся в объект
  scrollBackground - фоновое изображение вывода результата
+ При ширине графы меньше некоторой величины, уменьшаются размеры шрифтов
  */
 function AddSignalsTable() {
     var addSignals = {} ;
@@ -24,9 +28,16 @@ function AddSignalsTable() {
     var PICT_MAX_WIDTH = 230 ;   // max ширина картинки 09.03.2016
     var CSS_TEXT_SIGNAL = 'textSignal' ; // класс - текстовое оформление сигнала
     var CSS_TEXT_SIGNAL1 = 'textSignal1' ; // класс - подпись под картинкой
-    var CSS_TOTAL_SIGNAL = 'totalSignal' ; // класс для итоговой подписи
     var CSS_PRO_CONTRA_TEXT = 'proContraText' ;    // подпись на диаграмме ЗА    - ПРОТИВ
     var CSS_BIG_PRO_CONTRA_TEXT = 'proContraBigText' ; // подпись на итоговой диаграмме
+    var smallScreenFlag = false ;                // переключение на узкий экран
+    //----- классы для малой ширины колонки таблицы ---//
+    var CSS_TEXT_SIGNAL_SMALL = 'textSignalSmall' ; // класс - текстовое оформление сигнала
+    var CSS_TEXT_SIGNAL1_SMALL = 'textSignal1Small' ; // класс - подпись под картинкой
+    var CSS_PRO_CONTRA_TEXT_SMALL = 'proContraTextSmall' ;    // подпись на диаграмме ЗА    - ПРОТИВ
+    var CSS_BIG_PRO_CONTRA_TEXT_SMALL = 'proContraBigTextSmall' ; // подпись на итоговой диаграмме
+    var COLUMN_WIDTH_MIN = 142 ;    // ширина весов, при которой переключать на малый экран
+
     var _this = this ;
     //---------------------------------------------------//
     /**
@@ -49,7 +60,8 @@ function AddSignalsTable() {
                 pictEqual: 'balance_equal.png',
                 w: 142 ,
                 h: 117,
-                css: CSS_PRO_CONTRA_TEXT
+                css: CSS_PRO_CONTRA_TEXT,
+                cssSmall : CSS_PRO_CONTRA_TEXT_SMALL
             },
             big: {
                 pictContra:'balance_big_contra.png',
@@ -57,6 +69,7 @@ function AddSignalsTable() {
                 w: 223 ,
                 h: 176 ,
                 css: CSS_BIG_PRO_CONTRA_TEXT,
+                cssSmall: CSS_BIG_PRO_CONTRA_TEXT_SMALL,
                 kIncr: 1.62
             },
             diagram: {
@@ -94,6 +107,10 @@ function AddSignalsTable() {
     } ;
     var getColumnWidth = function() {
         tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 13 ; //20 ;  // колонка  таблицы
+        smallScreenFlag = (tabColumnWidth <= COLUMN_WIDTH_MIN) ;   // переключить на малый экран
+        if (smallScreenFlag) {
+            tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 7
+        }
     } ;
     /**
      * построитель строки таблицы
@@ -150,13 +167,23 @@ function AddSignalsTable() {
         var imgId =  typeName + '_img' ;
         $img.attr('id',imgId) ;
         var imgWidth = Math.min(width,PICT_MAX_WIDTH) ;
-        $tdPict.addClass(CSS_TEXT_SIGNAL1) ;
+        if (smallScreenFlag) {
+            $tdPict.addClass(CSS_TEXT_SIGNAL1_SMALL) ;
+        }else {
+            $tdPict.addClass(CSS_TEXT_SIGNAL1) ;
+        }
+
+
+
+
+
         $tdPict.css('width',imgWidth) ;
         $tdPict.append($img) ;
         //-- подпись под картинкой --//
         $img.css('width','95%') ;
         var txt = typeComment + '. ' + signalName ;
         $tdPict.append('<p>' +txt + '</p>') ;
+ //       $tdPict.append( txt ) ;
         return $tdPict ;
     } ;
     /**
@@ -218,20 +245,22 @@ function AddSignalsTable() {
 
         var $textBlock = $('<div/>') ;
         var textCss = currentImg['css'] ;
+        var textCssSmall = (currentImg['cssSmall'] !== undefined) ? currentImg['cssSmall'] : textCss ;
         $textBlock.css('width',tdWidth) ;
 //        $textBlock.css('width','100%') ;
+        textCss = (smallScreenFlag) ? textCssSmall : textCss ;
         $textBlock.addClass(textCss) ;
         //-- левый край  - текст
         var $textLeft =  $('<div/>') ;
         $textLeft.css('float','left') ;
         $textLeft.append(textLeft) ;
-        $textLeft.css('width','50%') ;
+        $textLeft.css('width','20%') ;
         $textLeft.css('text-align','left') ;
         $textBlock.append($textLeft) ;
         //-- правый край - текст
         var $textRight =  $('<div/>') ;
         $textRight.css('float','right') ;
-        $textRight.css('width','40%') ;
+        $textRight.css('width','80%') ;
         $textRight.css('text-align','right') ;
 
         $textRight.append(textRight) ;
@@ -276,12 +305,20 @@ function AddSignalsTable() {
      */
     var textColumnBuild = function(text,width)  {
         var $txtBlock = $('<div/>') ;
-        $txtBlock.addClass(CSS_TEXT_SIGNAL) ;
+        if (smallScreenFlag) {
+            $txtBlock.addClass(CSS_TEXT_SIGNAL_SMALL) ;
+        }else {
+            $txtBlock.addClass(CSS_TEXT_SIGNAL) ;
+        }
+
         $txtBlock.css('padding','0 10px') ;
         $txtBlock.css('column-count',2) ;
+//        $txtBlock.css('column-count',1) ;
         $txtBlock.css('column-gap','2em') ;
         $txtBlock.css('column-width',width/2) ;
         $txtBlock.append(text) ;
+        $txtBlock.css('overflow','hidden') ;
+
         return $txtBlock ;
 
     } ;

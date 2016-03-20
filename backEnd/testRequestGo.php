@@ -30,7 +30,7 @@ $answ = [
 //$phrase = 'Где купить телевизор?' ;
 //$phrase = 'почему я хочу купить холодильник по низкой цене в оренбурге' ;
 //$phrase = 'помогите стать миллионером' ;
-$phrase = 'где' ;
+$phrase = 'цейлонский чай' ;
 
 $reqGo = new RequestGo('requestRoot') ;
 $reqGo->parseDo($phrase) ;

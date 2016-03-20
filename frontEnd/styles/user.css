@@ -64,26 +64,46 @@ body {
     /**/
 
 /*}*/
-.textSignal,.textSignal1{
+/* текст - описание сигнала */
+.textSignal,.textSignal1,.textSignalSmall,.textSignal1Small{
     font-family: roboto ;
     font-size : 14px ;
     color : #6a2e02;
 
 }
+/** подписи под картинкой */
 .textSignal1 {
     font-size : 18px ;
 }
-.totalSignal,.proContraText,.proContraBigText {
+
+
+
+/** подписи над/под весами - итог**/
+.totalSignal,.proContraText,.proContraBigText,.proContraTextSmall,.proContraBigTextSmall {
     font-family: palar ;
     font-size : 22px ;
     color : #6a2e02;
 
 }
-
+/** подписи над весами - за против в строке сигнала **/
 .proContraText {
     font-size : 18px ;
 }
 
+/** вариант для узкого экрана **/
+.textSignalSmall {
+    font-size: 10px;
+}
+.textSignal1Small{
+    font-size: 12px;
+}
+.proContraTextSmall {
+    font-size: 12px;
+}
+.totalSignalSmall,.proContraBigTextSmall {
+    font-size: 14px;
+}
+/**--------------------------- **/
 
 ::-webkit-input-placeholder {
     font-family: roboto ;

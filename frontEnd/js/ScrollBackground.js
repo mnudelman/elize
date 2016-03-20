@@ -246,23 +246,13 @@ function ScrollBackground() {
         $mainBlockDiv.css('background-size','100% 100%') ;
         $mainBlockDiv.css('z-index',10) ;
         $mainBlockDiv.css('overflow','hidden') ;
-        $resultBackground.removeAttr('hidden') ;
+
 
         $mainBlockDiv.show( "blind", 500);
 
-
-        //$mainBlockDiv.show( "blind", 3000,function()  {
-        //    setTimeout(function() {
-        //$mainBlockDiv.removeAttr( "style" ).show() ;
-        //    }), 1000});
-
-
-
-
-
+        $resultBackground.removeAttr('hidden') ;
 
         formShowFlag = true ;
-
     } ;
     /**
      * Блок для вывода результата
@@ -376,15 +366,6 @@ function ScrollBackground() {
             var direct = Math.sign(event.deltaY) ;
             var mouseFlag = true ;
             scrollingGo(direct,mouseFlag) ;
-            //var timeout_id = setTimeout( function() {
-            //    scrollingGo(direct) ;
-            //    clearTimeout(timeout_id) ;} , 1000) ;
-
-
-
-
-
-
         });
        // ------ закрытие формы   --------//
         captionClick() ;
@@ -397,10 +378,10 @@ function ScrollBackground() {
                 case 27 :
                     _this.exit() ;
                     break ;
-                case 40 :
+                case 40 :                // down
                     scrollingGo(-1) ;
                     break ;
-                case 38 :
+                case 38 :               // up
                     scrollingGo(+1) ;
                     break ;
             }
@@ -458,14 +439,6 @@ function ScrollBackground() {
                         $resultBackground.attr( "hidden",'hidden') ;
                     }), 1000});
             }), 1000});
-
-
-
-
-
-        //$resultBackground.hide( "fade", 1000) ;
-
-
         $mainBlockDiv.empty() ;
         scrolling.stop = true ;
         formShowFlag = false ;
@@ -500,10 +473,7 @@ function ScrollBackground() {
      */
     var scrollingGo = function(yDirection,mouseFlag) {
         if (!scrolling.stop ) {
-            //if (scrolling.scrollingFlag) {
-            //    return ;
-            //}
-            if (mouseFlag !== undefined && mouseFlag) {
+            if (mouseFlag !== undefined && mouseFlag) {     // задержка для мыши
                 if (scrolling.scrollingFlag) {
                     return  ;
                 }
@@ -523,11 +493,6 @@ function ScrollBackground() {
             if (scrolling.kdyDataArea * dyMin > 50) {
                 dyMin  = 50/scrolling.kdyDataArea ;
             }
-
-
-            //if (yDirection === undefined) {
-            //    yDirection = Math.sign(e.deltaY) ;
-            //}
             var eDy = yDirection * dyMin ;
             var newMoving = scrolling.wheelMoving + eDy ;
             var top = scrolling.sliderY0 - newMoving ;
@@ -554,15 +519,6 @@ function ScrollBackground() {
             }
 
             $dataAreaDiv.css('top',topData) ;
-//            var timeDelay = 300;
-//            var steps = 0 ;
-//            var tmpTimer = setInterval(function () {
-//                    if(steps++ >= 1) {
-//                        scrolling.scrollingFlag = false ;
-//                        clearInterval(tmpTimer);
-//
-//                    }
-//            }, timeDelay);
             scrolling.scrollingFlag = false ;
         }
 //        scrollingDebug() ;

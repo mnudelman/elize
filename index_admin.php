@@ -21,15 +21,19 @@ $dirStyle = './frontEnd/styles';
     <link rel="stylesheet" href="<?= $dirStyle; ?>/formStyle.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/style.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/yandexStyles.css"/>
-    <link rel="stylesheet" href="<?= $dirStyle; ?>/user.css"/>
-    <link rel="stylesheet" href="<?= $dirStyle; ?>/admin.css"/>
+<!--    <link rel="stylesheet" href="--><?//= $dirStyle; ?><!--/user.css"/>-->
 
     <script language="javascript" src="<?= $dirLib; ?>/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="<?= $dirJquery_ui; ?>/jquery-ui.js"></script>
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
     <script type="text/javascript" src="<?= $dirMousewheel; ?>/jquery.mousewheel.js"></script>
+    <script type="text/javascript" src="<?= $dirAutoResize; ?>/autoResize.js"></script>
 
-    <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script> <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script> <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script> <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script> <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ResponseForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/MainProjectsForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
@@ -37,19 +41,20 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/BackgroundImg.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ScrollBackground.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/testScrollBackground.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/AddSignalsTable.js"></script>
 
     <script type="text/javascript" src="<?= $dirJs; ?>/SmokeClouds.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CircularMotion.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/ResultShow.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/UserInterface.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/RequestGo.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/AjaxRequest.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/MagicNormalPictures.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/CentralCircleText.js"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
-
 </head>
+
 <body>
 <div id="dbError" style="z-index:999;position:absolute;top:0;left:0;width:100%;htight:100%;background-color: #add8e6"></div>
 <div id="inviteInfo">

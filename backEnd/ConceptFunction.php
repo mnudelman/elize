@@ -128,6 +128,9 @@ class ConceptFunction
 
         $parseResult = $morphology->parsePhrase();
         $twoWords = ['noun' => false, 'adjective' => false] ;
+        $twoWordsTotal = [] ;
+        $twoWordsTotal[0] = $twoWords ;
+        $twoWordsTotal[1] = $twoWords ;
         for ($i = 0 ; $i < 2 ; $i++) {
             $pars = $parseResult[$i]['pars'];
 
@@ -147,8 +150,8 @@ class ConceptFunction
                         $parsItem[2] === 'nominative-ends'        // иминительный падеж
                     )
                 ) {
-                    $twoWords['noun'] = true ;
-                    break;
+                    $twoWordsTotal[$i]['noun'] = true ;
+//                    break;
                 }
                 if (
                     ($parsItem[0] === 'adjective' &&                // существительное
@@ -160,12 +163,16 @@ class ConceptFunction
                         $parsItem[2] === 'nominative-ends'        // иминительный падеж
                     )
                 ) {
-                    $twoWords['adjective'] = true ;
-                    break;
+                    $twoWordsTotal[$i]['adjective'] = true ;
+//                    break;
                 }
 
             }
          }
+        // складываем
+        $twoWords['noun'] = $twoWordsTotal[0]['noun'] || $twoWordsTotal[1]['noun'] ;
+        $twoWords['adjective'] = $twoWordsTotal[0]['adjective'] || $twoWordsTotal[1]['adjective'] ;
+
         if ($twoWords['noun'] &&  $twoWords['adjective']) {
             $result = [
                 'find' => true,

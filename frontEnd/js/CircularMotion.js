@@ -120,18 +120,22 @@ function CircularMotion() {
         var axisOffset = pxDeltaMove * currentStep ;
         var y = 0 ;
         var x = 0 ;
-        switch (mainAxis) {
-            case 'x' : {
-                y = blkHeight/2 ;
-                x = (direction == +1) ?  axisOffset : blkWidth - axisOffset  ;
-                break ;
-            }
-            case 'y' : {
-                x = blkWidth/2 ;
-                y = (direction == +1) ?  axisOffset : blkHeight - axisOffset  ;
-                break ;
-            }
-        }
+
+         switch (mainAxis) {
+             case 'x' :
+             {
+                 y = blkHeight / 2;
+                 x = (direction == +1) ? axisOffset : blkWidth - axisOffset;
+                 break;
+             }
+             case 'y' :
+             {
+                 x = blkWidth / 2;
+                 y = (direction == +1) ? axisOffset : blkHeight - axisOffset;
+                 break;
+             }
+         }
+
         return {x: x, y: y} ;
     } ;
     /**
