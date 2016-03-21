@@ -13,7 +13,7 @@ include_once __DIR__.'/local.php' ;
 $taskPar = TaskParameters::getInstance() ;
 $taskPar->setParameter('query','оренбург') ;
 $mp = new MainProjects() ;
-$mp->setQuery('холодильник') ;
+$mp->setQuery('краска') ;
 $mp->projectsGo() ;
 $result = $mp->getResult() ;
 

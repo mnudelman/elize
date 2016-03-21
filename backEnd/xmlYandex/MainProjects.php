@@ -135,12 +135,26 @@ class MainProjects {
 
     }
     public function setQuery($query) {
-       $this->currentQuery = $query ;
+       $this->currentQuery = $this->clearQuery($query) ;
     }
     public function getResult() {
         return [
             'successful' => true,
             'results' => $this->totalResult
             ];
+    }
+    /**
+     * убирает из запроса все лишние символы и разбивает на слова
+     * @param $phrase
+     */
+    private function clearQuery($text) {
+        $arr = [] ;
+        $phrase = trim($text)   ;
+        $phrase = preg_replace("/[\.,!?-]/",' ',$phrase) ;    //знаки припинания, -
+        $phrase = trim($phrase) ;
+        $phrase = preg_replace("/\s{1,}/",' ',$phrase) ;      // лишние пробелы
+        $phrase = mb_strtolower($phrase) ;
+        $phrase = trim($phrase) ;
+       return $phrase ;
     }
 }
