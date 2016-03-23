@@ -104,12 +104,13 @@ function AddSignalsTable() {
         var $totalRow = signalTotalRowBuild(totalRang) ;
         scrollBackground.putAnswerItem($totalRow,false) ;
 
+
     } ;
     var getColumnWidth = function() {
         tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 13 ; //20 ;  // колонка  таблицы
         smallScreenFlag = (tabColumnWidth <= COLUMN_WIDTH_MIN) ;   // переключить на малый экран
         if (smallScreenFlag) {
-            tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 7
+            tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 5
         }
     } ;
     /**
@@ -180,9 +181,13 @@ function AddSignalsTable() {
         $tdPict.css('width',imgWidth) ;
         $tdPict.append($img) ;
         //-- подпись под картинкой --//
-        $img.css('width','95%') ;
+        $img.css('width',imgWidth) ;
         var txt = typeComment + '. ' + signalName ;
-        $tdPict.append('<p>' +txt + '</p>') ;
+        var $p = $('<div/>') ;
+        $p.css('width',imgWidth) ;
+        $p.css('overflow','hidden') ;
+        $p.append(txt) ;
+        $tdPict.append($p) ;
  //       $tdPict.append( txt ) ;
         return $tdPict ;
     } ;
@@ -198,6 +203,9 @@ function AddSignalsTable() {
         bigFlag = (bigFlag === undefined) ? false : bigFlag ;
         var currentImg = (bigFlag) ? imgBalance.big : imgBalance.normal ;
         $tdBalance.css('width',tdWidth) ;
+        if (!bigFlag) {
+
+        }
         var dirBalance = imgBalance['dir'] ;
 
         var balancePict =  currentImg['pictContra'];
@@ -228,6 +236,7 @@ function AddSignalsTable() {
 
         var $proContra = textBalanceBuild(currentImg,tdWidth,textLeft,textRight) ;
 
+  //      $proContra.css('margin-right',5) ;
 
         $tdBalance.append($proContra) ;
         var $rangDiagram  = rangDiagramBuild(rang) ;  // линейная диаграмма
@@ -235,6 +244,7 @@ function AddSignalsTable() {
 
         $tdBalance.append($rangDiagram) ;
         $rangDiagram.css('width',tdWidth) ;
+ //       $rangDiagram.css('margin-right',5) ;
         return $tdBalance ;
     } ;
     /**
@@ -311,7 +321,8 @@ function AddSignalsTable() {
             $txtBlock.addClass(CSS_TEXT_SIGNAL) ;
         }
 
-        $txtBlock.css('padding','0 10px') ;
+        $txtBlock.css('padding','0 15px 0 10px') ;
+        $txtBlock.css('margin-right','5px') ;
         $txtBlock.css('column-count',2) ;
 //        $txtBlock.css('column-count',1) ;
         $txtBlock.css('column-gap','2em') ;

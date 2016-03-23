@@ -15,6 +15,8 @@ function MagicNormalPictures() {
     var $resultBlock = $('#resultBlockPhilosophy') ;
     var formShowFlag = false ;
     var currentStaticFlag = true ;  // статическая картинка(
+    var resizeFlag = false ;        // перевывод при изменении размера
+    var PICTURE_ID_PREFIX = 'magicPicture' ;   // для  ид блока
     var _this = this ;
     //----------------------------------//
     this.init = function() {
@@ -27,7 +29,7 @@ function MagicNormalPictures() {
     this.show = function(staticFlag) {
         currentStaticFlag = staticFlag ;
         formShowFlag = true ;
-        picturesShow(staticFlag) ;
+        picturesShow() ;
     } ;
 
     /**
@@ -43,6 +45,7 @@ function MagicNormalPictures() {
     this.resize = function() {
         if (formShowFlag) {
             animateStop = true ;
+            resizeFlag = true ;
             picturesShow() ;
         }
     } ;
@@ -51,7 +54,9 @@ function MagicNormalPictures() {
      * запускается вращение картинки, иначе - неподвижно
      */
     var picturesShow = function() {
-        $resultBlock.empty() ;
+        if (!resizeFlag) {
+            $resultBlock.empty();
+        }
         var pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
         var items = pictures['items'] ;
@@ -84,7 +89,7 @@ function MagicNormalPictures() {
 
         var imgFile = item['img']['text'] ;
 
-
+        var signalType = item['signalType'] ;
 
         var pictureFile = dir + '/' + imgFile ;
         var dy = (place['dy'] === undefined) ? 0 : place['dy'] ;
@@ -103,43 +108,79 @@ function MagicNormalPictures() {
         var left =  place['x1'] ;
         var width =  place['x2'] - place['x1'] ;
         var height =  place['y2'] - place['y1'] ;
-        var $block = $('<div/>') ;
+
+        var blkId = PICTURE_ID_PREFIX + '_' + item['typeSignal'] ;
+        var $block = $('#' + blkId) ;
+        var blkDefined = true ;
+        if($block.length === 0) {
+            $block = $('<div/>') ;
+            $block.attr('id',blkId) ;
+            blkDefined = false ;
+            $resultBlock.append($block);
+        }
+
+
+
         $block.css('position','absolute') ;
         $block.css('top',top) ;
         $block.css('left',left) ;
-        $resultBlock.append($block) ;
+
         // вкладываем вовнутрь рамку и картинку
-        var $borderBlock = $('<div/>') ;
-        $block.append($borderBlock) ;
+        var borderBlkId = blkId + '_border' ;
+        var $borderBlock = $('#' + borderBlkId) ;
+        if ($borderBlock.length === 0) {
+            $borderBlock = $('<div/>') ;
+            $borderBlock.attr('id',borderBlkId) ;
+            $block.append($borderBlock) ;
+        }
+
+
         $borderBlock.css('position','absolute') ;
         $borderBlock.css('top',0) ;
         $borderBlock.css('left',0) ;
 
 
-        var $borderImg = $('<img/>') ;
-        $borderImg.attr('src',borderFile) ;
+        var  $borderImg  =  $borderBlock.children('img') ;
+        if ($borderImg.length === 0) {
+            $borderImg = $('<img/>') ;
+            $borderBlock.append($borderImg) ;
+            $borderImg.attr('src',borderFile) ;
+        }
         $borderImg.css('width',width) ;
         $borderImg.css('height',height ) ;
-        $borderBlock.append($borderImg) ;
-
-
-
         // для картинки нужен отдельный блок
-        var $pictureBlock = $('<div/>') ;
+        var pictBlkId = blkId + '_picture' ;
+        var $pictureBlock = $('#' + pictBlkId) ;
+        if ($pictureBlock.length === 0) {
+            $pictureBlock = $('<div/>') ;
+            $block.append($pictureBlock) ;
+        }
+
         var pictTop = innerPlace['y1'] - place['y1'] ;
         var pictLeft = innerPlace['x1'] - place['x1'] ;
         var pictWidth = innerPlace['x2'] - innerPlace['x1'] ;
         var pictHeight = innerPlace['y2'] - innerPlace['y1'] ;
-        $block.append($pictureBlock) ;
+
         $pictureBlock.css('position','absolute') ;
         $pictureBlock.css('top',pictTop + dy) ;
         $pictureBlock.css('left',pictLeft) ;
-        var $pictureImg = $('<img/>') ;
+
+
+        var $pictureImg = $('#' + pictBlkId + ' img') ;
+        if ($pictureImg.length === 0) {
+            $pictureImg = $('<img/>') ;
+            $pictureBlock.append($pictureImg) ;
+        }
+
         $pictureImg.attr('id',itemKey+'_img') ;
-        $pictureImg.attr('src',pictureFile) ;
+
+        var src =  $pictureImg.attr('src') ;
+       if (src !== pictureFile) {
+            $pictureImg.attr('src',pictureFile) ;
+       }
         $pictureImg.css('width',pictWidth) ;
         $pictureImg.css('height',pictHeight - dy) ;
-        $pictureBlock.append($pictureImg) ;
+
         return $pictureImg ;
     } ;
 

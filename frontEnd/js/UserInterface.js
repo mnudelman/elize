@@ -7,8 +7,9 @@ function UserInterface() {
     var scrollBackground ;              // свиток - вывод результата
     var philosophyForm ;
     var magicNormalPictures ;           // фоновые картинки
+    var callStack;                      // стек вызовов
     var stamp = {} ;                    // планка - ввод запроса
-
+    var $stamp = $('#stamp') ;
     var $queryArea ;                    // область ввовда текста
     var resizeGo = false ;
     var resizeSteps = 0 ;
@@ -20,6 +21,9 @@ function UserInterface() {
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
+        callStack = paramSet.callStack ;
+        callStack.pushItem('userInterface',_this.reshow) ;
+
         backgroundImg = paramSet.backgroundImage; // объект - элементы изображения
         scrollBackground = paramSet.scrollBackground;    // "свиток" - фоновое изображение результата
         philosophyForm = paramSet.philosophyForm;
@@ -30,44 +34,62 @@ function UserInterface() {
         magicNormalPictures = paramSet.magicNormalPictures ;
         magicNormalPictures.init() ;                  // подготовка фоновых картинок
         stampDefine();              // объект stamp   - планка для запуска запроса
+        $queryArea = $('#queryText');
+        smoke.init();                 // подготовка и запуск облаков
+        smoke.smokeGo();
+        $queryArea.ready(function() {
+            userInterfaceEvents() ;
+            normalQueryShow() ;
+        }) ;
+
+    } ;
+    var userInterfaceEvents = function() {
+        $queryArea = $('#queryText');
+
+        $stamp = $('#stamp') ;
+        $stamp.off('click') ;
+        $stamp.click(function(e) {
+            stampClickGo() ;
+        }) ;
+
+
+
         $('*').off('mousedown') ;
         $('*').on('mousedown',function(e){
             var targetId = e.currentTarget.id;
- //           alert('targetId:' + target.id) ;
+            //           alert('targetId:' + target.id) ;
             if (targetId == 'smokeClouds') {
                 currentQuery = $queryArea.val();
                 e.preventDefault();
             }else {
 //                e.preventDefault();
             }
+            //          $queryArea.focus();
         }) ;
+
+
 
         $(window).click(function (e) {
             if (isTextClick(e)) {
-
+                $queryArea.focus();
             }else {
                 if (isStampClick(e)) {                   // выполнение запроса
-                    stampClickGo();
+ //                   stampClickGo();
                 } else {
-                    if (philosophyForm.getFormShowFlag() === true) { // click гасит форму
-                        philosophyForm.stopShow();
-                    }
                     normalQueryShow();
+                    $queryArea.focus();
                 }
             }
         });
+        $(window).off('resize') ;
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
-        $queryArea = $('#queryText');
-        $(document).keypress(function(){
+        $(document).off('keypress') ;
+        $(document).keypress(function(e){
             $queryArea.focus();
         }) ;
-        smoke.init();                 // подготовка и запуск облаков
-        smoke.smokeGo();
-        $centralCircleBlock.ready(function() {
-            $(window).click() ;
-        }) ;
+
 
     } ;
     /**
@@ -82,13 +104,15 @@ function UserInterface() {
         $queryArea = $('#queryText');
         $queryArea.attr('placeholder', 'ВВЕДИТЕ ВОПРОС');
 
+        $queryArea.css('z-index',10) ;
+
+
         $queryArea.off('keydown') ;
         $queryArea.on('keydown',function(e) {
             if (e.keyCode === 13) {
                 stampClickGo() ;
             }
         }) ;
-        $queryArea.css('z-index',10) ;
         $queryArea.off('blur') ;
         $queryArea.blur(function(e) {
             currentQuery = $queryArea.val();
@@ -96,15 +120,16 @@ function UserInterface() {
         var staticShow = true ;
         magicNormalPictures.show(staticShow) ;
         $queryArea.val(currentQuery);
-        $queryArea.focus() ;
+ //       $queryArea.focus() ;
     } ;
     /**
      * click по планке "ответ" -> процесс "раздумья" -
      * центральный круг и картинки вращаются
+     * запуск выполнения запроса
      */
     var stampClickGo = function() {
         if (philosophyForm.getFormShowFlag() === true) {
-            philosophyForm.scrollGo() ;       // развернуть свиток
+ //           philosophyForm.scrollGo() ;       // развернуть свиток
         } else {
             var staticShow = false ;
             magicNormalPictures.show(staticShow) ;
@@ -115,10 +140,20 @@ function UserInterface() {
                 var requestGo = paramSet.requestGo;
                 requestGo.setRequestText(currentQuery);
                 var auto = true;
+
                 requestGo.requestExecute(auto);
             }) ;
         }
     } ;
+    this.reshow = function() {
+        userInterfaceEvents() ;
+        normalQueryShow() ;
+        if(currentQuery.length > 0 ) {
+            $(window).click() ;
+        }
+
+    } ;
+
     /**
      * исполнитель изменения размера окна браузера
      * компоненты меняют размеры, если они в данный момент активны

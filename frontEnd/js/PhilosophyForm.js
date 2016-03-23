@@ -12,6 +12,7 @@
  * enter. Возврат в исходное состояние по  esc  или click по экрану.
  */
 function PhilosophyForm() {
+    var callStack ;       // стек вызовов
     var ajax ;
     var formAttr ;        // объект - атрибуты формы
     var currentPhrase = '' ;          // текущая фраза
@@ -31,6 +32,7 @@ function PhilosophyForm() {
     var _this = this ;
     //----------------------------------//
     this.init = function() {
+        callStack = paramSet.callStack ;
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
         formAttr = new PhilosophyFormAttr() ;        // объект - атрибуты формы
         formAttr.init() ;
@@ -41,21 +43,34 @@ function PhilosophyForm() {
         $answerAreaBlock = backgroundImg.getTextAreaBlock() ;
         $answerAreaBlock.empty() ;
         $answerAreaBlock.css('text-align','center') ;
-        $answerAreaBlock.css('vertical-align','center') ;
+        $answerAreaBlock.css('vertical-align','middle') ;
+        $answerAreaBlock.addClass('answerText') ;
         addSignalsTable = new AddSignalsTable() ;
+        currentPhrase = '' ;
 //
+
 
     } ;
      /**
      * изменить фразу
      */
     var phraseChange = function() {
-        currentPhrase = formAttr.getPhrase() ;
+         if(currentPhrase.length === 0) {
+             currentPhrase = (formAttr.getPhrase()).toUpperCase() ;
+
+         }
         $answerAreaBlock.empty() ;
-         var $p = $('<p/>') ;
-         $p.addClass('answerText') ;
+//         $answerAreaBlock.append(currentPhrase) ;
+         //
+         var $p = $('<div/>') ;
+
+         //$p.addClass('answerText') ;
          $p.append(currentPhrase) ;
          $answerAreaBlock.append($p) ;
+         var h = $p.height() ;
+         var blkH = $answerAreaBlock.height() ;
+         var top = (blkH - h) / 2 ;
+         $p.css('margin-top',top) ;
      } ;
     /**
      * развернуть свиток и
@@ -73,6 +88,10 @@ function PhilosophyForm() {
     this.queryGo = function() {
        formShowFlag = true ;
        scrollGoFlag = false ;
+        currentPhrase = '' ;
+
+       callStack.pushItem('philosophy',_this.reshow) ;
+
       responseShow() ;
     } ;
     this.getFormShowFlag = function() {
@@ -91,12 +110,22 @@ function PhilosophyForm() {
     this.resize = function() {
         if (formShowFlag) {
             animateStop = true ;
-            responseShow() ;
+//            responseShow() ;
+            showItems() ;
+            backgroundImg.stampShow('answer') ;
+            backgroundImg.centralCircleShow('answer') ;
             if (scrollGoFlag) {
                 addSignalsTable.tableShow() ;
             }
         }
     } ;
+    this.reshow = function() {
+        showItems() ;
+        backgroundImg.stampShow('answer') ;
+        backgroundImg.centralCircleShow('answer') ;
+
+    } ;
+
 
     var responseShow = function() {
         backgroundImg.stampShow('answer') ;
@@ -145,12 +174,20 @@ function PhilosophyForm() {
         var items = pictures['items'] ;
         for (var itemKey in items) {
             var item = items[itemKey] ;
-            var substName = item['subst'] ;
+            var substName = item['typeSignal'] ;
             signalTypes[signalTypesOrder++] = substName ;
 //            var substFile = dirImages + '/' +addSignals[substName]['file'] ;
             var substFile = addSignals[substName]['file'] ;
             magicNormalPictures.showItem(dir,item,itemKey,substFile) ;
         }
+        $(window).off('click') ;
+        $(window).on('click',function() {
+            $(window).off('click') ;
+            _this.stopShow() ;
+            callStack.pullItem() ;
+            callStack.currentGo() ;
+        }) ;
+        $(window).off('keydown') ;
         $(window).keydown(function(e){      // запуск по клавише
             if (e.keyCode === 13) {
                 $(window).off('keydown') ;
@@ -159,12 +196,19 @@ function PhilosophyForm() {
             if (e.keyCode === 27) {         // выход по esc
                 $(window).off('keydown') ;
                 _this.stopShow() ;
-                $(window).click() ;     // возврат в исходное состояние
+                callStack.pullItem() ;
+                callStack.currentGo() ;
             }
         }) ;
+        $stamp = $('#stamp') ;
+        $stamp.off('click') ;
+        $stamp.click(function(e) {
+            _this.scrollGo() ;
+        }) ;
 
-//        cycleShow() ;
+
         phraseChange() ;
+
     } ;
     /**
      * смена фраз в центральном круге

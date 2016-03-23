@@ -21,7 +21,7 @@ $dirStyle = './frontEnd/styles';
     <link rel="stylesheet" href="<?= $dirStyle; ?>/formStyle.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/style.css"/>
     <link rel="stylesheet" href="<?= $dirStyle; ?>/yandexStyles.css"/>
-<!--    <link rel="stylesheet" href="--><?//= $dirStyle; ?><!--/user.css"/>-->
+    <link rel="stylesheet" href="<?= $dirStyle; ?>/admin.css"/>
 
     <script language="javascript" src="<?= $dirLib; ?>/jquery-2.1.4.js"></script>
     <script type="text/javascript" src="<?= $dirJquery_ui; ?>/jquery-ui.js"></script>
@@ -56,11 +56,11 @@ $dirStyle = './frontEnd/styles';
 </head>
 
 <body>
-<div id="dbError" style="z-index:999;position:absolute;top:0;left:0;width:100%;htight:100%;background-color: #add8e6"></div>
+<div id="dbError" style="position:absolute;top:0;left:50%;width:50%;height:100%;overflow:auto;background-color: #add8e6"></div>
 <div id="inviteInfo">
     <strong>Вы можете редактировать структуру запроса и проверять его на примерах </strong>
 </div>
-<div id="tabs" >
+<div id="tabs" style="width:700px">
     <ul>
         <li><a href="#treeEditDialog">edit</a></li>
         <li><a href="#requestGoDialog">GO</a></li>
@@ -119,6 +119,7 @@ $dirStyle = './frontEnd/styles';
 
             </label>
             <button id="requestGoBt">go</button>
+            <button id="debugEmptyBt">debugEmpty</button>
         </div>
         <br>
 

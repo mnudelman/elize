@@ -47,6 +47,8 @@ function AjaxRequest(sendDataObject,overtimeFunc,requestFunc) {
      * исполнитель запроса
      */
     this.go = function () {
+        var url = paramSet.windowLocationHost+'/backEnd' ;
+        ajaxExecute = new AjaxExecutor(url) ;
         var iStep = 0;
         $(document).css('cursor','progress') ;
         ajaxExecute.postData(currentSendData, true);

@@ -9,6 +9,7 @@ function RequestGoForm() {
     var $textLabel = $('#textGoLabel') ;
     var $requestText = $('#requestText') ;
     var $buttonGo = $('#requestGoBt') ;          // запуск определения типа
+    var $buttonDebugEmpty = $('#debugEmptyBt') ;   // чистить область сообщений отладки
     var $treeResult = $('#treeResult') ;         // дерево  - результат определелния типа
     var $requestTypes = $('#requestTypes') ;
     var resultNodes ;         // список узлов, полученный от разбора запроса
@@ -24,10 +25,29 @@ function RequestGoForm() {
         $buttonGo.css('position','absolute') ;
         $buttonGo.position({
             my : "right center",
-            at : "right-10 top+80",
+            at : "left+500 top+80",
             of : "#requestGoDialog"
         }) ;
         $buttonGo.on('click',requestGo) ;
+
+
+        $buttonDebugEmpty.button() ;
+        $buttonDebugEmpty.css('border-radius',20) ;
+        $buttonDebugEmpty.css('position','absolute') ;
+        $buttonDebugEmpty.position({
+            my : "right center",
+            at : "left+500 top+120",
+            of : "#requestGoDialog"
+        }) ;
+        $buttonDebugEmpty.on('click',function() {
+            $('#dbError').empty() ;
+            $('#resultBlockPhilosophy').empty() ;
+            $('#centralCircle').empty() ;
+        }) ;
+
+
+
+
         $textLabel.css('position','absolute') ;
         $textLabel.position({
             my : "left top",

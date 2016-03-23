@@ -285,7 +285,7 @@ function BackgroundImg() {
 //   картинки основного фона
 //   правые и левые элементы имеют одинаковые размеры ->
 //           можно использовать одни и те же рамки
-//  атрибут subst определяет типСигнала для картинки
+//  атрибут typeSignal определяет типСигнала для картинки
 //  place.dy - поправка для обеспечение центрирования по вертикали
 // изображение задаётся тремя файлами:
 //  text: <статическое изображение основного фона с подписью>
@@ -319,7 +319,7 @@ function BackgroundImg() {
                         border:'l1_1_b.png',
                         text: 'l1_1_t.png'
                     },
-                    subst: 'cards'    // имя множества картинок в философском ответе
+                    typeSignal: 'cards'    // имя множества картинок в философском ответе
                 },
                 'l1_2': {                      // созвездия
                     place: {
@@ -343,7 +343,7 @@ function BackgroundImg() {
                         text: 'l1_2_t.png'
 
                     },
-                    subst: 'astrology'
+                    typeSignal: 'astrology'
                 },
                 'l1_3': {                     // домино
                     place: {
@@ -365,7 +365,7 @@ function BackgroundImg() {
                         border:'l1_1_b.png',
                         text: 'l1_3_t.png'
                     },
-                    subst: 'domino'
+                    typeSignal: 'domino'
                 },
                 'l2_1': {                      // лунно-солнечный календарь
                     place: {
@@ -386,7 +386,7 @@ function BackgroundImg() {
                         border:'l2_1_b.png',
                         text: 'l2_1_t.png'
                     },
-                    subst: 'moon_calendar'
+                    typeSignal: 'moon_calendar'
                 },
                 'l2_2': {                      // карты таро
                     place: {
@@ -407,7 +407,7 @@ function BackgroundImg() {
                         border:'l2_2_b.png',
                         text: 'l2_2_t.png'
                     },
-                    subst: 'taro'
+                    typeSignal: 'taro'
                 },
                 'l3_1': {                      // стихии
                     place: {
@@ -428,7 +428,7 @@ function BackgroundImg() {
                         border:'l2_1_b.png',
                         text: 'l3_1_t.png'
                     },
-                    subst: 'elements'
+                    typeSignal: 'elements'
                 },
                 'r1_1': {                         // звери
                     place: {
@@ -449,7 +449,7 @@ function BackgroundImg() {
                         border:'l1_1_b.png',
                         text: 'r1_1_t.png'
                     },
-                    subst: 'animals'
+                    typeSignal: 'animals'
                 },
                 'r1_2': {                         // деревья
                     place: {
@@ -470,7 +470,7 @@ function BackgroundImg() {
                         border:'l1_1_b.png',
                         text: 'r1_2_t.png'
                     },
-                    subst: 'trees'
+                    typeSignal: 'trees'
                 },
                 'r1_3': {                        // валюта
                     place: {
@@ -491,7 +491,7 @@ function BackgroundImg() {
                         border:'l1_1_b.png',
                         text: 'r1_3_t.png'
                     },
-                    subst: 'money'
+                    typeSignal: 'money'
                 },
                 'r2_1': {                       // цифры
                     place: {
@@ -512,7 +512,7 @@ function BackgroundImg() {
                         border:'l2_2_b.png',
                         text: 'r2_1_t.png'
                     },
-                    subst: 'digits'
+                    typeSignal: 'digits'
                 },
                 'r2_2': {                     // цвета
                     place: {
@@ -533,7 +533,7 @@ function BackgroundImg() {
                         border:'l2_1_b.png',
                         text: 'r2_2_t.png'
                     },
-                    subst: 'colors'
+                    typeSignal: 'colors'
                 },
                 'r3_1': {                    // страны
                     place: {
@@ -554,7 +554,7 @@ function BackgroundImg() {
                         border:'l2_1_b.png',
                         text: 'r3_1_t.png'
                     },
-                    subst: 'countries'
+                    typeSignal: 'countries'
                 }
             }
         } ;
@@ -614,7 +614,9 @@ function BackgroundImg() {
         }
         currentItem['place'] = placeResize(place) ;
         currentItem['img'] = newItemImg(item['img']) ;
-        currentItem['subst'] = item['subst'] ;
+        if(item['typeSignal'] !== undefined) {
+            currentItem['typeSignal'] = item['typeSignal'];
+        }
         return currentItem ;
     } ;
     var newItemImg = function(itemImg) {

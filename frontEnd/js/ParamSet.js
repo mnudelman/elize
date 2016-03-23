@@ -21,6 +21,7 @@ function ParamSet() {
     this.backgroundImage;      // объект - основной фон и его элементы
     this.scrollBackground ;    //  объект  -фок результата запроса
     this.magicNormalPictures ; // вывод картинок при вводе запроса
+    this.callStack ;           // стек вызовов
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -63,7 +64,9 @@ function ParamSet() {
         _this.backgroundImage = new BackgroundImg() ;
         _this.scrollBackground = new ScrollBackground();
         _this.magicNormalPictures = new MagicNormalPictures() ;
+        _this.callStack = new CallStack() ;
 //
+
 
     } ;
     this.setCurrentForm = function(form) {

@@ -2,6 +2,7 @@
  * Фоновое изображение - "свиток", подложенный под вывод результатов запроса
  */
 function ScrollBackground() {
+    var callStack ;               // стек вызовов
     var mainBlock = {} ;           // главный блок
     var mainDataBlock = {} ;     // окно для скроллтрования содержимого
     var caption = {} ;           // шапка - заголовок свитка
@@ -19,8 +20,8 @@ function ScrollBackground() {
     var $mainBlockDiv = $('#resultBlockNew') ;
     var $resultBackground = $('#resultBackground') ;
 
-    var $CaptionDiv ;           // шапка - заголовок свитка
-
+    var $captionDiv ;           // шапка - заголовок свитка
+    var $captionCrossDiv ;      // символ - закрытие свитка
     var $dataAreaDiv ;            // область данных
     var $mainDataBlockDiv ;       // подложка для прокрутки результата
     var $dataErrorBox ;
@@ -38,6 +39,7 @@ function ScrollBackground() {
     var _this = this ;
     //---------------------//
     this.init = function() {
+        callStack = paramSet.callStack ;
         dirImg = paramSet.dirImages + '/userInterface' ;
 
 
@@ -56,23 +58,35 @@ function ScrollBackground() {
 
         caption = {            // блок заголовок
             place: {
-                x1: 0 ,
+                x1:-8 ,
                 y1:-10,
-                x2: mainWidth + 10 ,
-                y2: 192  //186
+                x2: 1196, //mainWidth + 10 ,
+                y2: 195  //186
             },
             captionsTypes: {
                 answer: {
-                    file:'scroll_caption_answer.png'
+                    file:'scroll_caption_answer_1.png'
                 },
                 oracle: {
-                    file:'scroll_caption_oracle.png'
+                    file:'scroll_caption_oracle_1.png'
                 }
             },
             img : {
                 file: 'scroll_caption.png',
                 fileAnswer:'scroll_caption_answer.png'
+            },
+            captionCross: {
+                place: {
+                    x1: mainWidth - 100 + 20 +10 - 5 -5,
+                    y1: 40 + 20 -10 + 5 -2,
+                    x2: mainWidth - 100 + 20 + 10 -5 -5 + 32 ,
+                    y2: 72 +20 -10 +5 -2
+                },
+                img: {
+                    file: 'caption_cross.png'
+                }
             }
+
         } ;
         mainDataBlock = {           // блок вывода данных
             place: {
@@ -100,7 +114,7 @@ function ScrollBackground() {
                 y1:126,
                 x2:mainWidth - 50 + 6,
                 y2: 126 + 277,
-                y1Max : mainHeight - 277 -10 - 100
+                y1Max : mainHeight - 277 -10 - 100 - 10
             },
             img : {
                 file: 'slider_new.png'
@@ -159,9 +173,10 @@ function ScrollBackground() {
             kdyDataArea : 1,
             wheelMoving :0 ,
            sliderYMin : caption['place']['y2'],
-           sliderYMax: mainHeight - (slider['place']['y2'] - slider['place']['y1']) ,
+           sliderYMax: mainHeight - (slider['place']['y2'] - slider['place']['y1']) -20 ,
             stop : true,
-            scrollingFlag : false
+            scrollingFlag : false,
+            dy: 0
         } ;
 
         kResizeClc() ;
@@ -183,17 +198,24 @@ function ScrollBackground() {
         $mainBlockDiv.empty() ;
         mainBlockDefine() ;
 
+        var mainBlockId = $mainBlockDiv.attr('id') ;
+
         dataBlockDefine() ;
         internalBlockDefine('scrollLine',scrollLine) ;
         internalBlockDefine('slider',slider) ;
        //--- подстановка шапки  ---///
         caption.img['file'] = caption.captionsTypes[scrollType]['file'] ;
         internalBlockDefine('caption',caption) ;
+        $captionDiv = $('#' + mainBlockId +'_caption') ;
+        var captionCross  = caption.captionCross ;
+        internalBlockDefine('captionCross',captionCross,$captionDiv) ;
+        $captionCrossDiv = $('#' + mainBlockId +'_captionCross') ;
 
-//        internalBlockDefine('message',message) ;  // только для отладки
 
-         var mainBlockId = $mainBlockDiv.attr('id') ;
-        $CaptionDiv = $('#' + mainBlockId +'_caption') ;
+ //       internalBlockDefine('message',message) ;  // только для отладки
+
+
+
         $sliderDiv = $('#' + mainBlockId +'_slider') ;
         $scrollLineDiv = $('#' + mainBlockId +'_scrollLine') ;
         $messageDiv = $('#' + mainBlockId +'_message') ;
@@ -361,6 +383,7 @@ function ScrollBackground() {
      * события прокрутки
      */
     var scrollEvents = function() {
+        $(window).off('click') ;
         $mainBlockDiv.off('mousewheel') ;
         $mainBlockDiv.mousewheel(function(event, delta) {     //  колесо мыши (jquery plagin)
             var direct = Math.sign(event.deltaY) ;
@@ -392,23 +415,27 @@ function ScrollBackground() {
      */
     var captionClick = function() {
         // ------ закрытие формы   --------//
-        $CaptionDiv.off('mousemove') ;
-        $CaptionDiv.mousemove(function(e){
-            var x = e.pageX;
-            var y = e.pageY;
-            if (isExitArea(x,y)) {
-                $CaptionDiv.css('cursor','pointer') ;
-            } else {
-                $CaptionDiv.css('cursor','auto') ;
-            }
-        }) ;
-            $CaptionDiv.off('click') ;
-        $CaptionDiv.click(function(e) {
-            var x = e.pageX;
-            var y = e.pageY;
-            if (isExitArea(x,y)) {
+        $captionCrossDiv.off('mouseenter mouseout') ;
+       $captionCrossDiv.hover(function(e) {
+            $captionCrossDiv.css('cursor', 'pointer');
+        },
+           function(e) {
+               $captionCrossDiv.css('cursor', 'auto');
+           }
+       ) ;
+        //$captionDiv.off('mousemove') ;
+        //$captionDiv.mousemove(function(e){
+        //    var x = e.pageX;
+        //    var y = e.pageY;
+        //    if (isExitArea(x,y)) {
+        //        $captionDiv.css('cursor','pointer') ;
+        //    } else {
+        //        $captionDiv.css('cursor','auto') ;
+        //    }
+        //}) ;
+        $captionCrossDiv.off('click') ;
+        $captionCrossDiv.click(function(e) {
                 _this.exit() ;
-            }
         }) ;
 
     } ;
@@ -428,6 +455,9 @@ function ScrollBackground() {
         return ((x - left) >= 0.7 * width && (y - top) <= 0.6 * height) ;
 
     } ;
+    /**
+     * выход из формы
+     */
     this.exit = function() {
         $mainBlockDiv.hide( "blind", 500,function()  {
             setTimeout(function() {
@@ -439,11 +469,12 @@ function ScrollBackground() {
                         $resultBackground.attr( "hidden",'hidden') ;
                     }), 1000});
             }), 1000});
-        $mainBlockDiv.empty() ;
+//        $mainBlockDiv.empty() ;
         scrolling.stop = true ;
         formShowFlag = false ;
         $(window).off('keydown') ;
-        $(window).click() ;           // возврат в исходное состояние
+        callStack.currentGo() ;
+//        $(window).click() ;           // возврат в исходное состояние
     } ;
     /**
      * начальные атрибуты прокрутки (объект scrolling = {})
@@ -453,7 +484,7 @@ function ScrollBackground() {
         scrolling.scrollingFlag = false ;
         var height = slider.place['y2'] - slider.place['y1'];
         scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
-        scrolling.sliderYMax = kResize['ky'] * (mainHeight - height) - 30;
+        scrolling.sliderYMax = kResize['ky'] * (mainHeight - height) - 35;
         scrolling.pageY = 0 ;
         scrolling.pageY0 = 0 ;
         scrolling.sliderY = pixelToNumber($sliderDiv.css('top'));
@@ -480,7 +511,6 @@ function ScrollBackground() {
                 var timeout_id = setTimeout( function() {
                     clearTimeout(timeout_id) ;} , 2000) ;
             }
-
             scrolling.scrollingFlag = true ;
             var wheelSteps = 10 ;    // число вращений колеса мыши
             var maxDy = 10 ;//20 ;
@@ -494,15 +524,26 @@ function ScrollBackground() {
                 dyMin  = 50/scrolling.kdyDataArea ;
             }
             var eDy = yDirection * dyMin ;
+
+            scrolling.dy = eDy ;
+
+
             var newMoving = scrolling.wheelMoving + eDy ;
             var top = scrolling.sliderY0 - newMoving ;
 
-            var realTop = Math.max(top,scrolling.sliderYMin) ;
-            realTop = Math.min(realTop,scrolling.sliderYMax) ;
-            var deltaMoving = realTop - top ;
-            scrolling.wheelMoving = newMoving - deltaMoving ;
+
+            if (top > scrolling.sliderYMax) {
+                newMoving = newMoving + (top - scrolling.sliderYMax) ;
+                top = scrolling.sliderYMax ;
+            }
+            if (top < scrolling.sliderYMin) {
+                top = scrolling.sliderYMin ;
+                newMoving = 0 ;
+            }
+
+            scrolling.wheelMoving = newMoving   ;    //   - deltaMoving ;
             $sliderDiv.css('top', top);
-            scrolling.sliderY = pixelToNumber($sliderDiv.css('top')) ;
+            scrolling.sliderY =  top ;       //      pixelToNumber($sliderDiv.css('top')) ;
             var topData = scrolling.dataAreaY0 -
                 scrolling.kdyDataArea * (scrolling.sliderY - scrolling.sliderY0);
 
@@ -521,8 +562,8 @@ function ScrollBackground() {
             $dataAreaDiv.css('top',topData) ;
             scrolling.scrollingFlag = false ;
         }
-//        scrollingDebug() ;
-    } ;
+ //       scrollingDebug() ;
+  } ;
     /**
      * расчёт не видимой части выведенных данных
      */
@@ -583,12 +624,16 @@ function ScrollBackground() {
         text  = 'sliderYMin : ' + scrolling.sliderYMin+'<br>' ;
         $p.append(text) ;
         text  = 'sliderYMax : ' + scrolling.sliderYMax+'<br>' ;
+        $p.append(text) ;
         text  = 'stop : ' + ((scrolling.stop) ? 'true' : 'false') +'<br>' ;
         $p.append(text) ;
         text  = 'kDy : ' + scrolling.kdyDataArea +'<br>' ;
         $p.append(text) ;
             text  = 'wheelMoving : ' + scrolling.wheelMoving  +'<br>' ;
             $p.append(text) ;
+        scrolling.dy
+        text  = 'scrolling.dy : ' + scrolling.dy  +'<br>' ;
+        $p.append(text) ;
 
     } ;
     /**
@@ -732,6 +777,10 @@ function ScrollBackground() {
             internalBlockDefine('slider', slider);
 
             internalBlockDefine('caption', caption);
+            var captionCross = caption.captionCross ;
+            internalBlockDefine('captionCross',captionCross,$captionDiv) ;
+
+
             var classFLag = true ;
             vinjetkaShow(classFLag) ;
 

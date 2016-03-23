@@ -22,8 +22,9 @@ body {
 /** панель редактирования описаний**/
 .dialogPane {
     min-height: 400px;
-    min-width: 650px;
-    width: 650px;
+    min-width: 400px;
+    width: 400px;
+    left:0 ;
     overflow-x: auto ;
     /*overflow-y: visible ;*/
 }

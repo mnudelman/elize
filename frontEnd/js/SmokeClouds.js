@@ -84,10 +84,10 @@ function SmokeClouds() {
             circleMove: {
                 mainAxis: mainAxis, //'x' ,
                 direction: direction, // +1
-                deltaMove: 1,       // % от главной оси
+                deltaMove: 0.5,       // % от главной оси
                 rotationDirection: rotationDirection,    //'left',
                 radius: 10,         // %  от главной оси
-                deltaPhi: 20,        // число точек на окружности
+                deltaPhi: 30,        // число точек на окружности
                 axisMin: 40,         // % - границы перемещения по оси mainAxis
                 axisMax: 60
             }

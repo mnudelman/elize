@@ -60,6 +60,7 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/MagicNormalPictures.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CentralCircleText.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/CallStack.js"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>

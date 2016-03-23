@@ -4,7 +4,7 @@
 function AjaxExecutor(ajaxUrl) {
    var requestData = false ;                 // результат запроса
    var ajaxComplete = false ;
-   var debugFlag =  false ;                   // отладка запроса
+   var debugFlag =  true ;                   // отладка запроса
     var currentUrl = ajaxUrl ;
     var successDefault = function(data,textStatus) {
  //       alert('successDefault:status-'+textStatus+' ; hostAnswer:'+data) ;
