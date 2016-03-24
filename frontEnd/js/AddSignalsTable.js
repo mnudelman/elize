@@ -24,6 +24,7 @@ function AddSignalsTable() {
     var dirImages;             // папка изображений
     var scrollBackground ;     // объект - фоновое изображение для вывода
     var imgBalance = {} ;      // элементы изображения весов в таблице сигналов
+    var kResize ;              // пересчёт на размер окна
     var tabColumnWidth ;          // ширина колонки таблицы сигналов
     var PICT_MAX_WIDTH = 230 ;   // max ширина картинки 09.03.2016
     var CSS_TEXT_SIGNAL = 'textSignal' ; // класс - текстовое оформление сигнала
@@ -107,10 +108,10 @@ function AddSignalsTable() {
 
     } ;
     var getColumnWidth = function() {
-        tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 13 ; //20 ;  // колонка  таблицы
+        tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 13 +13 ; //20 ;  // колонка  таблицы
         smallScreenFlag = (tabColumnWidth <= COLUMN_WIDTH_MIN) ;   // переключить на малый экран
         if (smallScreenFlag) {
-            tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 5
+            tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 5 + 5
         }
     } ;
     /**
@@ -123,7 +124,7 @@ function AddSignalsTable() {
      * @returns {*|jQuery|HTMLElement}
      */
     var signalRowBuild = function(signal,typeName) {
-        var kResize = backgroundImg.getKResize()  ; // коэффициенты для пересчёта
+         kResize = backgroundImg.getKResize()  ; // коэффициенты для пересчёта
                                                     // на размер окна браузера
         // ширина столбцов из общей ширины области
  //       if (tabColumnWidth === undefined) {
@@ -217,6 +218,12 @@ function AddSignalsTable() {
             $imgB.css('transform','scaleX(-1)') ;
         }
         $tdBalance.css('vertical-align','top') ;
+
+
+
+
+
+        $tdBalance.css('padding-right',kResize['kx'] * 25) ;
 
         var imgW = currentImg['w'] ;
         var imgH = currentImg['h'] ;
@@ -320,8 +327,14 @@ function AddSignalsTable() {
         }else {
             $txtBlock.addClass(CSS_TEXT_SIGNAL) ;
         }
-
-        $txtBlock.css('padding','0 15px 0 10px') ;
+        var leftPadding = kResize['kx'] * 10 ;
+        var rightPadding = kResize['kx'] * 30 ;
+        rightPadding = Math.min(rightPadding,10) ;
+        rightPadding = Math.max(rightPadding,5) ;
+        leftPadding = 10 ;
+//        $txtBlock.css('padding','0 15px 0 10px') ;
+        $txtBlock.css('padding-left',leftPadding) ;
+        $txtBlock.css('padding-right',rightPadding) ;
         $txtBlock.css('margin-right','5px') ;
         $txtBlock.css('column-count',2) ;
 //        $txtBlock.css('column-count',1) ;

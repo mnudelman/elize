@@ -53,10 +53,10 @@ function BackgroundImg() {
                 y2: 710
             },
             textArea: {
-                x1: 827,
-                y1: 460,
-                x2: 1095,
-                y2: 625
+                x1: 827 - 6,
+                y1: 460 + 5,
+                x2: 1095 + 6,
+                y2: 625 + 5
             },
             query: {     // ценральный круг при вводе запроса
                 idText : 'queryText',
@@ -841,7 +841,7 @@ function BackgroundImg() {
         $block.append($txt) ;
 
         $txt.addClass('queryText') ;
-        $txt.attr('placeholder','ВВЕДИТЕ ВОПРОС') ;
+//        $txt.attr('placeholder','ВВЕДИТЕ ВОПРОС') ;
         $txt.css('width',0.95*txtWidth) ;
          $txt.attr('id',idText) ;
         $txt.css('height',0.97 * txtHeight) ;

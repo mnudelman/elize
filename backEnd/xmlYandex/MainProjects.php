@@ -135,7 +135,7 @@ class MainProjects {
 
     }
     public function setQuery($query) {
-       $this->currentQuery = $this->clearQuery($query) ;
+       $this->currentQuery = urlencode($this->clearQuery($query)) ;
     }
     public function getResult() {
         return [
@@ -152,7 +152,7 @@ class MainProjects {
         $phrase = trim($text)   ;
         $phrase = preg_replace("/[\.,!?-]/",' ',$phrase) ;    //знаки припинания, -
         $phrase = trim($phrase) ;
-        $phrase = preg_replace("/\s{1,}/",'+',$phrase) ;      // лишние пробелы
+        $phrase = preg_replace("/\s{1,}/",' ',$phrase) ;      // лишние пробелы
         $phrase = mb_strtolower($phrase) ;
         $phrase = trim($phrase) ;
         //заменить пробелы на +

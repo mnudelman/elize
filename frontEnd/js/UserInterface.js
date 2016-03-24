@@ -102,7 +102,7 @@ function UserInterface() {
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
         $queryArea = $('#queryText');
-        $queryArea.attr('placeholder', 'ВВЕДИТЕ ВОПРОС');
+ //       $queryArea.attr('placeholder', 'ВВЕДИТЕ ВОПРОС');
 
         $queryArea.css('z-index',10) ;
 

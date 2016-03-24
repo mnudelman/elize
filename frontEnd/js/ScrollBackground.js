@@ -47,9 +47,9 @@ function ScrollBackground() {
         mainBlock = {
             place : {
                 x1: 370,
-                y1: 6,
+                y1: 8,
                 x2: 1560,
-                y2: 1020
+                y2: 1020 -2
             },
             img : {
                 file: 'scroll_empty.png'
@@ -60,9 +60,9 @@ function ScrollBackground() {
         caption = {            // блок заголовок
             place: {
                 x1:-8 ,
-                y1:-10,
+                y1:-10 + 2  ,
                 x2: 1196, //mainWidth + 10 ,
-                y2: 195  //186
+                y2: 195 -5 -5 -5  //186
             },
             captionsTypes: {
                 answer: {
@@ -100,9 +100,9 @@ function ScrollBackground() {
         } ;
         dataArea = {              // область вывода
             place: {
-                x1:50,
+                x1:50, // 50,
                 y1:100, // 40,
-                x2: mainWidth - 50,
+                x2: mainWidth - 50 - 50,
                 y2: undefined
             },
             data: {
@@ -174,7 +174,7 @@ function ScrollBackground() {
             kdyDataArea : 1,
             wheelMoving :0 ,
            sliderYMin : caption['place']['y2'],
-           sliderYMax: mainHeight - (slider['place']['y2'] - slider['place']['y1']) -20 ,
+           sliderYMax: mainHeight - (slider['place']['y2'] - slider['place']['y1']) + 40, // -20 + 10 + 20 ,
             stop : true,
             scrollingFlag : false,
             dy: 0
@@ -208,6 +208,7 @@ function ScrollBackground() {
         caption.img['file'] = caption.captionsTypes[scrollType]['file'] ;
         internalBlockDefine('caption',caption) ;
         $captionDiv = $('#' + mainBlockId +'_caption') ;
+ //       $captionDiv.css('opacity',0.5) ;         // debug only
         var captionCross  = caption.captionCross ;
         internalBlockDefine('captionCross',captionCross,$captionDiv) ;
         $captionCrossDiv = $('#' + mainBlockId +'_captionCross') ;
@@ -380,6 +381,9 @@ function ScrollBackground() {
                 $blk.css('background-size','100% 100%') ;
             }
         }
+        if (block['refer'] !== undefined) {
+
+        }
     } ;
     /**
      * события прокрутки
@@ -417,14 +421,14 @@ function ScrollBackground() {
      */
     var captionClick = function() {
         // ------ закрытие формы   --------//
-        $captionCrossDiv.off('mouseenter mouseout') ;
-       $captionCrossDiv.hover(function(e) {
-            $captionCrossDiv.css('cursor', 'pointer');
-        },
-           function(e) {
-               $captionCrossDiv.css('cursor', 'auto');
-           }
-       ) ;
+       // $captionCrossDiv.off('mouseenter mouseout') ;
+       //$captionCrossDiv.hover(function(e) {
+       //     $captionCrossDiv.css('cursor', 'pointer');
+       // },
+       //    function(e) {
+       //        $captionCrossDiv.css('cursor', 'auto');
+       //    }
+       //) ;
         //$captionDiv.off('mousemove') ;
         //$captionDiv.mousemove(function(e){
         //    var x = e.pageX;
@@ -465,6 +469,8 @@ function ScrollBackground() {
             setTimeout(function() {
                 $mainBlockDiv.removeAttr( "style" ).hide().fadeIn();
                 $scrollLineDiv.attr('hidden','hidden') ;     // появлялась после сворачивания свитка
+                $dataAreaDiv.attr('hidden','hidden') ;     // что-то отсвечивало перед исчезновением
+                $captionDiv.attr('hidden','hidden') ;     // что-то отсвечивало перед исчезновением
 //-- фон тает после исчезновения свитки
                 $resultBackground.hide( "fade", 1000,function()  {
                     setTimeout(function() {
@@ -487,7 +493,7 @@ function ScrollBackground() {
         scrolling.scrollingFlag = false ;
         var height = slider.place['y2'] - slider.place['y1'];
         scrolling.sliderYMin = kResize['ky'] * slider.place['y1'];
-        scrolling.sliderYMax = kResize['ky'] * (mainHeight - height) - 35;
+        scrolling.sliderYMax = kResize['ky'] * (mainHeight - height - 35 + 5 );
         scrolling.pageY = 0 ;
         scrolling.pageY0 = 0 ;
         scrolling.sliderY = pixelToNumber($sliderDiv.css('top'));
@@ -715,7 +721,8 @@ function ScrollBackground() {
         var width = kResize['kx'] * (place['x2'] - place['x1']) ;
 
         var dataWidth = $dataAreaDiv.width() ;
-        left  = ((dataWidth - 80)- width)/2 ;
+//        left  = ((dataWidth - 80)- width)/2 ;
+        left  = (dataWidth - width)/2 ;
         $vinDiv.css('width',dataWidth) ;
 
         var vinDivHeight = place['y2'] + 60 ;

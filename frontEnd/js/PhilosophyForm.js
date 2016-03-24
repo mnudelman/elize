@@ -29,6 +29,8 @@ function PhilosophyForm() {
     var dirImages ;
     var signalTypes = [] ;          //  список типов сигналов в порядке
                                     // их вывода на экран
+    var fontSizeNormal ;
+    var fontSizeMin ;
     var _this = this ;
     //----------------------------------//
     this.init = function() {
@@ -45,7 +47,10 @@ function PhilosophyForm() {
         $answerAreaBlock.css('text-align','center') ;
         $answerAreaBlock.css('vertical-align','middle') ;
         $answerAreaBlock.addClass('answerText') ;
-        addSignalsTable = new AddSignalsTable() ;
+        fontSizeNormal =  $answerAreaBlock.css('font-size') ;
+        fontSizeNormal = fontSizeNormal.replace('px','') ;
+        fontSizeMin = 0.3 * fontSizeNormal ;
+            addSignalsTable = new AddSignalsTable() ;
         currentPhrase = '' ;
 //
 
@@ -62,8 +67,12 @@ function PhilosophyForm() {
         $answerAreaBlock.empty() ;
 //         $answerAreaBlock.append(currentPhrase) ;
          //
+         var kResize = backgroundImg.getKResize() ;
          var $p = $('<div/>') ;
-
+         var fontSize = kResize['kx'] * fontSizeNormal ;
+         fontSize = Math.min(fontSize,fontSizeNormal) ;
+         fontSize = Math.max(fontSize,fontSizeMin) ;
+         $answerAreaBlock.css('font-size',fontSize) ;
          //$p.addClass('answerText') ;
          $p.append(currentPhrase) ;
          $answerAreaBlock.append($p) ;
@@ -107,9 +116,12 @@ function PhilosophyForm() {
         formShowFlag = false ;
         $answerAreaBlock.empty() ;
     } ;
+
+
     this.resize = function() {
         if (formShowFlag) {
             animateStop = true ;
+//            scrollGoFlag = false ;
 //            responseShow() ;
             showItems() ;
             backgroundImg.stampShow('answer') ;
@@ -120,6 +132,7 @@ function PhilosophyForm() {
         }
     } ;
     this.reshow = function() {
+        scrollGoFlag = false ;
         showItems() ;
         backgroundImg.stampShow('answer') ;
         backgroundImg.centralCircleShow('answer') ;
