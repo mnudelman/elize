@@ -35,4 +35,10 @@ function CallStack() {
         var callback = stackItems[topStack]['callback'] ;
         callback() ;
     } ;
+    this.getStack = function() {
+        return {
+            top: topStack,
+            stack: stackItems
+        } ;
+    } ;
 }

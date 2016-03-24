@@ -181,12 +181,12 @@ function PhilosophyForm() {
             magicNormalPictures.showItem(dir,item,itemKey,substFile) ;
         }
         $(window).off('click') ;
-        $(window).on('click',function() {
-            $(window).off('click') ;
-            _this.stopShow() ;
-            callStack.pullItem() ;
-            callStack.currentGo() ;
-        }) ;
+        //$(window).on('click',function() {
+        //    $(window).off('click') ;
+        //    _this.stopShow() ;
+        //    callStack.pullItem() ;
+        //    callStack.currentGo() ;
+        //}) ;
         $(window).off('keydown') ;
         $(window).keydown(function(e){      // запуск по клавише
             if (e.keyCode === 13) {

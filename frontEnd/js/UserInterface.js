@@ -68,7 +68,7 @@ function UserInterface() {
         }) ;
 
 
-
+        $(window).off('click') ;
         $(window).click(function (e) {
             if (isTextClick(e)) {
                 $queryArea.focus();

@@ -30,6 +30,7 @@ function ScrollBackground() {
     var $scrollLineDiv ;          // линия скролирования
     var $messageDiv ;
     var $sliderDiv ;              // бегунок
+    var $scrollLine ;
     var kResize = {kx: 1, ky:1} ; // коэффициенты пересчёта по размеру экрана
     var dirImg ;
     var scrolling = {} ;         // текущая прокрутка
@@ -219,6 +220,7 @@ function ScrollBackground() {
         $sliderDiv = $('#' + mainBlockId +'_slider') ;
         $scrollLineDiv = $('#' + mainBlockId +'_scrollLine') ;
         $messageDiv = $('#' + mainBlockId +'_message') ;
+        $scrollLine = $('#' + mainBlockId +'_scrollLine') ;
         scrollEvents() ;
 
     } ;
@@ -462,19 +464,20 @@ function ScrollBackground() {
         $mainBlockDiv.hide( "blind", 500,function()  {
             setTimeout(function() {
                 $mainBlockDiv.removeAttr( "style" ).hide().fadeIn();
+                $scrollLineDiv.attr('hidden','hidden') ;     // появлялась после сворачивания свитка
 //-- фон тает после исчезновения свитки
                 $resultBackground.hide( "fade", 1000,function()  {
                     setTimeout(function() {
                         $resultBackground.removeAttr( "style" );   // .hide();       //.fadeIn();
                         $resultBackground.attr( "hidden",'hidden') ;
+
+                        scrolling.stop = true ;
+                        formShowFlag = false ;
+                        $(window).off('keydown') ;
+                        callStack.currentGo() ;
                     }), 1000});
+
             }), 1000});
-//        $mainBlockDiv.empty() ;
-        scrolling.stop = true ;
-        formShowFlag = false ;
-        $(window).off('keydown') ;
-        callStack.currentGo() ;
-//        $(window).click() ;           // возврат в исходное состояние
     } ;
     /**
      * начальные атрибуты прокрутки (объект scrolling = {})
