@@ -35,7 +35,8 @@ function ScrollBackground() {
     var dirImg ;
     var scrolling = {} ;         // текущая прокрутка
     var formShowFlag = false ;
-    var scrollingFlag = false ;     // во избежании слишком бытрой прокрутки
+    var preloadIimages = [] ;        // список изображений для preload
+    var cashImages = [] ;
     //---------------------//
     var _this = this ;
     //---------------------//
@@ -182,6 +183,19 @@ function ScrollBackground() {
 
         kResizeClc() ;
         $resultBackground.attr('hidden','hidden') ;
+        preloadIimages[0] = mainBlock.img.file ;
+        preloadIimages[1] = caption.captionsTypes.answer.file ;
+        preloadIimages[2] = caption.captionsTypes.oracle.file ;
+        preloadIimages[3] = caption.captionsTypes.oracle.file ;
+        preloadIimages[2] = caption.captionCross.img.file ;
+        preload() ;
+
+    } ;
+    var preload = function() {
+       for (var i = 0; i < preloadIimages.length; i++)  {
+            cashImages[i] = new Image() ;
+           cashImages[i].src = dirImg + '/' + preloadIimages[i] ;
+       }
     } ;
     /**
      * размеры главного блока

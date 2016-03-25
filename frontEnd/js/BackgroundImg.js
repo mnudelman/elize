@@ -32,6 +32,8 @@ function BackgroundImg() {
     var $stampBlock = $('#stamp') ;
     var animateStop = false ;
     var centralCircleText ;       // объект поддержки размера области ввода
+    var currentMainWidth ;
+    var currentMainHeight ;
     var _this = this ;
     //------------------------------------//
     this.init = function() {
@@ -559,7 +561,7 @@ function BackgroundImg() {
             }
         } ;
 
-
+       _this.setCurrentSize() ;
     } ;
     /**
      * отношение высоты к ширине
@@ -570,12 +572,28 @@ function BackgroundImg() {
         var h  = mainImgSize['h'] ;
         return Math.round((h/w)*100000)/100000 ;
     } ;
+    this.isResize = function() {
+        var screenW = $(document).width() ;
+        var screenH = $(document).height() ;
+        return (screenW !== currentMainWidth || screenH !== currentMainHeight) ;
+    } ;
+    this.setCurrentSize = function() {
+        var screenW = $(document).width() ;
+        var screenH = $(document).height() ;
+//     сохранить текущий размер
+        currentMainHeight = screenH ;
+        currentMainWidth = screenW ;
+    } ;
     /**
      * пересчёт в реальный размер экрана
      */
     this.getKResize = function() {
-        var screenW = $(document).width() ;
-        var screenH = $(document).height() ;
+        //var screenW = $(document).width() ;
+        //var screenH = $(document).height() ;
+//     сохранить текущий размер
+        var screenH = currentMainHeight  ;
+        var screenW = currentMainWidth   ;
+//     -------------------------------    //
         var imgW  = mainImg['size']['w'] ;
         var imgH  = mainImg['size']['h'] ;
         var imgHClc = screenW * _this.getKHW() ;

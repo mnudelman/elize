@@ -39,6 +39,9 @@ function AddSignalsTable() {
     var CSS_BIG_PRO_CONTRA_TEXT_SMALL = 'proContraBigTextSmall' ; // подпись на итоговой диаграмме
     var COLUMN_WIDTH_MIN = 142 ;    // ширина весов, при которой переключать на малый экран
 
+    var preloadIimages = [] ;        // список изображений для preload
+    var cashImages = [] ;
+
     var _this = this ;
     //---------------------------------------------------//
     /**
@@ -47,8 +50,8 @@ function AddSignalsTable() {
      * @param signalTps - список типов в порядке их вывода
      */
     this.init = function(signals,signalTps) {
-        addSignals = signals ;
-        signalTypes  = signalTps ;
+        //addSignals = signals ;
+        //signalTypes  = signalTps ;
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
         dirImages = paramSet.dirImages ;
         scrollBackground = paramSet.scrollBackground ; // объект для вывода
@@ -82,6 +85,25 @@ function AddSignalsTable() {
                 contra: 'Против'
             }
         } ;
+        preloadIimages[0] = imgBalance.normal.pictContra ;
+        preloadIimages[1] = imgBalance.normal.pictEqual ;
+        preloadIimages[2] = imgBalance.big.pictContra ;
+        preloadIimages[3] = imgBalance.big.pictEqual ;
+        preloadIimages[4] = imgBalance.diagram.linePro ;
+        preloadIimages[5] = imgBalance.diagram.lineContra  ;
+        preload() ;
+    } ;
+    var preload = function() {
+        var dirImg = imgBalance.dir ;
+        for (var i = 0; i < preloadIimages.length; i++)  {
+            cashImages[i] = new Image() ;
+            cashImages[i].src = dirImg + '/' + preloadIimages[i] ;
+        }
+    } ;
+
+    this.setSignals = function(signals,signalTps) {
+        addSignals = signals ;
+        signalTypes  = signalTps ;
     } ;
     /**
      * вывод таблицы

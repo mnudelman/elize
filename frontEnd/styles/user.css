@@ -5,6 +5,7 @@ body {
     overflow: hidden;
     background-repeat: no-repeat;
     background-color: #000000;
+    /*min-width: 500px;*/
 }
 @font-face {
     font-family: palar; /* Гарнитура шрифта */
@@ -57,7 +58,9 @@ body {
     font-weight: 900 ;
 
 }
-
+#resultBlockNew_captionCross:hover {
+    cursor: pointer;
+}
 /*.queryText {*/
     /*font-family: roboto ;*/
     /*font-size : 14px ;*/

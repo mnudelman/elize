@@ -12,6 +12,7 @@
 function SmokeClouds() {
     var $mainBlock = $('#smokeClouds');
     var stopAnimation = false;     // остановить анимацию
+    var animationTimers = [] ;
     var backgroundImg;
     var _this = this;
     //-------------------------------//
@@ -23,12 +24,16 @@ function SmokeClouds() {
      */
     this.smokeResize = function () {
         stopAnimation = true;
+        for (var i = 0; i < animationTimers.length; i++) {
+            var interval = animationTimers[i] ;
+            clearInterval(interval) ;
+        }
     };
     /**
      * Запуск прцесса дымления
      */
     this.smokeGo = function () {
-
+        animationTimers = [] ;
         stopAnimation = false;
         $mainBlock.empty();
         var clouds = backgroundImg.getClouds();    // массив описаний
@@ -36,9 +41,12 @@ function SmokeClouds() {
         var items = clouds['items'];
         for (var itemKey in items) {
             var item = items[itemKey];
-            var $blk = $('<div/>');
             var id = 'cloud_' + itemKey;
-            $blk.attr('id', id);
+            var $blk = $('#' + id);
+            if ($blk.length ===0) {
+                $blk = $('<div/>');
+                $blk.attr('id', id);
+            }
             var place = item['place'];
             var imgFile = dirImg + '/' + item['img']['file'];
             $mainBlock.append($blk);
@@ -108,6 +116,7 @@ function SmokeClouds() {
         motion.init(motionBlock);
 
         var tmpTimer = setInterval(function () {        // процесс анимации в блоке
+            animationTimers[animationTimers.length] = tmpTimer ;
             var blkCoord = motion.getImgPosition();    // это координаты картинки относ блока
             var newLeft = left_0 + blkCoord['x'];      // пересчёт в абсолютные координаты
             var newTop = top_0 + blkCoord['y'];

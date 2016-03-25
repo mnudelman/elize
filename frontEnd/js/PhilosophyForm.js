@@ -50,7 +50,8 @@ function PhilosophyForm() {
         fontSizeNormal =  $answerAreaBlock.css('font-size') ;
         fontSizeNormal = fontSizeNormal.replace('px','') ;
         fontSizeMin = 0.3 * fontSizeNormal ;
-            addSignalsTable = new AddSignalsTable() ;
+        addSignalsTable = new AddSignalsTable() ;
+        addSignalsTable.init() ;
         currentPhrase = '' ;
 //
 
@@ -87,7 +88,7 @@ function PhilosophyForm() {
      */
     this.scrollGo = function() {
         scrollGoFlag = true ;
-        addSignalsTable.init(addSignals,signalTypes) ;
+        addSignalsTable.setSignals(addSignals,signalTypes) ;
         addSignalsTable.tableShow() ;
 
     } ;

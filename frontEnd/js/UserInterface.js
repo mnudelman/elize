@@ -11,10 +11,9 @@ function UserInterface() {
     var stamp = {} ;                    // планка - ввод запроса
     var $stamp = $('#stamp') ;
     var $queryArea ;                    // область ввовда текста
+    var resizeGoFlag = false ;
     var resizeGo = false ;
-    var resizeSteps = 0 ;
-    var RESIZE_TIME_DELAY = 200 ;        // задержка при контроле изменения размеров
-    var RESIZE_TAKTS_MAX = 1;            // число тактов, после которых фиксируются изменения размера
+    var RESIZE_TIME_DELAY = 10 ;        // задержка при контроле изменения размеров
     var currentQuery = '' ;              // текст запроса
     var $centralCircleBlock = $('#centralCircle') ;  // центральный круг
     var $centralCircleTextBlock = $('#centralCircleText') ; // текст в круге
@@ -129,7 +128,7 @@ function UserInterface() {
      */
     var stampClickGo = function() {
         if (philosophyForm.getFormShowFlag() === true) {
- //           philosophyForm.scrollGo() ;       // развернуть свиток
+            philosophyForm.scrollGo() ;       // развернуть свиток
         } else {
             var staticShow = false ;
             magicNormalPictures.show(staticShow) ;
@@ -153,30 +152,27 @@ function UserInterface() {
         }
 
     } ;
-
-    /**
-     * исполнитель изменения размера окна браузера
-     * компоненты меняют размеры, если они в данный момент активны
-     */
     var resize = function() {
-        resizeSteps = 0;
         if (!resizeGo) {    // запустить таймер
             resizeGo = true;
             var tmpTimer = setInterval(function () {
-                if (++resizeSteps >= RESIZE_TAKTS_MAX) {    // конец изменения размера
+                if (!backgroundImg.isResize()) {
                     clearInterval(tmpTimer);
+                    resizeGo = false;
+                }else {
+                    backgroundImg.setCurrentSize() ;
                     stampDefine();              // объект stamp   - печать
                     normalQueryShow() ;
                     smoke.smokeGo();
-                    resizeGo = false;
-                    resizeSteps = 0;
                     philosophyForm.resize() ;
                     scrollBackground.resize() ;
+
                 }
             }, RESIZE_TIME_DELAY);
         }
     } ;
-     var stampDefine = function() {
+
+    var stampDefine = function() {
         var block = backgroundImg.getStamp() ;
         var x1 = block['place']['x1'] ;
         var y1 = block['place']['y1'] ;
