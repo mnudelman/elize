@@ -167,7 +167,9 @@ function PhilosophyForm() {
                 if (answ !== false) {
                     var message = answ['message'];
                     ajax.errorMessage(message) ;
+
                 }
+                exit();
 
             }
         }) ;
@@ -207,10 +209,7 @@ function PhilosophyForm() {
                 _this.scrollGo() ;
             }
             if (e.keyCode === 27) {         // выход по esc
-                $(window).off('keydown') ;
-                _this.stopShow() ;
-                callStack.pullItem() ;
-                callStack.currentGo() ;
+                exit() ;
             }
         }) ;
         $stamp = $('#stamp') ;
@@ -222,6 +221,12 @@ function PhilosophyForm() {
 
         phraseChange() ;
 
+    } ;
+    var exit = function() {
+        $(window).off('keydown') ;
+        _this.stopShow() ;
+        callStack.pullItem() ;
+        callStack.currentGo() ;
     } ;
     /**
      * смена фраз в центральном круге
