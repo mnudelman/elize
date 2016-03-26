@@ -23,6 +23,7 @@ function BackgroundImg() {
     var centralCircleGlow = {};   // размытый шар
     var stamp = {} ;              // печать - ввод запроса
     var dirImages = paramSet.dirImages ;
+    var placeholder ;             // объект - имитатор
     var dirMainImg ;
     var dirSmoke ;
     var dirPictures ;
@@ -37,6 +38,8 @@ function BackgroundImg() {
     var _this = this ;
     //------------------------------------//
     this.init = function() {
+        placeholder = paramSet.placeholder ;
+
         centralCircleText = new CentralCircleText() ;
         dirSmoke = dirImages + '/smoke' ;
         dirPictures =  dirImages + '/philosophy' ;
@@ -793,8 +796,10 @@ function BackgroundImg() {
         }
         if (showType == 'query') {
             $centralCircleGlowBlock.removeAttr('hidden') ;
-            defineTextArea($centralCircleTextBlock, textAreaPlace, textAreaBackGround,
+            var $txt = defineTextArea($centralCircleTextBlock, textAreaPlace, textAreaBackGround,
                 currentColor, 0, readonly, idText);
+            placeholder.init($centralCircleTextBlock) ;
+            placeholder.setTextArea($txt) ;
         }
     } ;
     /**
@@ -868,6 +873,7 @@ function BackgroundImg() {
         $txt.css('background','transparent') ;
         $txt.css('border','0px solid white') ;
         centralCircleText.init(txtWidth,txtHeight,$txt) ;
+        return $txt ;
     } ;
     /**
      * ид области ввода текста
@@ -886,6 +892,7 @@ function BackgroundImg() {
      */
     this.centralCircleRotate = function(callback) {
         $centralCircleTextBlock.attr('hidden', 'hidden');  // убираем поле ввода
+        placeholder.hideAll() ;      // убрать и не показывать
         var $block = $centralCircleBlock;
         //--- центр круга
         var x0 = pixelToNumber($block.css('left')) + pixelToNumber($block.css('width')) / 2;

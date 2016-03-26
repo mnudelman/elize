@@ -41,14 +41,17 @@ body {
     left:0 ;
 }
 /**поле ввода запроса **/
-.queryText {
+.queryText,.placeholder {
     border:none;
     font-family: northern ;
     font-size : 20px ;
     color: #fff ;
     font-weight: 900 ;
     text-align: center;
-
+    /*z-index: 10 ;*/
+}
+.placeholder {
+    background:transparent ;
 }
 .answerText {
     border:none;

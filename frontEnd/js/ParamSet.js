@@ -22,6 +22,7 @@ function ParamSet() {
     this.scrollBackground ;    //  объект  -фок результата запроса
     this.magicNormalPictures ; // вывод картинок при вводе запроса
     this.callStack ;           // стек вызовов
+    this.placeholder ;         // объект-имитатор placeholder
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -65,6 +66,7 @@ function ParamSet() {
         _this.scrollBackground = new ScrollBackground();
         _this.magicNormalPictures = new MagicNormalPictures() ;
         _this.callStack = new CallStack() ;
+        _this.placeholder = new Placeholder() ;
 //
 
 

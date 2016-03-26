@@ -8,18 +8,20 @@ function UserInterface() {
     var philosophyForm ;
     var magicNormalPictures ;           // фоновые картинки
     var callStack;                      // стек вызовов
+    var placeholder ;                   // имитатор placeholder
     var stamp = {} ;                    // планка - ввод запроса
     var $stamp = $('#stamp') ;
     var $queryArea ;                    // область ввовда текста
-    var resizeGoFlag = false ;
     var resizeGo = false ;
     var RESIZE_TIME_DELAY = 10 ;        // задержка при контроле изменения размеров
     var currentQuery = '' ;              // текст запроса
     var $centralCircleBlock = $('#centralCircle') ;  // центральный круг
     var $centralCircleTextBlock = $('#centralCircleText') ; // текст в круге
+    var $placeholder ;
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
+        placeholder = paramSet.placeholder ;
         callStack = paramSet.callStack ;
         callStack.pushItem('userInterface',_this.reshow) ;
 
@@ -36,6 +38,7 @@ function UserInterface() {
         $queryArea = $('#queryText');
         smoke.init();                 // подготовка и запуск облаков
         smoke.smokeGo();
+        $placeholder = $('#placeholder') ;
         $queryArea.ready(function() {
             userInterfaceEvents() ;
             normalQueryShow() ;
@@ -70,13 +73,23 @@ function UserInterface() {
         $(window).off('click') ;
         $(window).click(function (e) {
             if (isTextClick(e)) {
-                $queryArea.focus();
+//                $queryArea.focus();
+                placeholder.hide() ;
+
+
+
+
+
             }else {
                 if (isStampClick(e)) {                   // выполнение запроса
  //                   stampClickGo();
                 } else {
                     normalQueryShow();
-                    $queryArea.focus();
+                    placeholder.hide() ;
+//                    $queryArea.focus();
+
+
+
                 }
             }
         });
@@ -86,7 +99,11 @@ function UserInterface() {
         });
         $(document).off('keypress') ;
         $(document).keypress(function(e){
-            $queryArea.focus();
+//            $queryArea.focus();
+            placeholder.hide() ;
+
+
+
         }) ;
 
 
@@ -103,7 +120,7 @@ function UserInterface() {
         $queryArea = $('#queryText');
  //       $queryArea.attr('placeholder', 'ВВЕДИТЕ ВОПРОС');
 
-        $queryArea.css('z-index',10) ;
+//        $queryArea.css('z-index',10) ;
 
 
         $queryArea.off('keydown') ;
@@ -118,8 +135,26 @@ function UserInterface() {
         }) ;
         var staticShow = true ;
         magicNormalPictures.show(staticShow) ;
+
+  //      $queryArea.attr('hidden','hidden') ;
+//        $queryArea.focus() ;
+
+        currentQuery = currentQuery.replace('\r','') ;
+        currentQuery = currentQuery.replace('\f','') ;
+        currentQuery = currentQuery.replace('\n','') ;
+        currentQuery = currentQuery.trim() ;
+
         $queryArea.val(currentQuery);
- //       $queryArea.focus() ;
+
+        if (currentQuery.length === 0) {
+           placeholder.show() ;
+        }else {
+            placeholder.hide() ;
+        }
+
+
+
+
     } ;
     /**
      * click по планке "ответ" -> процесс "раздумья" -
@@ -147,9 +182,9 @@ function UserInterface() {
     this.reshow = function() {
         userInterfaceEvents() ;
         normalQueryShow() ;
-        if(currentQuery.length > 0 ) {
-            $(window).click() ;
-        }
+        //if(currentQuery.length > 0 ) {
+        //    $(window).click() ;
+        //}
 
     } ;
     var resize = function() {
