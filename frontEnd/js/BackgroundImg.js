@@ -843,7 +843,7 @@ function BackgroundImg() {
         var y1 = place['y1'] ;
         var y2 = place['y2'] ;
         var $txt = $('<textarea/>') ;
-
+        $txt.attr('tabindex',1) ;
         $block.css('top',y1) ;
         $block.css('left',x1) ;
         $block.css('color',color) ;

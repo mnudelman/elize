@@ -97,9 +97,21 @@ function UserInterface() {
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
-        $(document).off('keypress') ;
-        $(document).keypress(function(e){
+        //$(document).off('keypress') ;
+        //$(document).keypress(function(e){
+            $(document).off('keydown') ;
+            $(document).keydown(function(e){
+
+
 //            $queryArea.focus();
+//            alert('key:' + e.key + '\n' + 'code:'+ e.keyCode + '\n' +
+//            'val:' + $queryArea.val()) ;
+//            if (($queryArea.val()).length === 0) {
+//                if (typeof(e.key) == 'string') {
+//                    $queryArea.val(e.key) ;
+//                }
+//            }
+
             placeholder.hide() ;
 
 
@@ -139,19 +151,24 @@ function UserInterface() {
   //      $queryArea.attr('hidden','hidden') ;
 //        $queryArea.focus() ;
 
-        currentQuery = currentQuery.replace('\r','') ;
-        currentQuery = currentQuery.replace('\f','') ;
-        currentQuery = currentQuery.replace('\n','') ;
+        currentQuery = currentQuery.replace(/\r/,'') ;
+        currentQuery = currentQuery.replace(/\f/,'') ;
+        currentQuery = currentQuery.replace(/\n/,'') ;
         currentQuery = currentQuery.trim() ;
 
         $queryArea.val(currentQuery);
 
-        if (currentQuery.length === 0) {
-           placeholder.show() ;
-        }else {
-            placeholder.hide() ;
-        }
+        var to = setTimeout(function() {
+            clearTimeout(to) ;
+            if (currentQuery.length === 0) {
+                placeholder.show() ;
+            }else {
+                placeholder.hide() ;
+            }
+        },20) ;
 
+
+        var a = 1 ;
 
 
 

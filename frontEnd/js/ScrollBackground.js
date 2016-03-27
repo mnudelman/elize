@@ -287,7 +287,7 @@ function ScrollBackground() {
         $mainBlockDiv.css('overflow','hidden') ;
 
 
-        $mainBlockDiv.show( "blind", 500);
+        $mainBlockDiv.show( "blind", 1000);
 
         $resultBackground.removeAttr('hidden') ;
 

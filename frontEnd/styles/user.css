@@ -50,8 +50,10 @@ body {
     text-align: center;
     /*z-index: 10 ;*/
 }
+
 .placeholder {
     background:transparent ;
+    /*background-color: rgba(0,0,0,0.5);*/
 }
 .answerText {
     border:none;
