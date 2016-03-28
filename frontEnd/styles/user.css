@@ -20,12 +20,16 @@ body {
     src: url('../../fonts/The_Northern_Block_Acrom.otf'); /* Путь к файлу со шрифтом */
 }
 /**--- представление результата --**/
-.result {
+.result,.addSignalComment {
     /*background-image: url("../../images/userInterface/scroll_clear.png") ;*/
     background-image: url("../../images/userInterface/scroll_empty.png") ;
     background-size: auto 100%;
     background-repeat: no-repeat;
     z-index: 100 ;
+}
+.addSignalComment {
+    position: absolute;
+    background-size: 100% 100%;
 }
 #totalHuman {
     height:10% ;

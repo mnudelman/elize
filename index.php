@@ -62,7 +62,7 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/CentralCircleText.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CallStack.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/Placeholder.js"></script>
-
+    <script type="text/javascript" src="<?= $dirJs; ?>/AddSignalComment.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>
 <body>
@@ -107,6 +107,7 @@ $dirStyle = './frontEnd/styles';
     <div id="addSignalsTable"></div>
     <div id="addSignalsTotal"></div>
 </div>
+<div id="addSignalComment"></div>
 <div id="messages"></div>
 </body>
 

@@ -74,6 +74,8 @@ function MagicNormalPictures() {
      * положение рамки определяется объектом place{x1: ,y1: ,x2: ,y2:}
      * внутренняя область(куда помещается картинка) - innerPlace{}
      * dy - параметр для центрирования изображения по вертикали
+     * добавление атрибута 'data-type' позволяет идентифицировать элемент
+     * при выводе поясняющего текста
      * @param dir
      * @param borderSize
      * @param item
@@ -81,7 +83,7 @@ function MagicNormalPictures() {
      * @param substImageFile    - другая картинка для вставки в рамку (используется для "философии")
      * @returns {*|jQuery|HTMLElement}
      */
-    this.showItem = function(dir,item,itemKey,substImageFile) {
+    this.showItem = function(dir,item,itemKey,substImageFile,cssClass,dataType) {
         var place = item['place'] ;
         var innerPlace = item['innerPlace'] ;
         //var imgFile = (currentStaticFlag) ?
@@ -156,6 +158,8 @@ function MagicNormalPictures() {
             $block.append($pictureBlock) ;
         }
 
+
+
         var pictTop = innerPlace['y1'] - place['y1'] ;
         var pictLeft = innerPlace['x1'] - place['x1'] ;
         var pictWidth = innerPlace['x2'] - innerPlace['x1'] ;
@@ -173,6 +177,17 @@ function MagicNormalPictures() {
         }
 
         $pictureImg.attr('id',itemKey+'_img') ;
+
+        //--- если определены атрибуты, то добавить в определение --//
+        if (typeof(cssClass) === 'string') {
+            $pictureImg.addClass(cssClass) ;
+        }
+        if (typeof(dataType) === 'string') {
+            $pictureImg.attr('data-type',dataType) ;
+        }
+
+
+
 
         var src =  $pictureImg.attr('src') ;
        if (src !== pictureFile) {

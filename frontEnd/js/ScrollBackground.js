@@ -257,6 +257,20 @@ function ScrollBackground() {
             kResize['kx'] = kResize['ky'] ;
         }
     } ;
+    this.getKResize = function() {
+        kResizeClc() ;
+        return kResize ;
+    } ;
+    this.getMainBlockSize = function() {
+        var place = mainBlock.place ;
+        var x1 = place['x1'] ;
+        var x2 = place['x2'] ;
+        var y1 = place['y1'] ;
+        var y2 = place['y2'] ;
+        var height =  y2 - y1 ;
+        var width =  x2 - x1 ;
+        return {w:width, h: height}
+    } ;
     var mainBlockDefine = function(){
         var screenWidth = $(window).width() ;
         $mainBlockDiv.css('position','absolute') ;

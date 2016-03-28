@@ -57,6 +57,10 @@ function BackgroundImg() {
                 x2: 1130,
                 y2: 710
             },
+            increase: {
+                y1: 183 ,
+                y2: 710
+            },
             textArea: {
                 x1: 827 - 6,
                 y1: 460 + 5,
@@ -304,6 +308,22 @@ function BackgroundImg() {
 //    l3_1    l2_2             r2_1    r3_1
         philosophyPictures = {
             dir: dirPictures,
+            commentBlock: {
+                place: {
+                    x1: 766,      // l2_2 +
+                    w: 394,
+                    y1: 362,      // l1_3 +
+                    h: 333
+                },
+                textPlace: {
+                    x1:  50,      // l2_2 +
+                    w:   340,
+                    y1: 188,      // l1_3 +  - шапка
+                    h: 333 - 188
+
+                }
+
+            },
             items: {
                 'l1_1': {                      // карты
                     place: {
@@ -693,7 +713,12 @@ function BackgroundImg() {
     this.getPhilosophyPictures = function() {
         var currentPictures = {} ;
         currentPictures['dir'] = philosophyPictures['dir'] ;
-
+        var commentBlock = philosophyPictures['commentBlock'] ;
+        var commentPlace = commentBlock['place'] ;
+        currentPictures['commentBlock'] = {} ;
+        currentPictures['commentBlock']['place'] =  placeResize(commentPlace) ;
+        var textPlace = commentBlock['textPlace'] ;
+        currentPictures['commentBlock']['textPlace'] = placeResize(textPlace) ;
         var kResize = _this.getKResize()  ;
         var kx = kResize['kx']  ;
         var ky = kResize['ky']  ;
@@ -891,6 +916,7 @@ function BackgroundImg() {
      * @param callback   - возвращает управление при окончании "размышления"
      */
     this.centralCircleRotate = function(callback) {
+        $centralCircleGlowBlock.attr('hidden','hidden') ;
         $centralCircleTextBlock.attr('hidden', 'hidden');  // убираем поле ввода
         placeholder.hideAll() ;      // убрать и не показывать
         var $block = $centralCircleBlock;
@@ -898,12 +924,31 @@ function BackgroundImg() {
         var x0 = pixelToNumber($block.css('left')) + pixelToNumber($block.css('width')) / 2;
         var y0 = pixelToNumber($block.css('top')) + pixelToNumber($block.css('height')) / 2;
         var $img = $block.children('img');
+        var w0 = $img.width() ;
+        var h0 = $img.height() ;
+        var left0 = 0 ;
+        var top0 = 0 ;
+        var kResize = _this.getKResize() ;
+        var dMax =  kResize['ky'] *
+        (centralCircle.increase['y2'] - centralCircle.increase['y1'] );
+        var deltaR = Math.round((dMax - h0)/10) ;
+
+        var imgTop = top0 ;
+        var imgHeight = h0 ;
+        var imgLeft = left0 ;
+        var imgWidth = w0 ;
+
+
+
+
+
         var n = 0;          //  счётчик шагов  - элементарных поворотов на угол alphaStep
         var alphaStep = 30 ;   // шаг поворота (угловые градусы)
         var maxTime = 3000 ;
         animateStop = false;
         var time = 0 ;
-
+        var i = 0 ;
+        var iSign = 1 ;
         var timeDelay = 300;
         var tmpTimer = setInterval(function () {
             if (time > maxTime) {        //  остановить цикл вращения)
@@ -913,10 +958,33 @@ function BackgroundImg() {
                     callback() ;
                 }
             } else {
+                if (imgHeight +  deltaR * iSign >= dMax ) {
+                    iSign = -1 ;
+                }
+                if (imgHeight +  deltaR * iSign <= h0) {
+                    iSign = 0 ;
+                    imgTop = top0 ;
+                    imgHeight = h0 ;
+                    imgLeft = left0 ;
+                    imgWidth = w0 ;
+                }
+                 imgTop = imgTop -   2 * deltaR * iSign;
+                imgHeight = imgHeight +  2 * deltaR * iSign;
+                imgLeft = imgLeft - deltaR * iSign;
+                imgWidth = imgWidth +  2 * deltaR * iSign;
+
+                $img.css('width',imgWidth) ;
+                $img.css('margin-left',imgLeft) ;
+                $img.css('height',imgHeight) ;
+                $img.css('margin-top',imgTop) ;
                 var alpha = ++n * alphaStep ;
                 $img.css('transform', 'rotate(' + alpha + 'deg)');
                 n = (n >= 6) ? 0 : n;
                 time += timeDelay ;
+                if (++i > 5) {
+
+                }
+
             }
         }, timeDelay);
 
