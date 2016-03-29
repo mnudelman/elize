@@ -83,7 +83,8 @@ function MagicNormalPictures() {
      * @param substImageFile    - другая картинка для вставки в рамку (используется для "философии")
      * @returns {*|jQuery|HTMLElement}
      */
-    this.showItem = function(dir,item,itemKey,substImageFile,cssClass,dataType) {
+    this.showItem = function(dir,item,itemKey,substImageFile,
+                             cssClass,dataType,title) {
         var place = item['place'] ;
         var innerPlace = item['innerPlace'] ;
         //var imgFile = (currentStaticFlag) ?
@@ -178,14 +179,6 @@ function MagicNormalPictures() {
 
         $pictureImg.attr('id',itemKey+'_img') ;
 
-        //--- если определены атрибуты, то добавить в определение --//
-        if (typeof(cssClass) === 'string') {
-            $pictureImg.addClass(cssClass) ;
-        }
-        if (typeof(dataType) === 'string') {
-            $pictureImg.attr('data-type',dataType) ;
-        }
-
 
 
 
@@ -195,6 +188,38 @@ function MagicNormalPictures() {
        }
         $pictureImg.css('width',pictWidth) ;
         $pictureImg.css('height',pictHeight - dy) ;
+
+//      transparentBlock
+        var transparentBlockId  = itemKey + '_transparent' ;
+        var $transparentBlock = $('#' + transparentBlockId) ;
+        if ($transparentBlock.length === 0) {
+            $transparentBlock = $('<div/>') ;
+            $transparentBlock.attr('id',transparentBlockId) ;
+            $block.append($transparentBlock) ;
+        }
+        $transparentBlock.css('position','absolute') ;
+        $transparentBlock.css('top',pictTop + dy) ;
+        $transparentBlock.css('left',pictLeft) ;
+
+        $transparentBlock.css('width',pictWidth) ;
+        $transparentBlock.css('height',pictHeight - dy) ;
+        $transparentBlock.css('background-color','rgba(0,0,0,0') ;
+        $transparentBlock.css('z-index',40) ;
+        //--- если определены атрибуты, то добавить в определение --//
+        if (typeof(cssClass) === 'string') {
+            $transparentBlock.removeClass() ;
+            $transparentBlock.addClass(cssClass) ;
+        }
+        if (typeof(dataType) === 'string') {
+            $transparentBlock.removeAttr('data-signalType') ;
+            $transparentBlock.attr('data-signalType',dataType) ;
+        }
+
+        if (typeof(title) === 'string') {
+            $transparentBlock.removeAttr('title') ;
+            $transparentBlock.attr('title',title) ;
+        }
+
 
         return $pictureImg ;
     } ;

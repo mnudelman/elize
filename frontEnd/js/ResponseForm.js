@@ -27,7 +27,7 @@ function ResponseForm() {
      */
     this.queryGo = function(i) {
         scrollBackground = paramSet.scrollBackground ;
-        scrollBackground.answerInit() ;        // вывод пустой формы
+//        scrollBackground.answerInit() ;        // вывод пустой формы
 
 
         yandexResult = {} ;
@@ -64,6 +64,8 @@ function ResponseForm() {
      * Показать ответ
      */
     var responseShow = function() {
+        scrollBackground.answerInit() ;        // вывод пустой формы
+
         scrollBackground.answerBegin() ;     // начало выводаима
         var totalHuman  = yandexResult['totalHuman'] ;
         var pageStart =  yandexResult['pageStart'] ;

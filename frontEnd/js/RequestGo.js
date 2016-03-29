@@ -5,6 +5,7 @@
  */
 function RequestGo() {
     var ajax = new AjaxRequest() ;         // исполнитель работы с ajax
+    var actionSteps = paramSet.actionSteps ;
     var requestText = '' ;
     var resultNodes = {} ;   // дерево результата запроса(для контроля и отладки)
     var answReady = false ;   // возврат запроса
@@ -49,7 +50,9 @@ function RequestGo() {
             }else {
                 if (answ !== false) {
                     var message = answ['message'];
-                    ajax.errorMessage(message) ;
+                  actionSteps.addStep('requestType','break',ajax.errorMessage,message) ;
+
+//                    ajax.errorMessage(message) ;
                 }
 
             }

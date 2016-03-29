@@ -9,6 +9,7 @@ function UserInterface() {
     var magicNormalPictures ;           // фоновые картинки
     var callStack;                      // стек вызовов
     var placeholder ;                   // имитатор placeholder
+    var actionSteps ;                   // отслеживание шагов действия
     var stamp = {} ;                    // планка - ввод запроса
     var $stamp = $('#stamp') ;
     var $queryArea ;                    // область ввовда текста
@@ -21,6 +22,7 @@ function UserInterface() {
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
+        actionSteps = paramSet.actionSteps ;
         placeholder = paramSet.placeholder ;
         callStack = paramSet.callStack ;
         callStack.pushItem('userInterface',_this.reshow) ;
@@ -179,22 +181,34 @@ function UserInterface() {
      * запуск выполнения запроса
      */
     var stampClickGo = function() {
-        if (philosophyForm.getFormShowFlag() === true) {
-            philosophyForm.scrollGo() ;       // развернуть свиток
-        } else {
-            var staticShow = false ;
-            magicNormalPictures.show(staticShow) ;
+        //if (philosophyForm.getFormShowFlag() === true) {
+        //    philosophyForm.scrollGo() ;       // развернуть свиток
+        //} else {
 
-            backgroundImg.centralCircleRotate(function() {
-                var staticShow = true ;
-                currentQuery = $queryArea.val();
-                var requestGo = paramSet.requestGo;
-                requestGo.setRequestText(currentQuery);
-                var auto = true;
+// запускаем процесс
+        actionSteps.init();
+        currentQuery = $queryArea.val();
+        var requestGo = paramSet.requestGo;
+        requestGo.setRequestText(currentQuery);
+        var auto = true;
 
-                requestGo.requestExecute(auto);
-            }) ;
-        }
+        requestGo.requestExecute(auto);
+
+
+        var staticShow = false;
+        magicNormalPictures.show(staticShow);
+
+        backgroundImg.centralCircleRotate(function () {  // процесс раздумья
+            var stopThinking = (
+            actionSteps.isConditionBreak() || actionSteps.isConditionPrepare() );
+            if (!stopThinking) {     // рано останавливаться
+                return false;
+            }
+            var staticShow = true;
+            magicNormalPictures.show(staticShow);
+            actionSteps.callbackGo();
+        });
+        //}
     } ;
     this.reshow = function() {
         userInterfaceEvents() ;
@@ -214,8 +228,9 @@ function UserInterface() {
                 }else {
                     backgroundImg.setCurrentSize() ;
                     stampDefine();              // объект stamp   - печать
-                    normalQueryShow() ;
+//                    normalQueryShow() ;
                     smoke.smokeGo();
+                    normalQueryShow() ;
                     philosophyForm.resize() ;
                     scrollBackground.resize() ;
 

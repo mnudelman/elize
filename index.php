@@ -63,6 +63,7 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/CallStack.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/Placeholder.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/AddSignalComment.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/ActionSteps.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>
 <body>
@@ -70,25 +71,22 @@ $dirStyle = './frontEnd/styles';
 <div id="queryTextBlock" hidden="hidden" ></div>
 <!--<div id="total"></div>-->
 
+<!--<div>-->
+<!--    <div id="resultBlock" class="data result" hidden="hidden">-->
+<!--        <p id="resultBoxError"></p>-->
+<!---->
+<!--        <p id="totalHuman" ></p>-->
+<!--        <ul  id="resultBoxDocs">-->
+<!---->
+<!--        </ul>-->
+<!--<!--        <div id="resultCommands"></div>-->-->
+<!--    </div>-->
+<!--    <div id="resultBackground"  >-->
+<!--          <div id="resultBlockNew"></div>-->
+<!--    </div>-->
+<!--</div>-->
+
 <div>
-    <div id="resultBlock" class="data result" hidden="hidden">
-        <p id="resultBoxError"></p>
-
-        <p id="totalHuman" ></p>
-        <ul  id="resultBoxDocs">
-
-        </ul>
-<!--        <div id="resultCommands"></div>-->
-    </div>
-    <div id="resultBackground"  >
-          <div id="resultBlockNew"></div>
-    </div>
-</div>
-
-<div>
-    <div id="resultBlockPhilosophy" >
-
-    </div>
     <div id="centralCircle">
 
     </div>
@@ -99,10 +97,30 @@ $dirStyle = './frontEnd/styles';
     <div id="centralCircleText">
 
     </div>
+    <div id="resultBlockPhilosophy" >
+
+    </div>
 
     <div id="smokeClouds"></div>
     <div id="stamp"></div>
 </div>
+
+<div>
+    <div id="resultBlock" class="data result" hidden="hidden">
+        <p id="resultBoxError"></p>
+
+        <p id="totalHuman" ></p>
+        <ul  id="resultBoxDocs">
+
+        </ul>
+        <!--        <div id="resultCommands"></div>-->
+    </div>
+    <div id="resultBackground"  >
+        <div id="resultBlockNew"></div>
+    </div>
+</div>
+
+
 <div id="addSignalBlock">
     <div id="addSignalsTable"></div>
     <div id="addSignalsTotal"></div>

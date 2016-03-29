@@ -12,8 +12,14 @@ function AddSignalComment() {
     var $dataDiv ;
     var $titleDiv ;
     var $textDiv ;
+    var parentBlockPlace = {t:0,l:0,w:0,h:0} ;
+    var POSITION_PART_LEFT = 'left' ;
+    var POSITION_PART_RIGHT = 'right' ;
+    var currentPositionPart;
     var fontSizeNormal ;
     var fontSizeMin ;
+    var COMMENT_WIDTH = 200 ;
+    var COMMENT_HEIGHT = 300 ;
     var COMMENT_ID = 'addSignalComment' ;
     var COMMENT_DATA_ID = 'addSignalComment_data' ;
     var COMMENT_TITLE_ID = 'addSignalComment_title' ;
@@ -38,6 +44,12 @@ function AddSignalComment() {
         commentReplace() ;
         commentTextReplace() ;
     } ;
+    this.setParentBlockPlace = function(place) {
+        parentBlockPlace = place ;
+    } ;
+    this.setPositionPart = function(posPart) {
+        currentPositionPart = posPart ;
+    } ;
     this.showComment = function(title,text) {
         $titleDiv.empty() ;
         $titleDiv.append('<strong>' + title + '</strong>') ;
@@ -54,6 +66,24 @@ function AddSignalComment() {
         var left = commentPlace['x1'] ;
         var w = commentPlace['x2'] - commentPlace['x1'] ;
         var h = commentPlace['y2'] - commentPlace['y1'] ;
+        w = Math.max(w,COMMENT_WIDTH) ;
+        h= COMMENT_HEIGHT ;
+        var blkTop = parentBlockPlace['t'] ;
+        var blkLeft = parentBlockPlace['l'] ;
+        var blkHeight = parentBlockPlace['h'] ;
+        var blkWidth = parentBlockPlace['w'] ;
+        if (currentPositionPart == POSITION_PART_LEFT) {
+            top = blkTop ;
+            left = blkLeft + blkWidth + 10 ;
+        }else {
+            top = blkTop ;
+            left = blkLeft - w - 10 ;
+
+        }
+
+
+
+
         $commentDiv.css('top',top) ;
         $commentDiv.css('left',left) ;
         $commentDiv.css('width',w) ;
@@ -66,7 +96,7 @@ function AddSignalComment() {
     } ;
     var commentTextReplace = function() {
         var mainSize = scrollBackground.getMainBlockSize() ;
-        var w = commentPlace['x2'] - commentPlace['x1'] ;
+        var w = $commentDiv.width() ;
         var h = $commentDiv.height() ;
         var k = h/mainSize['h'] ;
         $dataDiv = $('#' + COMMENT_DATA_ID) ;
@@ -80,7 +110,7 @@ function AddSignalComment() {
         $dataDiv.empty() ;
 
         $dataDiv.css('position','absolute') ;
-        var top =  k * (textPlace['y1']  + 70) ;
+        var top =  k * (textPlace['y1']  + 100) ;
         var left = k*50 ; // extPlace['x1'] ;
         var w = textPlace['x2'] - left - k*50 ;
 

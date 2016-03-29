@@ -916,7 +916,7 @@ function BackgroundImg() {
      * @param callback   - возвращает управление при окончании "размышления"
      */
     this.centralCircleRotate = function(callback) {
-        $centralCircleGlowBlock.attr('hidden','hidden') ;
+//        $centralCircleGlowBlock.attr('hidden','hidden') ;
         $centralCircleTextBlock.attr('hidden', 'hidden');  // убираем поле ввода
         placeholder.hideAll() ;      // убрать и не показывать
         var $block = $centralCircleBlock;
@@ -924,21 +924,11 @@ function BackgroundImg() {
         var x0 = pixelToNumber($block.css('left')) + pixelToNumber($block.css('width')) / 2;
         var y0 = pixelToNumber($block.css('top')) + pixelToNumber($block.css('height')) / 2;
         var $img = $block.children('img');
-        var w0 = $img.width() ;
-        var h0 = $img.height() ;
-        var left0 = 0 ;
-        var top0 = 0 ;
-        var kResize = _this.getKResize() ;
-        var dMax =  kResize['ky'] *
-        (centralCircle.increase['y2'] - centralCircle.increase['y1'] );
-        var deltaR = Math.round((dMax - h0)/10) ;
-
-        var imgTop = top0 ;
-        var imgHeight = h0 ;
-        var imgLeft = left0 ;
-        var imgWidth = w0 ;
-
-
+        var $imgGl = $centralCircleGlowBlock.children('img') ;
+        var w0Gl  = $imgGl.width() ;
+        var h0Gl  = $imgGl.height() ;
+        var left0Gl = 0 ;
+        var top0Gl =  0 ;
 
 
 
@@ -949,24 +939,71 @@ function BackgroundImg() {
         var time = 0 ;
         var i = 0 ;
         var iSign = 1 ;
-        var timeDelay = 300;
+        var timeDelay = 150 ;
+
+
+        var w0 = $img.width() ;
+        var h0 = $img.height() ;
+        var left0 = 0 ;
+        var top0 = 0 ;
+        var kResize = _this.getKResize() ;
+        var dMax =  kResize['ky'] *
+            (centralCircle.increase['y2'] - centralCircle.increase['y1'] );
+        var deltaR = Math.round((dMax - h0)/20) ;
+
+        var imgTop = top0 ;
+        var imgHeight = h0 ;
+        var imgLeft = left0 ;
+        var imgWidth = w0 ;
+
+
+        var imgTopGl = top0Gl ;
+        var imgHeightGl = h0Gl ;
+        var imgLeftGl = left0Gl ;
+        var imgWidthGl = w0Gl ;
+
+
+
+
+
         var tmpTimer = setInterval(function () {
-            if (time > maxTime) {        //  остановить цикл вращения)
-                clearInterval(tmpTimer);
-                $centralCircleTextBlock.removeAttr('hidden');    // поле ввода - возврат
-                if (callback !== undefined) {
-                    callback() ;
-                }
-            } else {
+ //           if (time > maxTime) {        //  остановить цикл вращения)
+                //clearInterval(tmpTimer);
+                //$centralCircleTextBlock.removeAttr('hidden');    // поле ввода - возврат
+                //if (callback !== undefined) {
+                //    callback() ;
+                //}
+//            }
+//        else {
                 if (imgHeight +  deltaR * iSign >= dMax ) {
                     iSign = -1 ;
                 }
                 if (imgHeight +  deltaR * iSign <= h0) {
-                    iSign = 0 ;
+                    iSign = 1 ;
                     imgTop = top0 ;
                     imgHeight = h0 ;
                     imgLeft = left0 ;
                     imgWidth = w0 ;
+
+                    imgTopGl = top0Gl ;
+                    imgHeightGl = h0Gl ;
+                    imgLeftGl = left0Gl ;
+                    imgWidthGl = w0Gl ;
+
+
+                    clearInterval(tmpTimer);
+//                    $centralCircleTextBlock.removeAttr('hidden');    // поле ввода - возврат
+                    var stopFlag = true ;
+                    if (callback !== undefined) {
+                        stopFlag = callback() ;
+                    }
+
+                    if (stopFlag) {
+                        clearInterval(tmpTimer);
+                        iSign = 0 ;
+                    }
+
+
                 }
                  imgTop = imgTop -   2 * deltaR * iSign;
                 imgHeight = imgHeight +  2 * deltaR * iSign;
@@ -977,6 +1014,28 @@ function BackgroundImg() {
                 $img.css('margin-left',imgLeft) ;
                 $img.css('height',imgHeight) ;
                 $img.css('margin-top',imgTop) ;
+
+
+
+
+            imgTopGl = imgTopGl -   2 * deltaR * iSign;
+            imgHeightGl = imgHeightGl +  2 * deltaR * iSign;
+            imgLeftGl = imgLeftGl - deltaR * iSign;
+            imgWidthGl = imgWidthGl +  2 * deltaR * iSign;
+
+            $imgGl.css('width',imgWidthGl) ;
+            $imgGl.css('margin-left',imgLeftGl) ;
+            $imgGl.css('height',imgHeightGl) ;
+            $imgGl.css('margin-top',imgTopGl) ;
+
+
+
+
+
+
+
+
+
                 var alpha = ++n * alphaStep ;
                 $img.css('transform', 'rotate(' + alpha + 'deg)');
                 n = (n >= 6) ? 0 : n;
@@ -985,7 +1044,7 @@ function BackgroundImg() {
 
                 }
 
-            }
+ //           }
         }, timeDelay);
 
 

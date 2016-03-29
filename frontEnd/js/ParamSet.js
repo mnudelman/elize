@@ -23,6 +23,7 @@ function ParamSet() {
     this.magicNormalPictures ; // вывод картинок при вводе запроса
     this.callStack ;           // стек вызовов
     this.placeholder ;         // объект-имитатор placeholder
+    this.actionSteps ;         // отслеживание шагов действия
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -67,6 +68,7 @@ function ParamSet() {
         _this.magicNormalPictures = new MagicNormalPictures() ;
         _this.callStack = new CallStack() ;
         _this.placeholder = new Placeholder() ;
+        _this.actionSteps = new ActionSteps() ;
 //
 
 
