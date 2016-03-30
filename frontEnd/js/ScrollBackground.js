@@ -93,7 +93,7 @@ function ScrollBackground() {
         mainDataBlock = {           // блок вывода данных
             place: {
                 x1:50 ,
-                y1:150,
+                y1:150 - 50 -10,
                 x2: mainWidth - 50 ,
                 y2: mainHeight - 30
             }

@@ -20,7 +20,7 @@ function ActionSteps() {
         steps = [] ;
     } ;
     this.addStep = function(stepName,condName,callback,param) {
-        steps[steps.length] = newStep(stepName) ;
+        steps[steps.length] = newStep(stepName,condName,callback,param) ;
     } ;
     var newStep = function(stepName,condName,callback,param) {
         return {
@@ -32,7 +32,7 @@ function ActionSteps() {
             }
         } ;
     } ;
-    this.conditionGo = function() {
+    this.stepGo = function() {
         var n = steps.length ;
         if (n > 0) {
             var step = steps[n-1] ;

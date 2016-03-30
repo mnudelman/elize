@@ -24,6 +24,7 @@ function RequestGo() {
      * @param auto - true - сразу запуск на выполнение
      */
     this.requestExecute = function(auto,callback) {
+        actionSteps = paramSet.actionSteps ;
         resultNodes = {} ;
         answReady = false ;
         var goVect = {

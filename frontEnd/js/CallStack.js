@@ -28,8 +28,11 @@ function CallStack() {
         }
     } ;
     this.pullItem = function() {
-        stackItems[topStack] = {}  ;
-        topStack-- ;
+        if (topStack > 0) {
+            stackItems[topStack] = {}  ;
+            topStack-- ;
+
+        }
     } ;
     this.currentGo = function() {
         var callback = stackItems[topStack]['callback'] ;

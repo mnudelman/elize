@@ -12,6 +12,7 @@
  * enter. Возврат в исходное состояние по  esc  или click по экрану.
  */
 function PhilosophyForm() {
+    var actionSteps ;
     var addSignalComment ;
     var callStack ;       // стек вызовов
     var ajax ;
@@ -36,6 +37,7 @@ function PhilosophyForm() {
     var _this = this ;
     //----------------------------------//
     this.init = function() {
+        actionSteps = paramSet.actionSteps ;
         callStack = paramSet.callStack ;
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
         formAttr = new PhilosophyFormAttr() ;        // объект - атрибуты формы
@@ -131,8 +133,8 @@ function PhilosophyForm() {
 //            scrollGoFlag = false ;
 //            responseShow() ;
             showItems() ;
-            backgroundImg.stampShow('answer') ;
-            backgroundImg.centralCircleShow('answer') ;
+            //backgroundImg.stampShow('answer') ;
+            //backgroundImg.centralCircleShow('answer') ;
             if (scrollGoFlag) {
                 addSignalsTable.tableShow() ;
             }
@@ -141,18 +143,18 @@ function PhilosophyForm() {
     this.reshow = function() {
         scrollGoFlag = false ;
         showItems() ;
-        backgroundImg.stampShow('answer') ;
-        backgroundImg.centralCircleShow('answer') ;
+        //backgroundImg.stampShow('answer') ;
+        //backgroundImg.centralCircleShow('answer') ;
 
     } ;
 
 
     var responseShow = function() {
-        backgroundImg.stampShow('answer') ;
-        backgroundImg.centralCircleShow('answer') ;
+        //backgroundImg.stampShow('answer') ;
+        //backgroundImg.centralCircleShow('answer') ;
         var idText = backgroundImg.getIdText('answer') ;
         $answerArea = $('#'+idText) ;
-        $resultBlock.empty() ;
+//        $resultBlock.empty() ;
         addSignals = getAddSignals() ;
     } ;
     /**
@@ -169,12 +171,13 @@ function PhilosophyForm() {
             if (answ['successful'] == true) {
                 goVect['successful'] = true;
                 addSignals = answ['result'] ;              // дерево результата
-                showItems() ;
+                actionSteps.addStep('philosophy','prepare',showItems) ;
+//                showItems() ;
             }else {
                 if (answ !== false) {
                     var message = answ['message'];
-                    ajax.errorMessage(message) ;
-
+//                    ajax.errorMessage(message) ;
+                    actionSteps.addStep('philosophy','break',ajax.errorMessage,message) ;
                 }
                 exit();
 
@@ -190,7 +193,17 @@ function PhilosophyForm() {
      * addSignal
      */
     var showItems = function() {
+        backgroundImg.stampShow('answer') ;
+        backgroundImg.centralCircleShow('answer') ;
+        var idText = backgroundImg.getIdText('answer') ;
+        $answerArea = $('#'+idText) ;
+
+
+
+
+
         var cssClass = 'addSignal' ;
+//        $resultBlock.empty() ;
         pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
         var signalTypesOrder = 0 ;

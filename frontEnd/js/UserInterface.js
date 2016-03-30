@@ -188,11 +188,6 @@ function UserInterface() {
 // запускаем процесс
         actionSteps.init();
         currentQuery = $queryArea.val();
-        var requestGo = paramSet.requestGo;
-        requestGo.setRequestText(currentQuery);
-        var auto = true;
-
-        requestGo.requestExecute(auto);
 
 
         var staticShow = false;
@@ -206,8 +201,15 @@ function UserInterface() {
             }
             var staticShow = true;
             magicNormalPictures.show(staticShow);
-            actionSteps.callbackGo();
+            actionSteps.stepGo();
+            return true ;
         });
+        var requestGo = paramSet.requestGo;
+        requestGo.setRequestText(currentQuery);
+        var auto = true;
+
+        requestGo.requestExecute(auto);
+
         //}
     } ;
     this.reshow = function() {

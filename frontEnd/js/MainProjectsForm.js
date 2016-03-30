@@ -19,6 +19,7 @@
  */
 function MainProjectsForm() {
         var ajax = new AjaxRequest() ;
+        var actionSteps ;
         var currentQuery = '';         // текущий запрос
         var currentPage = 0;        //  текущая страница результата
         var $resultBlock = $('#resultBlock');
@@ -40,9 +41,7 @@ function MainProjectsForm() {
      * Отправить запрос.получить ответ
      */
     this.queryGo = function(i) {
-        scrollBackground = paramSet.scrollBackground ;
-        scrollBackground.answerInit() ;        // вывод пустой формы
-
+        actionSteps = paramSet.actionSteps ;
         var page =  (i === undefined) ? 0 : i  ;
         queryResult = {} ;
         var goVect = {
@@ -55,21 +54,41 @@ function MainProjectsForm() {
         ajax.setRequestFunc(function(answ){       // callback  для результата
             if (answ['successful'] == true) {
                 queryResult = answ['results'] ;
-                responseShow() ;
+                if (isRedirectQuery()) {
+                    actionSteps.addStep('mainProjects','continue') ;
+                }else {
+                    actionSteps.addStep('mainProjects','prepare',responseShow) ;
+                }
+ //                responseShow() ;
             }else {
                 var message = answ['message'];
-                ajax.errorMessage(message) ;
+                actionSteps.addStep('mainProjects','break',ajax.errorMessage,message) ;
+//                ajax.errorMessage(message) ;
             }
         }) ;
         ajax.go() ;
     } ;
+    var isRedirectQuery = function() {
+        var results = queryResult['results'] ;
+        if (results.length === 0) {                // пустой ответ-> передача Поисковой системе
+            var responseForm = paramSet.responseForm ;
+            responseForm.setQuery(currentQuery) ;
+            responseForm.queryGo() ;
+            return true ;
+        } else {
+            return false ;
+        }
 
+    } ;
 
         /**
          * Показать ответ
          */
 
     var responseShow = function() {
+            scrollBackground = paramSet.scrollBackground ;
+            scrollBackground.answerInit() ;        // вывод пустой формы
+
             scrollBackground.answerBegin() ;     // начало вывода
 
             var icon = queryResult['icon'] ;

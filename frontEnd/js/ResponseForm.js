@@ -3,6 +3,7 @@
  */
 function ResponseForm() {
     var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
+    var actionSteps = paramSet.actionSteps ;
     var ajax = new AjaxRequest() ;
     var currentQuery = '';         // текущий запрос
     var currentPage = 0;        //  текущая страница результата
@@ -29,7 +30,8 @@ function ResponseForm() {
         scrollBackground = paramSet.scrollBackground ;
 //        scrollBackground.answerInit() ;        // вывод пустой формы
 
-
+        actionSteps = paramSet.actionSteps ;
+        
         yandexResult = {} ;
         var page =  (i === undefined) ? 0 : i  ;
         var goVect = {
@@ -42,7 +44,11 @@ function ResponseForm() {
         ajax.setRequestFunc(function(answ){
             if (answ['successful'] == true) {
                 yandexResult = answ ;
-                responseShow() ;
+
+                actionSteps.addStep('searchSystem','prepare',responseShow) ;
+
+
+//                responseShow() ;
             }else {
                 var message = answ['message'];
                 if (message['@attributes'] !== undefined) {
@@ -52,10 +58,10 @@ function ResponseForm() {
                         var philosophyForm = paramSet.philosophyForm ;
                         philosophyForm.queryGo() ;
                         return true ;
-
                     }
                 }
-                ajax.errorMessage(message) ;
+                actionSteps.addStep('searchSystem','break',ajax.errorMessage,message) ;
+//                ajax.errorMessage(message) ;
             }
         }) ;
         ajax.go() ;

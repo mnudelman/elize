@@ -944,8 +944,8 @@ function BackgroundImg() {
 
         var w0 = $img.width() ;
         var h0 = $img.height() ;
-        var left0 = 0 ;
-        var top0 = 0 ;
+        var left0 = pixelToNumber($img.css('margin-left')) ;
+        var top0 = pixelToNumber($img.css('margin-top')) ; ;
         var kResize = _this.getKResize() ;
         var dMax =  kResize['ky'] *
             (centralCircle.increase['y2'] - centralCircle.increase['y1'] );
@@ -991,7 +991,6 @@ function BackgroundImg() {
                     imgWidthGl = w0Gl ;
 
 
-                    clearInterval(tmpTimer);
 //                    $centralCircleTextBlock.removeAttr('hidden');    // поле ввода - возврат
                     var stopFlag = true ;
                     if (callback !== undefined) {
@@ -1028,7 +1027,9 @@ function BackgroundImg() {
             $imgGl.css('height',imgHeightGl) ;
             $imgGl.css('margin-top',imgTopGl) ;
 
-
+            if (stopFlag) {
+                return ;
+            }
 
 
 
