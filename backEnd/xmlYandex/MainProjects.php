@@ -8,6 +8,9 @@
 
 class MainProjects {
     private $currentQuery = 'test' ;
+    private $cityId;
+    private $cityName ;
+    private $regionId ;
     private $totalContent = false ;  // соединённые результаты запросов к проектам
     private $projects = [] ;         // списсок адресов запросов
     private $totalResult = [] ;      // результирующий выход
@@ -16,15 +19,27 @@ class MainProjects {
     public function __construct() {
         $this->projects = ['mnogonado','popret'] ;
     }
+
+    /**
+     * В запрос добавляем cityid=<cityid>&city=<cityName>
+     * @param $projectName
+     * @return bool|string
+     */
     private function getUrl($projectName) {
         $url = false ;
         switch($projectName)  {
             case 'mnogonado' : {
-                $url = 'http://www.mnogonado.net/search/gki/?q='.$this->currentQuery.'&output=json' ;
+                $url = 'http://www.mnogonado.net/search/gki/?q='.$this->currentQuery.
+                    '&cityid='.$this->cityId.
+                    '&city='.$this->cityName.
+                    '&output=json' ;
                 break ;
             }
             case 'popret' : {
-                $url = 'http://popret.ru/ajax/json/test.php?q='.$this->currentQuery.'&output=json' ;
+                $url = 'http://popret.ru/ajax/json/test.php?q='.$this->currentQuery.
+                    '&cityid='.$this->cityId.
+                    '&city='.$this->cityName.
+                    '&output=json' ;
                 break ;
             }
 
@@ -133,6 +148,11 @@ class MainProjects {
             return false ;
         }
 
+    }
+    public function setCity($cityId,$cityName,$regionId) {
+        $this->cityId = $cityId;
+        $this->cityName = urlencode($cityName) ;
+        $this->regionId = $regionId ;
     }
     public function setQuery($query) {
        $this->currentQuery = urlencode($this->clearQuery($query)) ;

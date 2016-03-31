@@ -24,6 +24,7 @@ function ParamSet() {
     this.callStack ;           // стек вызовов
     this.placeholder ;         // объект-имитатор placeholder
     this.actionSteps ;         // отслеживание шагов действия
+    this.geoLocation ;        // определение ближайшего города
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -69,6 +70,7 @@ function ParamSet() {
         _this.callStack = new CallStack() ;
         _this.placeholder = new Placeholder() ;
         _this.actionSteps = new ActionSteps() ;
+        _this.geoLocation  = new GeoLocation() ;        // определение ближайшего города
 //
 
 

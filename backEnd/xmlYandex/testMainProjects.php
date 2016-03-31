@@ -14,6 +14,7 @@ $taskPar = TaskParameters::getInstance() ;
 $taskPar->setParameter('query','оренбург') ;
 $mp = new MainProjects() ;
 $mp->setQuery('акриловая краска') ;
+$mp->setCity('1', 'Челябинск','74') ;
 $mp->projectsGo() ;
 $result = $mp->getResult() ;
 

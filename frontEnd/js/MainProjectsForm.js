@@ -25,6 +25,7 @@ function MainProjectsForm() {
         var $resultBlock = $('#resultBlock');
         var queryResult = {};    // результат запроса
         var scrollBackground ;   // объект фоновое изображение
+        var city ;               // ближайший город
         var _this = this ;
         //--------------------------------------//
         this.init = function() {
@@ -41,6 +42,14 @@ function MainProjectsForm() {
      * Отправить запрос.получить ответ
      */
     this.queryGo = function(i) {
+        var geoLocation = paramSet.geoLocation ;
+        city = geoLocation.getCity() ;
+        var cityId = city['cityId'] ;
+        var cityName = city['cityName'] ;
+        var regionId = city['regionId'] ;
+
+
+
         actionSteps = paramSet.actionSteps ;
         var page =  (i === undefined) ? 0 : i  ;
         queryResult = {} ;
@@ -48,7 +57,11 @@ function MainProjectsForm() {
             'operation' : 'mainProjects',
             'query' : currentQuery,
             'page' : i,
-            'successful' : false       } ;
+            'cityId' : (cityId === undefined) ? '77' : cityId,
+            'cityName' :(cityName === undefined) ? 'Москва' : cityName,
+            'regionId' : (regionId === undefined) ? '77' : regionId,
+            'successful' : false
+        } ;
 
         ajax.setData(goVect) ;
         ajax.setRequestFunc(function(answ){       // callback  для результата

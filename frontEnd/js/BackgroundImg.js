@@ -913,18 +913,16 @@ function BackgroundImg() {
     } ;
     /**
      * вращение центрального круга - процесс "размышления оракула"
-     * @param callback   - возвращает управление при окончании "размышления"
+     * контроль окончания раздумья выполняется, когда шар возвращается в исходное состояние
+     * @param callback   - выдаёт true при окончании раздумья
      */
     this.centralCircleRotate = function(callback) {
 //        $centralCircleGlowBlock.attr('hidden','hidden') ;
         $centralCircleTextBlock.attr('hidden', 'hidden');  // убираем поле ввода
         placeholder.hideAll() ;      // убрать и не показывать
         var $block = $centralCircleBlock;
-        //--- центр круга
-        var x0 = pixelToNumber($block.css('left')) + pixelToNumber($block.css('width')) / 2;
-        var y0 = pixelToNumber($block.css('top')) + pixelToNumber($block.css('height')) / 2;
-        var $img = $block.children('img');
-        var $imgGl = $centralCircleGlowBlock.children('img') ;
+        var $img = $block.children('img');                      //  шар
+        var $imgGl = $centralCircleGlowBlock.children('img') ;  // ореол
         var w0Gl  = $imgGl.width() ;
         var h0Gl  = $imgGl.height() ;
         var left0Gl = 0 ;
@@ -933,122 +931,121 @@ function BackgroundImg() {
 
 
         var n = 0;          //  счётчик шагов  - элементарных поворотов на угол alphaStep
-        var alphaStep = 30 ;   // шаг поворота (угловые градусы)
+        var alphaStep = Math.PI/6 ;   // шаг поворота
         var maxTime = 3000 ;
-        animateStop = false;
         var time = 0 ;
         var i = 0 ;
         var iSign = 1 ;
         var timeDelay = 150 ;
 
-
+       // -- начальное положение шара  -- //
         var w0 = $img.width() ;
         var h0 = $img.height() ;
         var left0 = pixelToNumber($img.css('margin-left')) ;
         var top0 = pixelToNumber($img.css('margin-top')) ; ;
+     // -- крайняя верхняя точка при расширении шара  -- //
         var kResize = _this.getKResize() ;
         var dMax =  kResize['ky'] *
             (centralCircle.increase['y2'] - centralCircle.increase['y1'] );
-        var deltaR = Math.round((dMax - h0)/20) ;
-
+        var deltaR = Math.round((dMax - h0)/20) ;    // шаг увеличения/уменьшение радиуса шара
+//    -- начальное положение шара  -- //
         var imgTop = top0 ;
         var imgHeight = h0 ;
         var imgLeft = left0 ;
         var imgWidth = w0 ;
 
-
+//    -- начальное положение ореола  -- //
         var imgTopGl = top0Gl ;
         var imgHeightGl = h0Gl ;
         var imgLeftGl = left0Gl ;
         var imgWidthGl = w0Gl ;
-
-
-
-
+        var identityMatrix = 'matrix(1,0,0,1,0,0)' ;     // единичная матрица
 
         var tmpTimer = setInterval(function () {
- //           if (time > maxTime) {        //  остановить цикл вращения)
-                //clearInterval(tmpTimer);
-                //$centralCircleTextBlock.removeAttr('hidden');    // поле ввода - возврат
-                //if (callback !== undefined) {
-                //    callback() ;
-                //}
-//            }
-//        else {
-                if (imgHeight +  deltaR * iSign >= dMax ) {
-                    iSign = -1 ;
+            var identityFlag = false ;     // использовать единичную матрицу
+            if (imgHeight +  deltaR * iSign >= dMax ) {
+                iSign = -1 ;
+            }
+            if (imgHeight +  deltaR * iSign <= h0) {       // начальное положение
+                n = 0 ;
+                iSign = 1 ;
+                imgTop = top0 ;
+                imgHeight = h0 ;
+                imgLeft = left0 ;
+                imgWidth = w0 ;
+
+                imgTopGl = top0Gl ;
+                imgHeightGl = h0Gl ;
+                imgLeftGl = left0Gl ;
+                imgWidthGl = w0Gl ;
+                identityFlag = true ;
+
+                var stopFlag = true ;
+                if (callback !== undefined) {
+                    stopFlag = callback() ;
                 }
-                if (imgHeight +  deltaR * iSign <= h0) {
-                    iSign = 1 ;
-                    imgTop = top0 ;
-                    imgHeight = h0 ;
-                    imgLeft = left0 ;
-                    imgWidth = w0 ;
-
-                    imgTopGl = top0Gl ;
-                    imgHeightGl = h0Gl ;
-                    imgLeftGl = left0Gl ;
-                    imgWidthGl = w0Gl ;
-
-
-//                    $centralCircleTextBlock.removeAttr('hidden');    // поле ввода - возврат
-                    var stopFlag = true ;
-                    if (callback !== undefined) {
-                        stopFlag = callback() ;
-                    }
-
-                    if (stopFlag) {
-                        clearInterval(tmpTimer);
-                        iSign = 0 ;
-                    }
-
-
+                if (stopFlag) {
+                    clearInterval(tmpTimer);
+                    iSign = 0 ;
                 }
-                 imgTop = imgTop -   2 * deltaR * iSign;
-                imgHeight = imgHeight +  2 * deltaR * iSign;
-                imgLeft = imgLeft - deltaR * iSign;
-                imgWidth = imgWidth +  2 * deltaR * iSign;
+            }
+            imgTop = imgTop -    deltaR * iSign;
+            imgHeight = imgHeight +  2 * deltaR * iSign;
+            imgLeft = imgLeft - deltaR * iSign;
+            imgWidth = imgWidth +  2 * deltaR * iSign;
 
-                $img.css('width',imgWidth) ;
-                $img.css('margin-left',imgLeft) ;
-                $img.css('height',imgHeight) ;
-                $img.css('margin-top',imgTop) ;
-
-
-
-
-            imgTopGl = imgTopGl -   2 * deltaR * iSign;
+            imgTopGl = imgTopGl -    deltaR * iSign;
             imgHeightGl = imgHeightGl +  2 * deltaR * iSign;
             imgLeftGl = imgLeftGl - deltaR * iSign;
             imgWidthGl = imgWidthGl +  2 * deltaR * iSign;
 
-            $imgGl.css('width',imgWidthGl) ;
-            $imgGl.css('margin-left',imgLeftGl) ;
-            $imgGl.css('height',imgHeightGl) ;
-            $imgGl.css('margin-top',imgTopGl) ;
-
-            if (stopFlag) {
-                return ;
-            }
-
-
-
-
-
-
-
+            //transform: matrix(a, c, b, d, tx, ty)
+            if (identityFlag) {
+                var matrix = identityMatrix ;
+            } else {
+                var ky = imgHeight/h0 ;
+                var kx = imgWidth/w0 ;
+//          -- убрать анимацию --   //
+                ky = 1 ;
+                kx = 1 ;
                 var alpha = ++n * alphaStep ;
-                $img.css('transform', 'rotate(' + alpha + 'deg)');
-                n = (n >= 6) ? 0 : n;
-                time += timeDelay ;
-                if (++i > 5) {
+                var tx = 0 ;
+                var ty =   imgTop - top0  ;
+                ty = 0 ;
+                var a = kx * Math.cos(alpha) ;
+                var b = kx * Math.sin(alpha) ;
+                var c = (-1) * b ;
+                var d = ky *  Math.cos(alpha) ;
+                matrix = 'matrix(' + a + ',' + c + ',' + b +',' + d +',' + tx + ',' + ty + ')' ;
 
-                }
+            }
+            $img.css('transform', matrix);
+//    ---  аналогично для ореола   ---   ///
+            if (identityFlag) {
+                var matrix = identityMatrix ;
+            } else {
+                 ky = imgHeightGl/h0Gl ;
+                 kx = imgWidthGl/w0Gl ;
+//          -- убрать анимацию --   //
+                ky = 1 ;
+                kx = 1 ;
 
- //           }
+                 tx = 0 ;
+                 ty =   imgTopGl - top0Gl  ;
+                ty = 0 ;
+                 a = kx ;
+                 b = 0 ;
+                 c = 0 ;
+                 d = ky ;
+                matrix = 'matrix(' + a + ',' + c + ',' + b +',' + d +',' + tx + ',' + ty + ')' ;
+
+            }
+            $imgGl.css('transform', matrix);
+            time += timeDelay ;
+            if (++i > 5) {
+
+            }
         }, timeDelay);
-
-
     };
     /**
      * преобразовать строку вида 230px в число 230

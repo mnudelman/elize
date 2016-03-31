@@ -86,11 +86,14 @@ switch($operation) {
     }
     case 'mainProjects' : {
         $query = $taskPar->getParameter('query') ;
-
+        $cityId = $taskPar->getParameter('cityId') ;
+        $cityName = $taskPar->getParameter('cityName') ;
+        $regionId = $taskPar->getParameter('regionId') ;
       //  $query = 'test' ;
 
         $mp = new MainProjects() ;
         $mp->setQuery($query) ;
+        $mp->setCity($cityId,$cityName,$regionId) ;
         $mp->projectsGo() ;
         $answ = $mp->getResult() ;
         break ;
@@ -111,6 +114,14 @@ switch($operation) {
             'successful' => true,
             'result' => $result
         ] ;
+        break ;
+    }
+    case 'geoLocation' : {
+        $geo = new GeoLocation() ;
+        $lat = $taskPar->getParameter('lat') ;
+        $long = $taskPar->getParameter('long') ;
+        $geo->selectCity($lat,$long) ;
+        $answ = $geo->getResult() ;
         break ;
     }
 

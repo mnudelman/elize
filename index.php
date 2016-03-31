@@ -37,6 +37,7 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
     <script type="text/javascript" src="<?= $dirMousewheel; ?>/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="<?= $dirAutoResize; ?>/autoResize.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
@@ -64,6 +65,8 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/Placeholder.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/AddSignalComment.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/ActionSteps.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/GeoLocation.js"></script>
+
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>
 <body>
