@@ -596,13 +596,19 @@ function BackgroundImg() {
         return Math.round((h/w)*100000)/100000 ;
     } ;
     this.isResize = function() {
-        var screenW = $(document).width() ;
-        var screenH = $(document).height() ;
+        //var screenW = $(document).width() ;
+        //var screenH = $(document).height() ;
+        var screenW = $(window).width() ;
+        var screenH = $(window).height() ;
+
         return (screenW !== currentMainWidth || screenH !== currentMainHeight) ;
     } ;
     this.setCurrentSize = function() {
-        var screenW = $(document).width() ;
-        var screenH = $(document).height() ;
+        //var screenW = $(document).width() ;
+        //var screenH = $(document).height() ;
+        var screenW = $(window).width() ;
+        var screenH = $(window).height() ;
+
 //     сохранить текущий размер
         currentMainHeight = screenH ;
         currentMainWidth = screenW ;

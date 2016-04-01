@@ -136,7 +136,8 @@ function PhilosophyForm() {
             //backgroundImg.stampShow('answer') ;
             //backgroundImg.centralCircleShow('answer') ;
             if (scrollGoFlag) {
-                addSignalsTable.tableShow() ;
+                var resizeFlag = true ;
+                addSignalsTable.tableShow(resizeFlag) ;
             }
         }
     } ;

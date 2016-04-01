@@ -37,6 +37,8 @@ function ScrollBackground() {
     var formShowFlag = false ;
     var preloadIimages = [] ;        // список изображений для preload
     var cashImages = [] ;
+    var currentWindowWidth ;
+    var currentWindowHeight ;
     //---------------------//
     var _this = this ;
     //---------------------//
@@ -187,8 +189,14 @@ function ScrollBackground() {
         preloadIimages[1] = caption.captionsTypes.answer.file ;
         preloadIimages[2] = caption.captionsTypes.oracle.file ;
         preloadIimages[3] = caption.captionsTypes.oracle.file ;
-        preloadIimages[2] = caption.captionCross.img.file ;
-        preload() ;
+        preloadIimages[4] = caption.captionCross.img.file ;
+        preloadIimages[5] = vinjetka.img.file ;
+        preloadIimages[6] = slider.img.file ;
+        preloadIimages[7] = scrollLine.background.img.file ;
+
+
+
+         preload() ;
 
     } ;
     var preload = function() {
@@ -248,6 +256,8 @@ function ScrollBackground() {
         var placeWidth =  place['x2'] - place['x1'] ;
         var screenWidth = $(window).width() ;
         var screenHeight = $(window).height() ;
+        currentWindowHeight = screenHeight ;
+        currentWindowWidth = screenWidth ;
         kResize['ky'] = Math.round((screenHeight/placeHeight)*10000)/10000 ;
         var placeClcWidth = kResize['ky'] * placeWidth ;
         if (placeClcWidth > screenWidth*0.8) {
@@ -448,26 +458,7 @@ function ScrollBackground() {
      * click по шапке для закрытия
      */
     var captionClick = function() {
-        // ------ закрытие формы   --------//
-       // $captionCrossDiv.off('mouseenter mouseout') ;
-       //$captionCrossDiv.hover(function(e) {
-       //     $captionCrossDiv.css('cursor', 'pointer');
-       // },
-       //    function(e) {
-       //        $captionCrossDiv.css('cursor', 'auto');
-       //    }
-       //) ;
-        //$captionDiv.off('mousemove') ;
-        //$captionDiv.mousemove(function(e){
-        //    var x = e.pageX;
-        //    var y = e.pageY;
-        //    if (isExitArea(x,y)) {
-        //        $captionDiv.css('cursor','pointer') ;
-        //    } else {
-        //        $captionDiv.css('cursor','auto') ;
-        //    }
-        //}) ;
-        $captionCrossDiv.off('click') ;
+         $captionCrossDiv.off('click') ;
         $captionCrossDiv.click(function(e) {
                 _this.exit() ;
         }) ;
@@ -782,13 +773,18 @@ function ScrollBackground() {
      */
     this.resize = function() {
         if (formShowFlag) {
+
+            //           setTimeout(function() {
             kResizeClc();
-
-            internalBlockDefine('mainDataBlock',mainDataBlock) ;
-            internalBlockDefine('dataArea',dataArea,$mainDataBlockDiv) ;
+            //           }, 100);
 
 
-            var screenWidth = $(window).width();
+            //internalBlockDefine('mainDataBlock',mainDataBlock) ;
+            //internalBlockDefine('dataArea',dataArea,$mainDataBlockDiv) ;
+
+
+            var screenWidth = currentWindowWidth ;
+//            var screenHeight = $(window).height();
             var place = mainBlock.place;
             var x1 = place['x1'];
             var x2 = place['x2'];
@@ -796,31 +792,36 @@ function ScrollBackground() {
             var y2 = place['y2'];
             var kx = kResize['kx'];
             var ky = kResize['ky'];
-            $mainBlockDiv.css('top', ky * y1);
+
+            var top = ky * y1;
+
+            $mainBlockDiv.css('top', top);
 
             $mainBlockDiv.css('height', ky * (y2 - y1));
+
+//            $mainBlockDiv.css('height', screenHeight - top -10);
             var width = kx * (x2 - x1);
-
             $mainBlockDiv.css('width', width);
-
             $mainBlockDiv.css('left', (screenWidth - width) / 2);
+            internalBlockDefine('mainDataBlock', mainDataBlock);
+            internalBlockDefine('dataArea', dataArea, $mainDataBlockDiv);
             //
-            dataAreaHiddenClc() ;
-            scrollingShow() ;
-            scrollingBegin() ;
+            dataAreaHiddenClc();
+            scrollingShow();
+            scrollingBegin();
 
-            internalBlockDefine('dataArea',dataArea) ;
+            internalBlockDefine('dataArea', dataArea);
 
             internalBlockDefine('scrollLine', scrollLine);
             internalBlockDefine('slider', slider);
 
             internalBlockDefine('caption', caption);
-            var captionCross = caption.captionCross ;
-            internalBlockDefine('captionCross',captionCross,$captionDiv) ;
+            var captionCross = caption.captionCross;
+            internalBlockDefine('captionCross', captionCross, $captionDiv);
 
 
-            var classFLag = true ;
-            vinjetkaShow(classFLag) ;
+            var classFLag = true;
+            vinjetkaShow(classFLag);
 
         }
     }

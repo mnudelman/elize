@@ -110,7 +110,7 @@ function AddSignalsTable() {
      * signalTypes - список типов сигналов в порядке их вывода
      * как таковая таблица не формируется. Строки передаются на вывод
      */
-    this.tableShow = function() {
+    this.tableShow = function(reshowFlag) {
         scrollBackground.answerInit('oracle') ;        // вывод пустой формы
         scrollBackground.answerBegin() ;        // начало вывода
         var n = 0 ;
@@ -125,7 +125,16 @@ function AddSignalsTable() {
         }
         totalRang = totalRang/n ;
         var $totalRow = signalTotalRowBuild(totalRang) ;
-        scrollBackground.putAnswerItem($totalRow,false) ;
+ // --- попробуем задержку ----- //
+        if ( reshowFlag === true) {
+            scrollBackground.putAnswerItem($totalRow,false) ;
+        }else {
+            setTimeout(function() {
+                scrollBackground.putAnswerItem($totalRow,false) ;
+            }, 400);
+        }
+
+
 
 
     } ;
