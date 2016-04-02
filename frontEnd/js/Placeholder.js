@@ -27,7 +27,7 @@ function Placeholder() {
         $placeholder.attr('id', 'placeholder');
         $placeholder.attr('hidden','hidden') ;
         FONT_SIZE_NORMAL = ($placeholder.css('font-size')).replace('px','') - 0 ;
-        FONT_SIZE_MIN =  0.5 * FONT_SIZE_NORMAL;
+        FONT_SIZE_MIN =  0.7 * FONT_SIZE_NORMAL;
     } ;
     this.holderSetPlace = function() {
         blockWidth = $blockContainer.width();
@@ -57,7 +57,7 @@ function Placeholder() {
     this.hide = function() {
         $placeholder.attr('hidden','hidden') ;
         var fontSize = fontSizeClc() ;
-    //    $textArea.css('font-size',fontSize) ;
+        $textArea.css('font-size',fontSize) ;
         $textArea.removeAttr('hidden') ;
 
         $textArea.focus() ;
@@ -69,6 +69,6 @@ function Placeholder() {
     var fontSizeClc = function() {
         var kResize = backgroundImg.getKResize() ;
         var ky = kResize['ky'] ;
-        return  (ky < 0.3) ? FONT_SIZE_MIN : FONT_SIZE_NORMAL ;
+        return  (ky < 0.5) ? FONT_SIZE_MIN : FONT_SIZE_NORMAL ;
     } ;
 }

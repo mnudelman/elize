@@ -70,6 +70,11 @@ $dirStyle = './frontEnd/styles';
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>
 <body>
+<div id="dbError" hidden="hidden" class="dbError">
+    <button id="closeErrorMessages">закрыть</button>
+    <h3>Ошибка обмена данными с сервером</h3>
+    <div id="dbErrorData"> </div>
+</div>
 <div id="userInterfaceBlock"></div>
 <div id="queryTextBlock" hidden="hidden" ></div>
 <!--<div id="total"></div>-->

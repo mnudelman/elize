@@ -70,26 +70,25 @@ function MagicNormalPictures() {
         }
     } ;
     /**
-     * вывод рамки и картинки внутри
+     *      * вывод рамки и картинки внутри
      * положение рамки определяется объектом place{x1: ,y1: ,x2: ,y2:}
      * внутренняя область(куда помещается картинка) - innerPlace{}
      * dy - параметр для центрирования изображения по вертикали
-     * добавление атрибута 'data-type' позволяет идентифицировать элемент
+     * добавление атрибута 'data-signalType' позволяет идентифицировать элемент
      * при выводе поясняющего текста
      * @param dir
-     * @param borderSize
      * @param item
      * @param itemKey
-     * @param substImageFile    - другая картинка для вставки в рамку (используется для "философии")
+     * @param substImageFile  - подстановка другой картинки
+     * @param cssClass - css class
+     * @param dataType - атрибут 'data-signalType'
+     * @param title    - атрибут title
      * @returns {*|jQuery|HTMLElement}
      */
     this.showItem = function(dir,item,itemKey,substImageFile,
                              cssClass,dataType,title) {
         var place = item['place'] ;
         var innerPlace = item['innerPlace'] ;
-        //var imgFile = (currentStaticFlag) ?
-        //              item['img']['text'] : item['img']['file'] ;
-
         var imgFile = item['img']['text'] ;
 
         var signalType = item['signalType'] ;
@@ -101,7 +100,7 @@ function MagicNormalPictures() {
         dy = 0 ;
 
 
-        if (typeof(substImageFile) === 'string' ) {
+        if (typeof(substImageFile) === 'string' ) {   // подстановка картинки
             pictureFile = substImageFile ;
             dy = 0 ;        // поправка
         }
@@ -183,13 +182,14 @@ function MagicNormalPictures() {
 
 
         var src =  $pictureImg.attr('src') ;
-       if (src !== pictureFile) {
+       if (src !== pictureFile) {                // меняем картинку в рамке
             $pictureImg.attr('src',pictureFile) ;
        }
         $pictureImg.css('width',pictWidth) ;
         $pictureImg.css('height',pictHeight - dy) ;
 
-//      transparentBlock
+//      transparentBlock     - дополнительный прозрачный блок над картинкой, чтобы
+//      гарантировать hover, z-index: 40
         var transparentBlockId  = itemKey + '_transparent' ;
         var $transparentBlock = $('#' + transparentBlockId) ;
         if ($transparentBlock.length === 0) {
@@ -203,7 +203,7 @@ function MagicNormalPictures() {
 
         $transparentBlock.css('width',pictWidth) ;
         $transparentBlock.css('height',pictHeight - dy) ;
-        $transparentBlock.css('background-color','rgba(0,0,0,0') ;
+        $transparentBlock.css('background','transparent') ;
         $transparentBlock.css('z-index',40) ;
         //--- если определены атрибуты, то добавить в определение --//
         if (typeof(cssClass) === 'string') {
@@ -228,7 +228,7 @@ function MagicNormalPictures() {
     /**
      * блок - параметры вращения картинки
      * @param $img
-     * @returns {{$img: *, dx_0: number, dy_0: number, axis: string, scaleStep: number, sizeMin: number, timeDelay: number}}
+     * @returns {{$img: *, timeDelay: number}}
      */
     var rotationBlockPrepare = function($img) {
 

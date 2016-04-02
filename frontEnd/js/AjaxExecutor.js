@@ -11,8 +11,13 @@ function AjaxExecutor(ajaxUrl) {
    } ;
     var errorDefault = function(event, XMLHttpRequest, ajaxOptions, thrownError) {
         var responseText = event.responseText ; // html - page
-
-        $('#dbError').append(responseText) ;    // здесь будут необработанные php-ошибки
+        $('#dbErrorData').empty() ;
+        $('#dbErrorData').append(responseText) ;    // здесь будут необработанные php-ошибки
+        $('#dbError').removeAttr('hidden') ;
+        $('#closeErrorMessages').off('click') ;
+        $('#closeErrorMessages').click(function(){
+            $('#dbError').attr('hidden','hidden') ;
+        }) ;
     } ;
     var completeDefault = function() {
         ajaxComplete = true ;

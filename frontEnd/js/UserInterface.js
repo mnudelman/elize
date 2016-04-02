@@ -77,54 +77,17 @@ function UserInterface() {
 
         $(window).off('click') ;
         $(window).click(function (e) {
-            if (isTextClick(e)) {
-//                $queryArea.focus();
-                placeholder.hide() ;
-
-
-
-
-
-            }else {
-                if (isStampClick(e)) {                   // выполнение запроса
- //                   stampClickGo();
-                } else {
-                    normalQueryShow();
-                    placeholder.hide() ;
-//                    $queryArea.focus();
-
-
-
-                }
-            }
+            placeholder.hide() ;
         });
         $(window).off('resize') ;
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
-        //$(document).off('keypress') ;
-        //$(document).keypress(function(e){
             $(document).off('keydown') ;
-            $(document).keydown(function(e){
-
-
-//            $queryArea.focus();
-//            alert('key:' + e.key + '\n' + 'code:'+ e.keyCode + '\n' +
-//            'val:' + $queryArea.val()) ;
-//            if (($queryArea.val()).length === 0) {
-//                if (typeof(e.key) == 'string') {
-//                    $queryArea.val(e.key) ;
-//                }
-//            }
-
-            placeholder.hide() ;
-
-
-
-        }) ;
-
-
-    } ;
+            $(document).keydown(function(e) {
+                placeholder.hide();
+            }) ;
+   } ;
     /**
      * подготовить поле ввода запроса
      */
@@ -135,11 +98,6 @@ function UserInterface() {
         var idText = backgroundImg.getIdText('query');
         $queryArea = $('#' + idText);
         $queryArea = $('#queryText');
- //       $queryArea.attr('placeholder', 'ВВЕДИТЕ ВОПРОС');
-
-//        $queryArea.css('z-index',10) ;
-
-
         $queryArea.off('keydown') ;
         $queryArea.on('keydown',function(e) {
             if (e.keyCode === 13) {
@@ -152,10 +110,6 @@ function UserInterface() {
         }) ;
         var staticShow = true ;
         magicNormalPictures.show(staticShow) ;
-
-  //      $queryArea.attr('hidden','hidden') ;
-//        $queryArea.focus() ;
-
         currentQuery = currentQuery.replace(/\r/,'') ;
         currentQuery = currentQuery.replace(/\f/,'') ;
         currentQuery = currentQuery.replace(/\n/,'') ;
@@ -171,12 +125,6 @@ function UserInterface() {
                 placeholder.hide() ;
             }
         },20) ;
-
-
-        var a = 1 ;
-
-
-
     } ;
     /**
      * click по планке "ответ" -> процесс "раздумья" -
@@ -184,10 +132,6 @@ function UserInterface() {
      * запуск выполнения запроса
      */
     var stampClickGo = function() {
-        //if (philosophyForm.getFormShowFlag() === true) {
-        //    philosophyForm.scrollGo() ;       // развернуть свиток
-        //} else {
-
 // запускаем процесс
         actionSteps.init();
         currentQuery = $queryArea.val();
@@ -218,11 +162,7 @@ function UserInterface() {
     this.reshow = function() {
         userInterfaceEvents() ;
         normalQueryShow() ;
-        //if(currentQuery.length > 0 ) {
-        //    $(window).click() ;
-        //}
-
-    } ;
+   } ;
     var resize = function() {
         if (!resizeGo) {    // запустить таймер
             resizeGo = true;

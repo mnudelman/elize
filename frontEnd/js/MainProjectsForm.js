@@ -22,7 +22,6 @@ function MainProjectsForm() {
         var actionSteps ;
         var currentQuery = '';         // текущий запрос
         var currentPage = 0;        //  текущая страница результата
-        var $resultBlock = $('#resultBlock');
         var queryResult = {};    // результат запроса
         var scrollBackground ;   // объект фоновое изображение
         var city ;               // ближайший город
@@ -43,7 +42,7 @@ function MainProjectsForm() {
      */
     this.queryGo = function(i) {
         var geoLocation = paramSet.geoLocation ;
-        city = geoLocation.getCity() ;
+        city = geoLocation.getCity() ;        // ближайший город, определённый по ip
         var cityId = city['cityId'] ;
         var cityName = city['cityName'] ;
         var regionId = city['regionId'] ;
@@ -67,20 +66,35 @@ function MainProjectsForm() {
         ajax.setRequestFunc(function(answ){       // callback  для результата
             if (answ['successful'] == true) {
                 queryResult = answ['results'] ;
-                if (isRedirectQuery()) {
+                if (isRedirectQuery()) {        // перенаправить запрос далее
                     actionSteps.addStep('mainProjects','continue') ;
                 }else {
-                    actionSteps.addStep('mainProjects','prepare',responseShow) ;
+                    actionSteps.addStep('mainProjects','prepare',responseShow) ; // фиксируем готовность к выводу
                 }
  //                responseShow() ;
             }else {
                 var message = answ['message'];
-                actionSteps.addStep('mainProjects','break',ajax.errorMessage,message) ;
+                actionSteps.addStep('mainProjects','break',ajax.errorMessage,message) ; // фиксируем ошибку
 //                ajax.errorMessage(message) ;
+                exit() ;
             }
         }) ;
         ajax.go() ;
     } ;
+    /**
+     * прервать выполнение
+     * возврат в точку, заданную callStack
+     */
+    var exit = function() {
+        var callStack = paramSet.callStack ;
+        callStack.currentGo() ;
+
+    } ;
+
+    /**
+     * В  случае пустого ответа, запрос перенаправляется на поисковую систему
+     * @returns {boolean}
+     */
     var isRedirectQuery = function() {
         var results = queryResult['results'] ;
         if (results.length === 0) {                // пустой ответ-> передача Поисковой системе
@@ -106,14 +120,6 @@ function MainProjectsForm() {
 
             var icon = queryResult['icon'] ;
             var results = queryResult['results'] ;
-            if (results.length === 0) {                // пустой ответ-> передача Поисковой системе
-                    var responseForm = paramSet.responseForm ;
-                    responseForm.setQuery(currentQuery) ;
-                    responseForm.queryGo() ;
-                    return true ;
-            }
-
-
 
             var totalHuman  = 'обнаружено записей: ' + results.length ;
             var pageStart =  1 ;        //   queryResult['pageStart'] ;
@@ -122,7 +128,6 @@ function MainProjectsForm() {
             for (var i = 0; i < results.length; i++) {
                 var result = results[i] ;
                 var li = liCreate(result) ;
-//                li.css('list-style-image','url('+icon+')') ;
                 scrollBackground.putAnswerItem(li) ;   // вывод элемента ответа
             }
         } ;

@@ -1,5 +1,6 @@
 /**
  * Фоновое изображение - "свиток", подложенный под вывод результатов запроса
+ * компоненты: шапка, область данных, линия прокрутки, бегунок
  */
 function ScrollBackground() {
     var callStack ;               // стек вызовов
@@ -19,7 +20,8 @@ function ScrollBackground() {
     var rightMargin ;
     var $mainBlockDiv = $('#resultBlockNew') ;
     var $resultBackground = $('#resultBackground') ;
-
+    var MAIN_BLOCK_CSS_CLASS = 'result' ;
+    var DATA_AREA_CSS_CLASS = 'data' ;
     var $captionDiv ;           // шапка - заголовок свитка
     var $captionCrossDiv ;      // символ - закрытие свитка
     var $dataAreaDiv ;            // область данных
@@ -37,7 +39,7 @@ function ScrollBackground() {
     var formShowFlag = false ;
     var preloadIimages = [] ;        // список изображений для preload
     var cashImages = [] ;
-    var currentWindowWidth ;
+    var currentWindowWidth ;         // текущий размер экрана
     var currentWindowHeight ;
     //---------------------//
     var _this = this ;
@@ -141,7 +143,7 @@ function ScrollBackground() {
 
             }
         } ;
-        message = {
+        message = {              // область вывода отладочных ссобщений
             place: {
                 x1: 100,
                 y1: 200,
@@ -193,12 +195,12 @@ function ScrollBackground() {
         preloadIimages[5] = vinjetka.img.file ;
         preloadIimages[6] = slider.img.file ;
         preloadIimages[7] = scrollLine.background.img.file ;
-
-
-
          preload() ;
 
     } ;
+    /**
+     * предподготовка элементов свитка
+     */
     var preload = function() {
        for (var i = 0; i < preloadIimages.length; i++)  {
             cashImages[i] = new Image() ;
@@ -226,26 +228,19 @@ function ScrollBackground() {
         dataBlockDefine() ;
         internalBlockDefine('scrollLine',scrollLine) ;
         internalBlockDefine('slider',slider) ;
-       //--- подстановка шапки  ---///
+       //--- подстановка шапки по типу ---///
         caption.img['file'] = caption.captionsTypes[scrollType]['file'] ;
         internalBlockDefine('caption',caption) ;
         $captionDiv = $('#' + mainBlockId +'_caption') ;
- //       $captionDiv.css('opacity',0.5) ;         // debug only
-        var captionCross  = caption.captionCross ;
+        var captionCross  = caption.captionCross ;                       // блок - крест закрытия свитка
         internalBlockDefine('captionCross',captionCross,$captionDiv) ;
         $captionCrossDiv = $('#' + mainBlockId +'_captionCross') ;
-
-
  //       internalBlockDefine('message',message) ;  // только для отладки
-
-
-
         $sliderDiv = $('#' + mainBlockId +'_slider') ;
         $scrollLineDiv = $('#' + mainBlockId +'_scrollLine') ;
         $messageDiv = $('#' + mainBlockId +'_message') ;
         $scrollLine = $('#' + mainBlockId +'_scrollLine') ;
         scrollEvents() ;
-
     } ;
     /**
      * пересчёт размеров под размер окна браузера
@@ -254,14 +249,12 @@ function ScrollBackground() {
         var place = mainBlock['place'] ;
         var placeHeight = place['y2'] - place['y1'] ;
         var placeWidth =  place['x2'] - place['x1'] ;
-        var screenWidth = $(window).width() ;
-        var screenHeight = $(window).height() ;
-        currentWindowHeight = screenHeight ;
-        currentWindowWidth = screenWidth ;
-        kResize['ky'] = Math.round((screenHeight/placeHeight)*10000)/10000 ;
+        currentWindowHeight = $(window).height() ;
+        currentWindowWidth = $(window).width() ;
+        kResize['ky'] = Math.round((currentWindowHeight/placeHeight)*10000)/10000 ;
         var placeClcWidth = kResize['ky'] * placeWidth ;
-        if (placeClcWidth > screenWidth*0.8) {
-            var realWidth = Math.min(screenWidth*0.8,placeClcWidth) ;
+        if (placeClcWidth > currentWindowWidth*0.8) {
+            var realWidth = currentWindowWidth*0.8 ;
             kResize['kx'] = Math.round((realWidth/placeWidth)*10000)/10000 ;
         } else {
             kResize['kx'] = kResize['ky'] ;
@@ -282,11 +275,16 @@ function ScrollBackground() {
         return {w:width, h: height}
     } ;
     var mainBlockDefine = function(){
-        var screenWidth = $(window).width() ;
-        $mainBlockDiv.css('position','absolute') ;
-
         $mainBlockDiv.attr('hidden','hidden') ;
-
+        mainBlockRealPlace() ;
+        $mainBlockDiv.show( "blind", 1000);
+        $resultBackground.removeAttr('hidden') ;
+        formShowFlag = true ;
+    } ;
+    /**
+     * размеры, пересчитанные на размер экрана
+     */
+    var mainBlockRealPlace = function() {
         var place = mainBlock.place ;
         var x1 = place['x1'] ;
         var x2 = place['x2'] ;
@@ -294,48 +292,38 @@ function ScrollBackground() {
         var y2 = place['y2'] ;
         var kx = kResize['kx'] ;
         var ky = kResize['ky'] ;
-        $mainBlockDiv.css('top',ky * y1) ;
 
+        $mainBlockDiv.removeClass() ;
+        $mainBlockDiv.addClass(MAIN_BLOCK_CSS_CLASS) ;
+
+        $mainBlockDiv.css('top',ky * y1) ;
         $mainBlockDiv.css('height',ky * (y2 - y1)) ;
         var width = kx * (x2 - x1) ;
-
         $mainBlockDiv.css('width',width) ;
-
-        $mainBlockDiv.css('left',(screenWidth - width)/2) ;
-
-        var imgFile = dirImg + '/' + mainBlock['img']['file'] ;
-        $mainBlockDiv.css('background-image','url("' + imgFile +'")') ;
-        $mainBlockDiv.css('background-repeat','no-repeat') ;
-        $mainBlockDiv.css('background-size','100% 100%') ;
-        $mainBlockDiv.css('z-index',10) ;
-        $mainBlockDiv.css('overflow','hidden') ;
-
-
-        $mainBlockDiv.show( "blind", 1000);
-
-        $resultBackground.removeAttr('hidden') ;
-
-        formShowFlag = true ;
+        $mainBlockDiv.css('left',(currentWindowWidth - width)/2) ;
     } ;
     /**
      * Блок для вывода результата
      * для корректной прокрутки результата
      * потребовался промежуточный уровень mainDataBlock  в
      * дополнение к области вывода dataArea
+     * dataArea  - это список блоков результата
      */
     var dataBlockDefine = function() {
         internalBlockDefine('mainDataBlock',mainDataBlock) ;
         var mainBlockId = $mainBlockDiv.attr('id') ;
         $mainDataBlockDiv = $('#' + mainBlockId +'_mainDataBlock') ;
-        $mainDataBlockDiv.css('background-color','rgba(0,0,0,0)') ;   // прозрачный
+        $mainDataBlockDiv.css('background','transparent') ;   // прозрачный
+
         $mainDataBlockDiv.css('overflow','hidden') ;
 
         internalBlockDefine('dataArea',dataArea,$mainDataBlockDiv) ;
-
-
         $dataAreaDiv = $('#' + mainBlockId +'_dataArea') ;
-        $dataAreaDiv.css('background-color','rgba(0,0,0,0)') ;   // прозрачный
-        $dataAreaDiv.addClass('data') ;
+        $dataAreaDiv.css('background','transparent') ;   // прозрачный
+//        $dataAreaDiv.addClass('data') ;
+
+        $dataAreaDiv.addClass(DATA_AREA_CSS_CLASS) ;
+
         var $pHuman = $('<p/>') ;
         $pHuman.attr('id','dataHuman') ;
 //        $dataAreaDiv.append($pHuman) ;  // отказались
@@ -378,12 +366,8 @@ function ScrollBackground() {
         var y2 = place['y2'] ;
         var kx = kResize['kx'] ;
         var ky = kResize['ky'] ;
-
-
-
         var width = kx * (x2 - x1) ;
         var height = (y2 === undefined) ? undefined :ky * (y2 - y1) ;
-
         $blk.css('top',ky * y1) ;
         $blk.css('left',kx * x1) ;
         if (block['img'] !== undefined) {                 // блок включает картинку
@@ -430,17 +414,17 @@ function ScrollBackground() {
         $(window).off('click') ;
         $mainBlockDiv.off('mousewheel') ;
         $mainBlockDiv.mousewheel(function(event, delta) {     //  колесо мыши (jquery plagin)
-            var direct = Math.sign(event.deltaY) ;
+            var direct = Math.sign(event.deltaY) ;            //  направление прокрутки(-1 - вниз,+1 - вверх)
             var mouseFlag = true ;
             scrollingGo(direct,mouseFlag) ;
         });
        // ------ закрытие формы   --------//
         captionClick() ;
         $(window).off('keydown') ;
-        $(window).on('keydown',function(e) {
-            if (e.keyCode === 27) {
-                _this.exit() ;
-            }
+        $(window).on('keydown',function(e) {           // управление клавишами
+            //if (e.keyCode === 27) {
+            //    _this.exit() ;
+            //}
             switch (e.keyCode) {
                 case 27 :
                     _this.exit() ;
@@ -455,29 +439,13 @@ function ScrollBackground() {
         }) ;
     } ;
     /**
-     * click по шапке для закрытия
+     * click по кресту на шапке для закрытия
      */
     var captionClick = function() {
          $captionCrossDiv.off('click') ;
         $captionCrossDiv.click(function(e) {
                 _this.exit() ;
         }) ;
-
-    } ;
-    /**
-     * область закрытия свитка (символ "X")
-     * @param x
-     * @param y
-     * @returns {boolean}
-     */
-    var isExitArea = function(x,y) {
-        var ky = kResize['ky'] ;
-        var kx = kResize['kx'] ;
-        var left = kx * mainBlock['place']['x1'] ;
-        var width = kx *(mainBlock['place']['x2'] -  mainBlock['place']['x1']) ;
-        var top = ky * mainBlock['place']['y1'] ;
-        var height =  ky *(caption['place']['y2'] -  caption['place']['y1']) ;
-        return ((x - left) >= 0.7 * width && (y - top) <= 0.6 * height) ;
 
     } ;
     /**
@@ -488,8 +456,8 @@ function ScrollBackground() {
             setTimeout(function() {
                 $mainBlockDiv.removeAttr( "style" ).hide().fadeIn();
                 $scrollLineDiv.attr('hidden','hidden') ;     // появлялась после сворачивания свитка
-                $dataAreaDiv.attr('hidden','hidden') ;     // что-то отсвечивало перед исчезновением
-                $captionDiv.attr('hidden','hidden') ;     // что-то отсвечивало перед исчезновением
+                $dataAreaDiv.attr('hidden','hidden') ;       // что-то отсвечивало перед исчезновением
+                $captionDiv.attr('hidden','hidden') ;        // что-то отсвечивало перед исчезновением
 //-- фон тает после исчезновения свитки
                 $resultBackground.hide( "fade", 1000,function()  {
                     setTimeout(function() {
@@ -499,13 +467,15 @@ function ScrollBackground() {
                         scrolling.stop = true ;
                         formShowFlag = false ;
                         $(window).off('keydown') ;
-                        callStack.currentGo() ;
+                        callStack.currentGo() ;         // продолжение работы
                     }), 1000});
 
             }), 1000});
     } ;
     /**
      * начальные атрибуты прокрутки (объект scrolling = {})
+     * прокрутка выполняется если есть область прокрутки(scrolling.dyHidden > 0 )
+     * scrolling.kdyDataArea - коэффициент пересчёта премещений бегунка в прокрутку области данных
      */
     var scrollingBegin = function() {
         scrolling.stop = (scrolling.dyHidden <= 0) ;
@@ -515,20 +485,21 @@ function ScrollBackground() {
         scrolling.sliderYMax = kResize['ky'] * (mainHeight - height - 35 + 5 );
         scrolling.pageY = 0 ;
         scrolling.pageY0 = 0 ;
-        scrolling.sliderY = pixelToNumber($sliderDiv.css('top'));
         scrolling.sliderY0 = pixelToNumber($sliderDiv.css('top'));
+        scrolling.sliderY = scrolling.sliderY0 ;     // текущее положение
+
         scrolling.dataAreaY0 = pixelToNumber($dataAreaDiv.css('top'));
         scrolling.dataAreaY = scrolling.dataAreaY0 ;
         scrolling.wheelMoving = 0 ;
         scrolling.kdyDataArea =
                    scrolling.dyHidden / (scrolling.sliderYMax - scrolling.sliderYMin) ;
-        var topData = scrolling.dataAreaY0  ; //+
-//            scrolling.kdyDataArea  ; //* (scrolling.sliderY - scrolling.sliderY0);
+        var topData = scrolling.dataAreaY0  ;
         $dataAreaDiv.css('top',topData) ;
     } ;
     /**
-     * реакция на 1 шаг вращения колеса мыши
-     * @param e
+     *
+     * @param yDirection   - направление движения (-1 - вниз, +1 - вверх)
+     * @param mouseFlag    - сигнал от мыши, иначе клавиша
      */
     var scrollingGo = function(yDirection,mouseFlag) {
         if (!scrolling.stop ) {
@@ -701,6 +672,7 @@ function ScrollBackground() {
      * вывод блока ответа - элемента списка
      * при этом пересчитываются параметры прокрутки( неизветно является ли блок последним)
      * @param $liItem
+     * @vinFlag - выводить виньетку после блока данных
      */
     this.putAnswerItem = function($liItem,vinFlag) {
         vinFlag = (vinFlag === undefined) ? true : vinFlag ;
@@ -740,7 +712,6 @@ function ScrollBackground() {
         var width = kResize['kx'] * (place['x2'] - place['x1']) ;
 
         var dataWidth = $dataAreaDiv.width() ;
-//        left  = ((dataWidth - 80)- width)/2 ;
         left  = (dataWidth - width)/2 ;
         $vinDiv.css('width',dataWidth) ;
 
@@ -753,7 +724,6 @@ function ScrollBackground() {
         $img.css('margin-left',left) ;
         $img.css('width',width) ;
         $img.css('height',height) ;
-//        $liItem.append($vinDiv) ;
         if (!classFlag) {
             return $vinDiv ;
         }
@@ -773,44 +743,17 @@ function ScrollBackground() {
      */
     this.resize = function() {
         if (formShowFlag) {
-
-            //           setTimeout(function() {
             kResizeClc();
-            //           }, 100);
-
-
-            //internalBlockDefine('mainDataBlock',mainDataBlock) ;
-            //internalBlockDefine('dataArea',dataArea,$mainDataBlockDiv) ;
-
-
-            var screenWidth = currentWindowWidth ;
-//            var screenHeight = $(window).height();
-            var place = mainBlock.place;
-            var x1 = place['x1'];
-            var x2 = place['x2'];
-            var y1 = place['y1'];
-            var y2 = place['y2'];
-            var kx = kResize['kx'];
-            var ky = kResize['ky'];
-
-            var top = ky * y1;
-
-            $mainBlockDiv.css('top', top);
-
-            $mainBlockDiv.css('height', ky * (y2 - y1));
-
-//            $mainBlockDiv.css('height', screenHeight - top -10);
-            var width = kx * (x2 - x1);
-            $mainBlockDiv.css('width', width);
-            $mainBlockDiv.css('left', (screenWidth - width) / 2);
+            mainBlockRealPlace() ;
+// -- перестраиваем блоки данных  ---   //
             internalBlockDefine('mainDataBlock', mainDataBlock);
             internalBlockDefine('dataArea', dataArea, $mainDataBlockDiv);
-            //
+
             dataAreaHiddenClc();
             scrollingShow();
             scrollingBegin();
 
-            internalBlockDefine('dataArea', dataArea);
+//            internalBlockDefine('dataArea', dataArea);
 
             internalBlockDefine('scrollLine', scrollLine);
             internalBlockDefine('slider', slider);

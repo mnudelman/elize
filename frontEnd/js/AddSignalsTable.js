@@ -10,7 +10,7 @@
              }
   каждый  addSignal выводится как строка таблицы
  колонки : -изображение с подписью,
-           -текстовое опимание,
+           -текстовое описание,
            -весы с диаграммой, иллюстрирующие ранг
  в конце таблицы выводится условная средняя оценка по всем сигналам
  таблица для вывода передаётся в объект
@@ -138,29 +138,25 @@ function AddSignalsTable() {
 
 
     } ;
+    /**
+     * Ширина колонки - 1/4 ширины области данных свитка
+     * свиток(scrollBackground) - фоновое изображение для вывода таблицы сигналов
+     */
     var getColumnWidth = function() {
-        tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 13 +13 ; //20 ;  // колонка  таблицы
-        smallScreenFlag = (tabColumnWidth <= COLUMN_WIDTH_MIN) ;   // переключить на малый экран
-        if (smallScreenFlag) {
-            tabColumnWidth = scrollBackground.getDataAreaWidth()/4 - 5 + 5
-        }
+        tabColumnWidth = scrollBackground.getDataAreaWidth()/4  ;   // колонка  таблицы
     } ;
     /**
      * построитель строки таблицы
      * графа1 - картинка, графа2,3 - текст-описатель, графа4 - весы
-     * signal['file'] - имя файла вместе с папкой - именем типа сигнала
-     * signal['file'] = <typeName>/<fileName>
      * @param signal
-     * @param typeName
+     * @param typeName - тип сигнала (карты | астрология | ....}
      * @returns {*|jQuery|HTMLElement}
      */
     var signalRowBuild = function(signal,typeName) {
          kResize = backgroundImg.getKResize()  ; // коэффициенты для пересчёта
                                                     // на размер окна браузера
         // ширина столбцов из общей ширины области
- //       if (tabColumnWidth === undefined) {
             getColumnWidth() ;
- //       }
         var width = tabColumnWidth ;
 
         var $tr = $('<tr/>') ;
@@ -205,11 +201,6 @@ function AddSignalsTable() {
         }else {
             $tdPict.addClass(CSS_TEXT_SIGNAL1) ;
         }
-
-
-
-
-
         $tdPict.css('width',imgWidth) ;
         $tdPict.append($img) ;
         //-- подпись под картинкой --//
@@ -220,7 +211,6 @@ function AddSignalsTable() {
         $p.css('overflow','hidden') ;
         $p.append(txt) ;
         $tdPict.append($p) ;
- //       $tdPict.append( txt ) ;
         return $tdPict ;
     } ;
     /**
@@ -235,9 +225,6 @@ function AddSignalsTable() {
         bigFlag = (bigFlag === undefined) ? false : bigFlag ;
         var currentImg = (bigFlag) ? imgBalance.big : imgBalance.normal ;
         $tdBalance.css('width',tdWidth) ;
-        if (!bigFlag) {
-
-        }
         var dirBalance = imgBalance['dir'] ;
 
         var balancePict =  currentImg['pictContra'];
@@ -249,13 +236,7 @@ function AddSignalsTable() {
             $imgB.css('transform','scaleX(-1)') ;
         }
         $tdBalance.css('vertical-align','top') ;
-
-
-
-
-
         $tdBalance.css('padding-right',kResize['kx'] * 25) ;
-
         var imgW = currentImg['w'] ;
         var imgH = currentImg['h'] ;
         if (tdWidth > imgW ) {
@@ -273,16 +254,10 @@ function AddSignalsTable() {
         var textRight = imgBalance.text['contra'] ;
 
         var $proContra = textBalanceBuild(currentImg,tdWidth,textLeft,textRight) ;
-
-  //      $proContra.css('margin-right',5) ;
-
         $tdBalance.append($proContra) ;
         var $rangDiagram  = rangDiagramBuild(rang) ;  // линейная диаграмма
-
-
         $tdBalance.append($rangDiagram) ;
         $rangDiagram.css('width',tdWidth) ;
- //       $rangDiagram.css('margin-right',5) ;
         return $tdBalance ;
     } ;
     /**
@@ -292,10 +267,9 @@ function AddSignalsTable() {
     var textBalanceBuild = function(currentImg,tdWidth,textLeft,textRight) {
 
         var $textBlock = $('<div/>') ;
-        var textCss = currentImg['css'] ;
+        var textCss = currentImg['css'] ;     // класс
         var textCssSmall = (currentImg['cssSmall'] !== undefined) ? currentImg['cssSmall'] : textCss ;
         $textBlock.css('width',tdWidth) ;
-//        $textBlock.css('width','100%') ;
         textCss = (smallScreenFlag) ? textCssSmall : textCss ;
         $textBlock.addClass(textCss) ;
         //-- левый край  - текст
@@ -324,7 +298,7 @@ function AddSignalsTable() {
      */
     var rangDiagramBuild = function(rang) {
         var $rangBlock = $('<div/>') ;
-        $rangBlock.css('clear','both') ;
+        $rangBlock.css('clear','both') ;           // отмена обтекания
         var rangPro = Math.round(50 + rang/2) ;
         var rangContra = 100 - rangPro ;
         var dirBalance = imgBalance.dir ;
@@ -363,12 +337,10 @@ function AddSignalsTable() {
         rightPadding = Math.min(rightPadding,10) ;
         rightPadding = Math.max(rightPadding,5) ;
         leftPadding = 10 ;
-//        $txtBlock.css('padding','0 15px 0 10px') ;
         $txtBlock.css('padding-left',leftPadding) ;
         $txtBlock.css('padding-right',rightPadding) ;
         $txtBlock.css('margin-right','5px') ;
         $txtBlock.css('column-count',2) ;
-//        $txtBlock.css('column-count',1) ;
         $txtBlock.css('column-gap','2em') ;
         $txtBlock.css('column-width',width/2) ;
         $txtBlock.append(text) ;

@@ -23,17 +23,16 @@ function BackgroundImg() {
     var centralCircleGlow = {};   // размытый шар
     var stamp = {} ;              // печать - ввод запроса
     var dirImages = paramSet.dirImages ;
-    var placeholder ;             // объект - имитатор
+    var placeholder ;             // объект - имитатор placeholder
     var dirMainImg ;
     var dirSmoke ;
     var dirPictures ;
-    var $centralCircleBlock = $('#centralCircle') ;
-    var $centralCircleGlowBlock = $('#centralCircleGlow') ;
-    var $centralCircleTextBlock = $('#centralCircleText') ;
+    var $centralCircleBlock = $('#centralCircle') ;             // центральный круг
+    var $centralCircleGlowBlock = $('#centralCircleGlow') ;     // ореол вокруг центрального круга
+    var $centralCircleTextBlock = $('#centralCircleText') ;     // область текста внутри круга
     var $stampBlock = $('#stamp') ;
-    var animateStop = false ;
-    var centralCircleText ;       // объект поддержки размера области ввода
-    var currentMainWidth ;
+    var centralCircleText ;       // объект поддержки измеения размера области ввода
+    var currentMainWidth ;        // текущие размеры основного блока
     var currentMainHeight ;
     var _this = this ;
     //------------------------------------//
@@ -49,7 +48,7 @@ function BackgroundImg() {
             file: "magic2_empty_serg.jpg",
             size : {w:1917, h:1074 ,u:'px'}
         } ;
-        centralCircle = {
+        centralCircle = {                 // центральный круг
             dir: dirMainImg,
             place: {
                 x1: 800,
@@ -57,11 +56,11 @@ function BackgroundImg() {
                 x2: 1130,
                 y2: 710
             },
-            increase: {
+            increase: {            // координаты при раздувании центрального шара
                 y1: 183 ,
                 y2: 710
             },
-            textArea: {
+            textArea: {            // область текста внутри круга
                 x1: 827 - 6,
                 y1: 460 + 5,
                 x2: 1095 + 6,
@@ -108,12 +107,12 @@ function BackgroundImg() {
                 x2: 1111,
                 y2: 748
             },
-            query: {
+            query: {                     // ввод вопроса
                 img: {
                     file: 'stamp_ask.png'
                 }
             },
-            answer: {
+            answer: {                   // "далее" для пояснения ответа
                 img: {
                     file: 'stamp.png'
                 }
@@ -308,7 +307,7 @@ function BackgroundImg() {
 //    l3_1    l2_2             r2_1    r3_1
         philosophyPictures = {
             dir: dirPictures,
-            commentBlock: {
+            commentBlock: {                // не используется
                 place: {
                     x1: 766,      // l2_2 +
                     w: 394,
@@ -595,31 +594,27 @@ function BackgroundImg() {
         var h  = mainImgSize['h'] ;
         return Math.round((h/w)*100000)/100000 ;
     } ;
+    /**
+     * было ли изменение размера экрана ?
+     * @returns {boolean}
+     */
     this.isResize = function() {
-        //var screenW = $(document).width() ;
-        //var screenH = $(document).height() ;
         var screenW = $(window).width() ;
         var screenH = $(window).height() ;
 
         return (screenW !== currentMainWidth || screenH !== currentMainHeight) ;
     } ;
+    /**
+     * фиксировать текущий размер эрана
+     */
     this.setCurrentSize = function() {
-        //var screenW = $(document).width() ;
-        //var screenH = $(document).height() ;
-        var screenW = $(window).width() ;
-        var screenH = $(window).height() ;
-
-//     сохранить текущий размер
-        currentMainHeight = screenH ;
-        currentMainWidth = screenW ;
+        currentMainWidth = $(window).width() ;
+        currentMainHeight = $(window).height() ;
     } ;
     /**
      * пересчёт в реальный размер экрана
      */
     this.getKResize = function() {
-        //var screenW = $(document).width() ;
-        //var screenH = $(document).height() ;
-//     сохранить текущий размер
         var screenH = currentMainHeight  ;
         var screenW = currentMainWidth   ;
 //     -------------------------------    //
@@ -725,9 +720,6 @@ function BackgroundImg() {
         currentPictures['commentBlock']['place'] =  placeResize(commentPlace) ;
         var textPlace = commentBlock['textPlace'] ;
         currentPictures['commentBlock']['textPlace'] = placeResize(textPlace) ;
-        var kResize = _this.getKResize()  ;
-        var kx = kResize['kx']  ;
-        var ky = kResize['ky']  ;
         currentPictures['items'] = {} ;
         var currentItems = currentPictures['items'] ;
         var items = philosophyPictures['items'] ;
@@ -760,11 +752,6 @@ function BackgroundImg() {
         currentGlow['place'] =  placeResize(centralCircleGlow['place']) ;
         currentGlow['img'] =  centralCircleGlow['img'];
         return currentGlow ;
-    } ;
-    var newTextArea = function(alpha,newPlace) {
-       var textArea = {} ;
-
-
     } ;
     /**
      * планка "далее" - запуск выполнения запроса
@@ -829,7 +816,7 @@ function BackgroundImg() {
             $centralCircleGlowBlock.removeAttr('hidden') ;
             var $txt = defineTextArea($centralCircleTextBlock, textAreaPlace, textAreaBackGround,
                 currentColor, 0, readonly, idText);
-            placeholder.init($centralCircleTextBlock) ;
+            placeholder.init($centralCircleTextBlock) ;      // имитатор placeholder
             placeholder.setTextArea($txt) ;
         }
     } ;

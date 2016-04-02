@@ -14,9 +14,9 @@ function GeoLocation() {
         calcLocation() ;
         var tmpTimer = setInterval(function () {
             var geoLoc = _this.getGeoLocation() ;
-            if (geoLoc.lat !== undefined && geoLoc.long !== undefined) {
+            if (geoLoc.lat !== undefined && geoLoc.long !== undefined) { // координаты определны
                 clearInterval(tmpTimer);
-                clcCity() ;
+                clcCity() ;                 // ближайший город по ккординатам
             }
         }, 300);
     } ;

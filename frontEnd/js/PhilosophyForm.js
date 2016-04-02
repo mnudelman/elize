@@ -9,7 +9,7 @@
  * * дополнительная форма вывода через addSignalsTable - таблица дополнительных
  * сигналов, куда вместе с картинкой выводится дополнительная информация
  * Дополнительная форма запускается по click на планку "далее" или клавишей
- * enter. Возврат в исходное состояние по  esc  или click по экрану.
+ * enter. Возврат в исходное состояние по  esc или $(window).click()
  */
 function PhilosophyForm() {
     var actionSteps ;
@@ -108,7 +108,7 @@ function PhilosophyForm() {
        scrollGoFlag = false ;
         currentPhrase = '' ;
 
-       callStack.pushItem('philosophy',_this.reshow) ;
+       callStack.pushItem('philosophy',_this.reshow) ;  // фиксируем метод-продолжение
 
       responseShow() ;
     } ;
@@ -119,43 +119,36 @@ function PhilosophyForm() {
      * прервать вывод
      */
     this.stopShow = function() {
-//        $resultBlock.empty() ;
-
         animateStop = true ;
         formShowFlag = false ;
         $answerAreaBlock.empty() ;
     } ;
 
-
+    /**
+     * изменение размера
+     */
     this.resize = function() {
         if (formShowFlag) {
             animateStop = true ;
-//            scrollGoFlag = false ;
-//            responseShow() ;
             showItems() ;
-            //backgroundImg.stampShow('answer') ;
-            //backgroundImg.centralCircleShow('answer') ;
             if (scrollGoFlag) {
                 var resizeFlag = true ;
                 addSignalsTable.tableShow(resizeFlag) ;
             }
         }
     } ;
+    /**
+     *  перевывод после возврата
+     */
     this.reshow = function() {
         scrollGoFlag = false ;
         showItems() ;
-        //backgroundImg.stampShow('answer') ;
-        //backgroundImg.centralCircleShow('answer') ;
-
     } ;
 
 
     var responseShow = function() {
-        //backgroundImg.stampShow('answer') ;
-        //backgroundImg.centralCircleShow('answer') ;
-        var idText = backgroundImg.getIdText('answer') ;
+         var idText = backgroundImg.getIdText('answer') ;
         $answerArea = $('#'+idText) ;
-//        $resultBlock.empty() ;
         addSignals = getAddSignals() ;
     } ;
     /**
@@ -172,14 +165,16 @@ function PhilosophyForm() {
             if (answ['successful'] == true) {
                 goVect['successful'] = true;
                 addSignals = answ['result'] ;              // дерево результата
-                actionSteps.addStep('philosophy','prepare',showItems) ;
+                actionSteps.addStep('philosophy','prepare',showItems) ;  //  выполнена подготовка данных для вывода
 //                showItems() ;
             }else {
+                var message = 'Ошибка запроса к дополнительным сигналам';
                 if (answ !== false) {
-                    var message = answ['message'];
+                    message = answ['message'];
 //                    ajax.errorMessage(message) ;
-                    actionSteps.addStep('philosophy','break',ajax.errorMessage,message) ;
+
                 }
+                actionSteps.addStep('philosophy','break',ajax.errorMessage,message) ;
                 exit();
 
             }
@@ -195,16 +190,11 @@ function PhilosophyForm() {
      */
     var showItems = function() {
         backgroundImg.stampShow('answer') ;
-        backgroundImg.centralCircleShow('answer') ;
+        backgroundImg.centralCircleShow('answer') ;         // синий шар
         var idText = backgroundImg.getIdText('answer') ;
         $answerArea = $('#'+idText) ;
 
-
-
-
-
         var cssClass = 'addSignal' ;
-//        $resultBlock.empty() ;
         pictures = backgroundImg.getPhilosophyPictures() ;
         var dir = pictures['dir'] ;
         var signalTypesOrder = 0 ;
@@ -212,27 +202,20 @@ function PhilosophyForm() {
         for (var itemKey in items) {
             var item = items[itemKey] ;
             var typeSignal = item['typeSignal'] ;
-            signalTypes[signalTypesOrder++] = typeSignal ;
-//            var substFile = dirImages + '/' +addSignals[substName]['file'] ;
+            signalTypes[signalTypesOrder++] = typeSignal ;     // список типов в порядке вывода
             var signal = addSignals[typeSignal] ;
             var substFile = signal['file'] ;
             var typeComment = signal['typeComment'] ;  // коментарий к типу
             var signalName =  signal['name'] ;         // имя сигнала
 
             var title =  typeComment + '.' + signalName ;
-
-
-
-
             magicNormalPictures.showItem(dir,item,itemKey,substFile,cssClass,typeSignal,title) ;
         }
         $(window).off('click') ;
-        //$(window).on('click',function() {
-        //    $(window).off('click') ;
-        //    _this.stopShow() ;
-        //    callStack.pullItem() ;
-        //    callStack.currentGo() ;
-        //}) ;
+        $(window).on('click',function() {
+            $(window).off('click') ;
+            exit() ;
+        }) ;
         $(window).off('keydown') ;
         $(window).keydown(function(e){      // запуск по клавише
             if (e.keyCode === 13) {
@@ -248,52 +231,7 @@ function PhilosophyForm() {
         $stamp.click(function(e) {
             _this.scrollGo() ;
         }) ;
-
-
         phraseChange() ;
-
-        //$('.addSignal').off('mouseenter mouseout') ;
-        //$('.addSignal').hover(function(e) {
-        //        $('.addSignal').css('cursor','pointer') ;
-        //        var place = pictures['commentBlock']['place'] ;
-        //        var textPlace =  pictures['commentBlock']['textPlace'] ;
-        //        addSignalComment.setCommentPlace(place,textPlace) ;
-        //        var typeSignal = e.target.dataset.type ;
-        //        var id = e.target.id ;
-        //        var picturePositionPart = (id.indexOf('l') === 0) ? 'left' : 'right' ;
-        //        var $parentBlock = ($('#' + id).parent()).parent() ;
-        //        var parentPlace = {
-        //            t : ($parentBlock.css('top')).replace('px','') - 0,
-        //            l: ($parentBlock.css('left')).replace('px','') - 0,
-        //            w: $('#' +id).width(),
-        //            h: $('#' +id).height()
-        //        } ;
-        //        addSignalComment.setParentBlockPlace(parentPlace) ;
-        //        addSignalComment.setPositionPart(picturePositionPart) ;
-        //
-        //        var signal = addSignals[typeSignal] ;
-        //
-        //
-        //         var typeComment = signal['typeComment'] ;  // коментарий к типу
-        //        var signalName =  signal['name'] ;         // имя сигнала
-        //
-        //        var title =  typeComment + '.' + signalName ;
-        //        var text = signal['text'] ;
-        //
-        //
-        //        addSignalComment.showComment(title,text) ;
-        //    },
-        //    function() {
-        //        addSignalComment.hideComment() ;
-        //        $('.addSignal').css('cursor','auto') ;
-        //
-        //    }
-        //);
-
-
-
-
-
     } ;
     var exit = function() {
         $(window).off('keydown') ;

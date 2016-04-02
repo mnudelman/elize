@@ -4,6 +4,7 @@
 function ResponseForm() {
     var ajaxExecute = paramSet.ajaxExecute;    // объект обмена с БД
     var actionSteps = paramSet.actionSteps ;
+    var callStack ;
     var ajax = new AjaxRequest() ;
     var currentQuery = '';         // текущий запрос
     var currentPage = 0;        //  текущая страница результата
@@ -62,9 +63,19 @@ function ResponseForm() {
                 }
                 actionSteps.addStep('searchSystem','break',ajax.errorMessage,message) ;
 //                ajax.errorMessage(message) ;
+                exit() ;
             }
         }) ;
         ajax.go() ;
+    } ;
+    /**
+     * прервать выполнение
+     * возврат в точку, заданную callStack
+     */
+    var exit = function() {
+        callStack = paramSet.callStack ;
+        callStack.currentGo() ;
+
     } ;
     /**
      * Показать ответ

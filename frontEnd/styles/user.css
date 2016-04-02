@@ -22,15 +22,14 @@ body {
 /**--- представление результата --**/
 .result,.addSignalComment {
     /*background-image: url("../../images/userInterface/scroll_clear.png") ;*/
+    position: absolute;
     background-image: url("../../images/userInterface/scroll_empty.png") ;
-    background-size: auto 100%;
+    background-size: 100% 100%;
     background-repeat: no-repeat;
+    overflow: hidden;
     z-index: 100 ;
 }
-.addSignalComment {
-    position: absolute;
-    background-size: 100% 100%;
-}
+
 #totalHuman {
     height:10% ;
 }
@@ -151,4 +150,14 @@ body {
 }
 .stamp:hover {
     cursor: pointer;
+}
+/** ошибки обмена через ajax**/
+.dbError {
+    position:absolute;
+    z-index: 100 ;
+    /*top:0;left:0;*/
+    /*width:100%;*/
+    height:100%;
+    overflow:auto;
+    background-color: #add8e6
 }
