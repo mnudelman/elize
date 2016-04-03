@@ -44,9 +44,6 @@ class YandexController {
         // Set Query
         $this->Yandex->query($query)
             ->host($host)// set one host or multihost
-            //-> host(array('anton.shevchuk.name','cotoha.info'))
-            //-> site(array('anton.shevchuk.name','cotoha.info'))
-            //-> domain(array('ru','org'))
             ->page($page)// set current page
             ->limit(10)// set page limit
             ->geo($geo)// set geo region - http://search.yaca.yandex.ru/geo.c2n

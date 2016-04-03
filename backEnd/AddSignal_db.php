@@ -13,7 +13,6 @@ include_once __DIR__ . '/local.php';
 class AddSignal_db  extends Db_base
 {
     // --------------------------------- //
-    private $typeList = [];         //  типы узлов - копия таблицы БД node_types
     private $errors = [];           // ошибки операций
     private $debug = [];            // отладка
 

@@ -1,12 +1,7 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: michael
- * Date: 31.03.16
- * Time: 11:03
+ * определние города по координатам : широта, долгота
  */
-
-
 session_start();
 ini_set('display_errors', 1);
 //error_reporting(E_ALL) ;
@@ -19,14 +14,12 @@ class GeoLocation_db  extends Db_base
     // --------------------------------- //
     private $errors = [];           // ошибки операций
     private $debug = [];            // отладка
-
     //-----------------------------------//
     public function __construct()
     {
         parent::__construct();
         $this->errors = [];
     }
-
     /**
      * получить список ошибок
      * @return array

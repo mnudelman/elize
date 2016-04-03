@@ -77,23 +77,6 @@ $dirStyle = './frontEnd/styles';
 </div>
 <div id="userInterfaceBlock"></div>
 <div id="queryTextBlock" hidden="hidden" ></div>
-<!--<div id="total"></div>-->
-
-<!--<div>-->
-<!--    <div id="resultBlock" class="data result" hidden="hidden">-->
-<!--        <p id="resultBoxError"></p>-->
-<!---->
-<!--        <p id="totalHuman" ></p>-->
-<!--        <ul  id="resultBoxDocs">-->
-<!---->
-<!--        </ul>-->
-<!--<!--        <div id="resultCommands"></div>-->-->
-<!--    </div>-->
-<!--    <div id="resultBackground"  >-->
-<!--          <div id="resultBlockNew"></div>-->
-<!--    </div>-->
-<!--</div>-->
-
 <div>
     <div id="centralCircle">
 
@@ -121,7 +104,6 @@ $dirStyle = './frontEnd/styles';
         <ul  id="resultBoxDocs">
 
         </ul>
-        <!--        <div id="resultCommands"></div>-->
     </div>
     <div id="resultBackground"  >
         <div id="resultBlockNew"></div>

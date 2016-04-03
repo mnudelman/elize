@@ -56,11 +56,9 @@ function UserInterface() {
         $stamp = $('#stamp') ;
         $stamp.off('click') ;
         $stamp.click(function(e) {
-            stampClickGo() ;
+            stampClickGo() ;             // запуск запроса
         }) ;
-
-
-
+        // - отменяем mousedown для блоков - облаков
         $('*').off('mousedown') ;
         $('*').on('mousedown',function(e){
             var targetId = e.currentTarget.id;
@@ -68,13 +66,9 @@ function UserInterface() {
             if (targetId == 'smokeClouds') {
                 currentQuery = $queryArea.val();
                 e.preventDefault();
-            }else {
-//                e.preventDefault();
             }
-            //          $queryArea.focus();
         }) ;
-
-
+        // click - должен открывать ввод текста запроса
         $(window).off('click') ;
         $(window).click(function (e) {
             placeholder.hide() ;
@@ -83,6 +77,7 @@ function UserInterface() {
         $(window).on('resize', function () {      // размеры окна браузера
             resize();
         });
+        // нажатая клавиша передаётся в текст запроса
             $(document).off('keydown') ;
             $(document).keydown(function(e) {
                 placeholder.hide();
@@ -95,11 +90,9 @@ function UserInterface() {
         backgroundImg.stampShow('query') ;   // планка, запускающая выполнение запроса
         backgroundImg.centralCircleGlowShow() ;
         backgroundImg.centralCircleShow('query');
-        var idText = backgroundImg.getIdText('query');
-        $queryArea = $('#' + idText);
         $queryArea = $('#queryText');
         $queryArea.off('keydown') ;
-        $queryArea.on('keydown',function(e) {
+        $queryArea.on('keydown',function(e) {   // enter - запускает выполнение
             if (e.keyCode === 13) {
                 stampClickGo() ;
             }
@@ -130,6 +123,9 @@ function UserInterface() {
      * click по планке "ответ" -> процесс "раздумья" -
      * центральный круг и картинки вращаются
      * запуск выполнения запроса
+     * остановка вращения происходит запущенный процесс
+     * сообщит о готовности данных для вывода -  actionSteps.isConditionPrepare()
+     * или аварийном завершении - actionSteps.isConditionBreak()
      */
     var stampClickGo = function() {
 // запускаем процесс
@@ -148,7 +144,7 @@ function UserInterface() {
             }
             var staticShow = true;
             magicNormalPictures.show(staticShow);
-            actionSteps.stepGo();
+            actionSteps.stepGo();    // продолжение действия
             return true ;
         });
         var requestGo = paramSet.requestGo;

@@ -1,6 +1,7 @@
 <?php
 session_start() ;
 /**
+ * контроллер обращения к БД
  */
 ?>
 <?php
@@ -53,8 +54,6 @@ switch($operation) {
                 'pocketEnd' => $pocketEnd,
             ] ;
         }
-
-
         break ;
     }
     case 'requestGo' : {                                  // тип запроса
@@ -73,7 +72,7 @@ switch($operation) {
         $answ['requestTypes'] = $rType->getRequestTypes() ;
         break ;
     }
-    case 'yandex' : {
+    case 'yandex' : {                              // запрос к информ системе yandex
         $query = $taskPar->getParameter('query') ;
         $page = $taskPar->getParameter('page') ;
         $yandex = new YandexController() ;
@@ -84,14 +83,12 @@ switch($operation) {
         $answ = $yandex->getResultsForShow() ;
         break ;
     }
-    case 'mainProjects' : {
+    case 'mainProjects' : {                             // запрос к основным проектам
         $query = $taskPar->getParameter('query') ;
         $cityId = $taskPar->getParameter('cityId') ;
         $cityName = $taskPar->getParameter('cityName') ;
         $regionId = $taskPar->getParameter('regionId') ;
-      //  $query = 'test' ;
-
-        $mp = new MainProjects() ;
+       $mp = new MainProjects() ;
         $mp->setQuery($query) ;
         $mp->setCity($cityId,$cityName,$regionId) ;
         $mp->projectsGo() ;
@@ -116,7 +113,7 @@ switch($operation) {
         ] ;
         break ;
     }
-    case 'geoLocation' : {
+    case 'geoLocation' : {              // определить город по широте, долготе
         $geo = new GeoLocation() ;
         $lat = $taskPar->getParameter('lat') ;
         $long = $taskPar->getParameter('long') ;
