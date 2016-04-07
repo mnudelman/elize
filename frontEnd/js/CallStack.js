@@ -40,8 +40,10 @@ function CallStack() {
         }
     } ;
     this.currentGo = function() {
-        var callback = stackItems[topStack]['callback'] ;
-        callback() ;
+       if (topStack >= 0) {
+           var callback = stackItems[topStack]['callback'] ;
+           callback() ;
+       }
     } ;
     this.getStack = function() {
         return {

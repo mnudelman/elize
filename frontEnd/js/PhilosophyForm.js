@@ -12,7 +12,7 @@
  * enter. Возврат в исходное состояние по  esc или $(window).click()
  */
 function PhilosophyForm() {
-    var actionSteps ;
+    var actionSteps ;          // отслеживание шагов выполнения
     var addSignalComment ;
     var callStack ;       // стек вызовов
     var ajax ;
@@ -32,6 +32,7 @@ function PhilosophyForm() {
     var dirImages ;
     var signalTypes = [] ;          //  список типов сигналов в порядке
                                     // их вывода на экран
+    var noActionStepsFlag = false ;        // прямой вывод изображения без механизма actionSteps
     var fontSizeNormal ;
     var fontSizeMin ;
     var _this = this ;
@@ -46,14 +47,15 @@ function PhilosophyForm() {
         dirImages = paramSet.dirImages ;
         magicNormalPictures = paramSet.magicNormalPictures ;
         formShowFlag = false ;
-        $answerAreaBlock = backgroundImg.getTextAreaBlock() ;
-        $answerAreaBlock.empty() ;
-        $answerAreaBlock.css('text-align','center') ;
-        $answerAreaBlock.css('vertical-align','middle') ;
-        $answerAreaBlock.addClass('answerText') ;
-        fontSizeNormal =  $answerAreaBlock.css('font-size') ;
-        fontSizeNormal = fontSizeNormal.replace('px','') ;
-        fontSizeMin = 0.3 * fontSizeNormal ;
+        //$answerAreaBlock = backgroundImg.getTextAreaBlock() ;
+        //$answerAreaBlock.empty() ;
+        //$answerAreaBlock.css('text-align','center') ;
+        //$answerAreaBlock.css('vertical-align','middle') ;
+        //$answerAreaBlock.addClass('answerText') ;
+        //fontSizeNormal =  $answerAreaBlock.css('font-size') ;
+        //fontSizeNormal = fontSizeNormal.replace('px','') ;
+        //fontSizeMin = 0.3 * fontSizeNormal ;
+        _this.answerAreBlockInit() ;
         addSignalsTable = new AddSignalsTable() ;
         addSignalsTable.init() ;
         currentPhrase = '' ;
@@ -62,6 +64,18 @@ function PhilosophyForm() {
         addSignalComment.init() ;
 //
 
+
+    } ;
+    this.answerAreBlockInit = function() {
+        $answerAreaBlock = backgroundImg.getTextAreaBlock() ;
+        $answerAreaBlock.empty() ;
+        $answerAreaBlock.css('text-align','center') ;
+        $answerAreaBlock.css('vertical-align','middle') ;
+        $answerAreaBlock.removeClass() ;
+        $answerAreaBlock.addClass('answerText') ;
+        fontSizeNormal =  $answerAreaBlock.css('font-size') ;
+        fontSizeNormal = fontSizeNormal.replace('px','') ;
+        fontSizeMin = 0.3 * fontSizeNormal ;
 
     } ;
      /**
@@ -102,8 +116,12 @@ function PhilosophyForm() {
     } ;
     /**
      * выполнить запрос
+     * @param directShw определяет использовать или нет механизм actionSteps
+     * разделение результата на 2 этапа: подготовка, вывод
+     * если directShw === true -> прямой вывод без разбиения на шаги
      */
-    this.queryGo = function() {
+    this.queryGo = function(directShw) {
+       noActionStepsFlag = (directShw == undefined) ? false : directShw ;
        formShowFlag = true ;
        scrollGoFlag = false ;
         currentPhrase = '' ;
@@ -165,8 +183,12 @@ function PhilosophyForm() {
             if (answ['successful'] == true) {
                 goVect['successful'] = true;
                 addSignals = answ['result'] ;              // дерево результата
-                actionSteps.addStep('philosophy','prepare',showItems) ;  //  выполнена подготовка данных для вывода
-//                showItems() ;
+                if (noActionStepsFlag) {           // без разбиения на шаги
+                    showItems() ;
+                }else {
+                    actionSteps.addStep('philosophy','prepare',showItems) ;  //  выполнена подготовка данных для вывода
+                }
+//
             }else {
                 var message = 'Ошибка запроса к дополнительным сигналам';
                 if (answ !== false) {
@@ -174,9 +196,11 @@ function PhilosophyForm() {
 //                    ajax.errorMessage(message) ;
 
                 }
-                actionSteps.addStep('philosophy','break',ajax.errorMessage,message) ;
-                exit();
-
+                if (noActionStepsFlag) {           // без разбиения на шаги
+                    actionSteps.addStep('philosophy', 'break', ajax.errorMessage, message);
+                }else {
+                    exit();
+                }
             }
         }) ;
         ajax.go() ;

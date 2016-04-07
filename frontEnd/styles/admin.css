@@ -28,3 +28,147 @@ body {
     overflow-x: auto ;
     /*overflow-y: visible ;*/
 }
+@font-face {
+    font-family: palar; /* Гарнитура шрифта */
+    src: url('../../fonts/palar__.ttf'); /* Путь к файлу со шрифтом */
+}
+@font-face {
+    font-family: roboto; /* Гарнитура шрифта */
+    src: url('../../fonts/Roboto_Regular.ttf'); /* Путь к файлу со шрифтом */
+}
+@font-face {
+    font-family: northern; /* Гарнитура шрифта */
+    src: url('../../fonts/The_Northern_Block_Acrom.otf'); /* Путь к файлу со шрифтом */
+}
+/**--- представление результата --**/
+.result,.addSignalComment {
+    /*background-image: url("../../images/userInterface/scroll_clear.png") ;*/
+    position: absolute;
+    background-image: url("../../images/userInterface/scroll_empty.png") ;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    z-index: 100 ;
+}
+
+#totalHuman {
+    height:10% ;
+}
+/* прозрачная подложка **/
+#resultBackground {
+    position:absolute;
+    background-color:rgba(0,0,0,0.9);
+    width:100%;
+    height:100%;
+    z-index: 90 ;
+    top:0;
+    left:0 ;
+}
+/**поле ввода запроса **/
+.queryText,.placeholder {
+    border:none;
+    font-family: northern ;
+    font-size : 20px ;
+    color: #fff ;
+    font-weight: 900 ;
+    text-align: center;
+    /*z-index: 10 ;*/
+}
+
+.placeholder {
+    background:transparent ;
+    /*background-color: rgba(0,0,0,0.5);*/
+}
+.answerText {
+    border:none;
+    font-family: northern ;
+    font-size : 21px ;
+    color: #fff ;
+    font-weight: 900 ;
+
+}
+#resultBlockNew_captionCross:hover {
+    cursor: pointer;
+}
+/*.queryText {*/
+/*font-family: roboto ;*/
+/*font-size : 14px ;*/
+/*color: #fff ;*/
+/**/
+
+/*}*/
+/* текст - описание сигнала */
+.textSignal,.textSignal1,.textSignalSmall,.textSignal1Small{
+    font-family: roboto ;
+    font-size : 14px ;
+    color : #6a2e02;
+
+}
+/** подписи под картинкой */
+.textSignal1 {
+    font-size : 18px ;
+}
+
+
+
+/** подписи над/под весами - итог**/
+.totalSignal,.proContraText,.proContraBigText,.proContraTextSmall,.proContraBigTextSmall {
+    font-family: palar ;
+    font-size : 22px ;
+    color : #6a2e02;
+
+}
+/** подписи над весами - за против в строке сигнала **/
+.proContraText {
+    font-size : 18px ;
+}
+
+/** вариант для узкого экрана **/
+.textSignalSmall {
+    font-size: 10px;
+}
+.textSignal1Small{
+    font-size: 12px;
+}
+.proContraTextSmall {
+    font-size: 12px;
+}
+.totalSignalSmall,.proContraBigTextSmall {
+    font-size: 14px;
+}
+/**--------------------------- **/
+
+::-webkit-input-placeholder {
+    font-family: roboto ;
+    font-size : 15px ;
+    color: #fff ;
+    font-weight: 900 ;
+    cursor:  none ;
+
+}
+:-moz-placeholder {        /* старый firefox */
+    font-family: roboto ;
+    font-size : 15px ;
+    color: #fff ;
+    font-weight: 900 ;
+
+}
+
+:-ms-input-placeholder      {
+    font-family: roboto ;
+    font-size : 15px ;
+    color: #fff ;
+    font-weight: 900 ;
+    cursor:  none ;
+}
+::-moz-placeholder { /* Mozilla Firefox 19+ */
+    font-family: roboto ;
+    font-size : 15px ;
+    font-weight: 900 ;
+    color: #ffffff;
+    opacity:  1;         /* обязательно !! */
+    cursor:  none ;
+}
+.stamp:hover {
+    cursor: pointer;
+}

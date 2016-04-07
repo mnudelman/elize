@@ -98,7 +98,16 @@ function AjaxExecutor(ajaxUrl) {
      */
     var parseError = function(errorObj,level) {
         if (level == 0) {
-            $('#dbError').append('<strong>-------R E Q U E S T&nbsp;&nbsp;E R R O R:-------</strong><br>');
+            $('#dbErrorData').empty() ;
+//            $('#dbErrorData').append(responseText) ;    // здесь будут необработанные php-ошибки
+            $('#dbError').removeAttr('hidden') ;
+            $('#closeErrorMessages').off('click') ;
+            $('#closeErrorMessages').click(function() {
+                $('#dbError').attr('hidden', 'hidden');
+            }) ;
+
+
+                $('#dbErrorData').append('<strong>-------R E Q U E S T&nbsp;&nbsp;E R R O R:-------</strong><br>');
         }
         var simpleType = ['number','boolean','string','undefined'] ;
         var tab = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp' ;
@@ -114,12 +123,12 @@ function AjaxExecutor(ajaxUrl) {
             return true ;
         }
         for (var key in errorObj) {
-            $('#dbError').append(indent+'<strong>'+key+':</strong>'+br) ;
+            $('#dbErrorData').append(indent+'<strong>'+key+':</strong>'+br) ;
             var value = errorObj[key] ;
             parseError(value,level+1) ;
         }
         if (level == 0) {
-            $('#dbError').append('<strong>---------------------------------------</strong><br>') ;
+            $('#dbErrorData').append('<strong>---------------------------------------</strong><br>') ;
 
         }
      return true ;

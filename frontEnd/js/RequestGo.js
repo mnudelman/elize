@@ -105,26 +105,26 @@ function RequestGo() {
     /**
      * запрос к поисковой системе
      */
-    this.searchSystemGo = function() {
+    this.searchSystemGo = function(noActionStepsFlag) {
         var responseForm = paramSet.responseForm ;
         responseForm.setQuery(requestText) ;
-        responseForm.queryGo() ;
+        responseForm.queryGo(noActionStepsFlag) ;
     } ;
     /**
      * запрос к основнымПроектам
      */
-    this.mainProjectsGo = function() {
+    this.mainProjectsGo = function(noActionStepsFlag) {
         var mainProjectsForm = paramSet.mainProjectsForm ;
         mainProjectsForm.setQuery(requestText) ;
-        mainProjectsForm.queryGo() ;
+        mainProjectsForm.queryGo(noActionStepsFlag) ;
 
     } ;
     /**
      * философский запрос
      */
-    this.philosophyGo = function() {
+    this.philosophyGo = function(noActionStepsFlag) {
         var philosophyForm = paramSet.philosophyForm ;
-        philosophyForm.queryGo() ;
+        philosophyForm.queryGo(noActionStepsFlag) ;
     } ;
 
 }

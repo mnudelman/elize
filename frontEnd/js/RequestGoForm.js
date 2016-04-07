@@ -11,11 +11,14 @@ function RequestGoForm() {
     var $buttonGo = $('#requestGoBt') ;          // запуск определения типа
     var $buttonDebugEmpty = $('#debugEmptyBt') ;   // чистить область сообщений отладки
     var $treeResult = $('#treeResult') ;         // дерево  - результат определелния типа
-    var $requestTypes = $('#requestTypes') ;
+    var $requestTypesPane = $('#requestTypes') ;  // панель вывода типов запроса
+    var requestTypes ;                          // список типов - результат определения типа
     var resultNodes ;         // список узлов, полученный от разбора запроса
     var currentTreeResult  ;
     var currentRootId ;       // корневой результата
+    var noActionStepsFlag = true ;  // выполнять без механизма actionSteps
     var scrollBackground= paramSet.scrollBackground ;
+    var backgroundImg ;
     var requestGo ;           // объект RequestGo
     var _this = this ;
     //-----------------------------//
@@ -28,7 +31,7 @@ function RequestGoForm() {
             at : "left+500 top+80",
             of : "#requestGoDialog"
         }) ;
-        $buttonGo.on('click',requestGo) ;
+        $buttonGo.on('click',requestTypeGo) ;
 
 
         $buttonDebugEmpty.button() ;
@@ -64,8 +67,8 @@ function RequestGoForm() {
             of : "#requestGoDialog"
 
         }) ;
-        $requestTypes.css('position','absolute') ;
-        $requestTypes.position({
+        $requestTypesPane.css('position','absolute') ;
+        $requestTypesPane.position({
             my : "left top",
             at : "left+10 top+170",
             of : "#requestGoDialog"
@@ -74,48 +77,64 @@ function RequestGoForm() {
         $treeResult.css('position','absolute') ;
         $treeResult.position({
             my : "left top",
-            at : "left+10 top+300",
+            at : "left+10 top+310",
             of : "#requestGoDialog"
 
         }) ;
-        $('#searchSystemBt').on('click',searchSystemGo) ;
-        $('#mainProjectsBt').on('click',mainProjectsGo) ;
-        $('#philosophyBt').on('click',philosophyGo) ;
-        $('#searchSystemBt').button() ;
-        $('#mainProjectsBt').button() ;
-        $('#philosophyBt').button() ;
+        _this.buttonInit() ;
         treeInit() ;
         scrollBackground= paramSet.scrollBackground ;   // нужно потом для конкретных запросов
         scrollBackground.init() ;
+        backgroundImg = paramSet.backgroundImage ;
         requestGo = paramSet.requestGo ;
+        var philosophyForm = paramSet.philosophyForm ;
+        philosophyForm.init() ;
+
     } ;
-    /**
-     * запрос к поисковым системам
-     */
-    var searchSystemGo = function() {
-       requestGo.searchSystemGo() ;
+    this.buttonInit = function() {
+        $('#searchSystemBt').on('click',function() {
+            requestExe('searchSystem');
+        }) ;
+        $('#mainProjectsBt').on('click',function() {
+            requestExe('mainProjects');
+        }) ;
+        $('#philosophyBt').on('click',function() {
+            requestExe('philosophy');
+        }) ;
+        $('#searchSystemBt').button() ;
+        $('#mainProjectsBt').button() ;
+        $('#philosophyBt').button() ;
+
     } ;
-    /**
-     * запрос к основным проектам
-     */
-    var mainProjectsGo = function() {
-        requestGo.mainProjectsGo() ;
+    var requestExe = function(requestType) {
+        requestTypeShow() ;
+        $('#resultBlockPhilosophy').empty() ;
+        $('#centralCircle').empty() ;
+        $('#stamp').empty() ;
+        $('#globalResult').removeAttr('hidden') ;
+        backgroundImg.setCurrentSize() ;   // соответствие с тек размером экрана
+        switch (requestType) {
+            case 'searchSystem' :
+                requestGo.searchSystemGo(noActionStepsFlag) ;
+                break ;
+            case 'mainProjects' :
+                requestGo.mainProjectsGo(noActionStepsFlag) ;
+                break ;
+            case 'philosophy' :
+                requestGo.philosophyGo(noActionStepsFlag) ;
+                break ;
+
+        }
     } ;
-    /**
-     * фолософский вопрос
-     */
-    var philosophyGo = function() {
-        requestGo.philosophyGo() ;
-    } ;
-    var requestGo = function() {
+    var requestTypeGo = function() {
         resultNodes = {} ;
         requestGo.setRequestText($requestText.val());
         var auto = false;                  // отмена автоматического запуска запроса
         requestGo.requestExecute(auto,function(){
             resultNodes = requestGo.getResultNodes() ;
-            var requestTypes = requestGo.getRequestTypes() ;
+            requestTypes = requestGo.getRequestTypes() ;
             treeBuild() ;
-            requestTypeShow(requestTypes) ;  // таблица типов
+            requestTypeShow() ;  // таблица типов
         });
     } ;
    /**
@@ -234,7 +253,10 @@ function RequestGoForm() {
         }
         return countOpenedNodes;
     } ;
-    var requestTypeShow = function(requestTypes) {
+    /**
+     * определяет кнопки для выполнения запроса каждого типа
+    */
+    var requestTypeShow = function() {
         var $types = [
             {
                 'type' : 'mainProjects',

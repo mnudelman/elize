@@ -2,7 +2,8 @@
 $dirLib = './../lib';
 $dirJstree = $dirLib . '/jstree';
 $dirJquery_ui = $dirLib . '/jquery-ui/jquery-ui-1.11.4';
-$dirMousewheel = $dirLib.'/jquery-mousewheel/mousewheel-3.1.13' ;
+$dirMousewheel = $dirLib . '/jquery-mousewheel/mousewheel-3.1.13';
+$dirAutoResize = $dirLib . '/textAreaAutoResize';
 $dirJs = './frontEnd/js';
 $dirStyle = './frontEnd/styles';
 ?>
@@ -28,6 +29,7 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJstree; ?>/jstree.js"></script>
     <script type="text/javascript" src="<?= $dirMousewheel; ?>/jquery.mousewheel.js"></script>
     <script type="text/javascript" src="<?= $dirAutoResize; ?>/autoResize.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
     <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
     <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
@@ -52,11 +54,21 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirJs; ?>/MagicNormalPictures.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CentralCircleText.js"></script>
     <script type="text/javascript" src="<?= $dirJs; ?>/CallStack.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/Placeholder.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/AddSignalComment.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/ActionSteps.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/GeoLocation.js"></script>
+
     <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
 </head>
 
 <body>
-<div id="dbError" style="position:absolute;top:0;left:50%;width:50%;height:100%;overflow:auto;background-color: #add8e6"></div>
+<div id="dbError" hidden="hidden" class="dbError">
+    <button id="closeErrorMessages">закрыть</button>
+    <h3>Ошибка обмена данными с сервером</h3>
+
+    <div id="dbErrorData"></div>
+</div>
 <div id="inviteInfo">
     <strong>Вы можете редактировать структуру запроса и проверять его на примерах </strong>
 </div>
@@ -154,32 +166,80 @@ $dirStyle = './frontEnd/styles';
 <div id="mainBlock"
      style="position:relative;width:100%;height:165px; margin-top:350px;border:0px solid red">
 </div>
+<!--Вывод результатов-->
+<div id="globalResult" hidden="hidden"
+     style="position:absolute;top:0;left:0;width:100%;height:100%;background-color:rgba(0,0,0,0.5)">
+    <button id="closeErrorMessages">закрыть</button>
+    <div>
+        <div id="resultBlock" class="data result" hidden="hidden">
+            <p id="resultBoxError"></p>
 
-<div>
-    <div id="resultBlock" class="data result" hidden="hidden">
-        <p id="resultBoxError"></p>
+            <p id="totalHuman"></p>
+            <ol start="1" id="resultBoxDocs">
 
-        <p id="totalHuman" ></p>
-        <ol start="1" id="resultBoxDocs">
-
-        </ol>
-        <div id="resultCommands"></div>
+            </ol>
+            <div id="resultCommands"></div>
+        </div>
+<!--        <div id="resultBackground" hidden="hidden">-->
+            <div id="resultBlockNew"></div>
+<!--        </div>-->
     </div>
-    <div id="resultBackground">
-        <div id="resultBlockNew"></div>
+
+    <div>
+        <div id="resultBlockPhilosophy">
+
+        </div>
+        <div id="centralCircle">
+
+        </div>
+        <div id="centralCircleText"></div>
+        <div id="smokeClouds"></div>
     </div>
+    <div id="messages"></div>
+
+
+    <div>
+        <div id="centralCircle">
+
+        </div>
+        <div id="centralCircleGlow">
+
+        </div>
+
+        <div id="centralCircleText">
+
+        </div>
+        <div id="resultBlockPhilosophy">
+
+        </div>
+
+        <div id="smokeClouds"></div>
+        <div id="stamp"></div>
+    </div>
+
+    <div>
+        <div id="resultBlock" class="data result" hidden="hidden">
+            <p id="resultBoxError"></p>
+
+            <p id="totalHuman"></p>
+            <ul id="resultBoxDocs">
+
+            </ul>
+        </div>
+        <div id="resultBackground">
+            <div id="resultBlockNew"></div>
+        </div>
+    </div>
+
+
+    <div id="addSignalBlock">
+        <div id="addSignalsTable"></div>
+        <div id="addSignalsTotal"></div>
+    </div>
+
+
 </div>
 
-<div>
-    <div id="resultBlockPhilosophy" >
 
-    </div>
-    <div id="centralCircle">
-
-    </div>
-    <div id="centralCircleText"></div>
-    <div id="smokeClouds"></div>
-</div>
-<div id="messages"></div>
 </body>
 </html>

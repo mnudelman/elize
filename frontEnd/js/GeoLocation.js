@@ -40,7 +40,8 @@ function GeoLocation() {
         }
     };
     this.getCity = function() {
-        return city ;
+        var ct = (city === undefined) ? cityDefault() : city ;
+        return ct ;
     } ;
     var clcCity = function() {
 

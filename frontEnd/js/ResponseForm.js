@@ -11,6 +11,7 @@ function ResponseForm() {
     var $resultBlock = $('#resultBlock');
     var yandexResult = {};    // результат поиска yandex
     var scrollBackground ;    // фоновое изображение для вывода запроса
+    var noActionStepsFlag = false ;   // без разбиения по шагам
     var _this = this ;
     //--------------------------------------//
     this.init = function() {
@@ -27,14 +28,15 @@ function ResponseForm() {
     /**
      * Отправить запрос.получить ответ
      */
-    this.queryGo = function(i) {
+    this.queryGo = function(noActSteps) {
+        noActionStepsFlag = (noActSteps === undefined) ? false : noActSteps ;
         scrollBackground = paramSet.scrollBackground ;
 //        scrollBackground.answerInit() ;        // вывод пустой формы
 
         actionSteps = paramSet.actionSteps ;
         
         yandexResult = {} ;
-        var page =  (i === undefined) ? 0 : i  ;
+        var page =  0  ;
         var goVect = {
             'operation' : 'yandex',
             'query' : currentQuery,
@@ -45,8 +47,12 @@ function ResponseForm() {
         ajax.setRequestFunc(function(answ){
             if (answ['successful'] == true) {
                 yandexResult = answ ;
+                if (noActionStepsFlag){
+                    responseShow() ;
+                }else {
+                    actionSteps.addStep('searchSystem','prepare',responseShow) ;
+                }
 
-                actionSteps.addStep('searchSystem','prepare',responseShow) ;
 
 
 //                responseShow() ;
@@ -57,11 +63,16 @@ function ResponseForm() {
                     if (code === '15') {        // yandex не нашёл
                         scrollBackground.exit() ;
                         var philosophyForm = paramSet.philosophyForm ;
-                        philosophyForm.queryGo() ;
+                        philosophyForm.queryGo(noActionStepsFlag) ;
                         return true ;
                     }
                 }
-                actionSteps.addStep('searchSystem','break',ajax.errorMessage,message) ;
+               if (noActionStepsFlag) {
+                   ajax.errorMessage(message) ;
+               } else {
+                   actionSteps.addStep('searchSystem','break',ajax.errorMessage,message) ;
+               }
+
 //                ajax.errorMessage(message) ;
                 exit() ;
             }

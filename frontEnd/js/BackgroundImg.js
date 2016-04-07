@@ -812,10 +812,12 @@ function BackgroundImg() {
         if (showType == 'answer') {
             $centralCircleGlowBlock.attr('hidden','hidden') ;
         }
-        if (showType == 'query') {
+
             $centralCircleGlowBlock.removeAttr('hidden') ;
+//        if (showType == 'query') {
             var $txt = defineTextArea($centralCircleTextBlock, textAreaPlace, textAreaBackGround,
                 currentColor, 0, readonly, idText);
+        if (showType == 'query') {
             placeholder.init($centralCircleTextBlock) ;      // имитатор placeholder
             placeholder.setTextArea($txt) ;
         }
@@ -864,18 +866,23 @@ function BackgroundImg() {
         $txt.attr('tabindex',1) ;
         $block.css('top',y1) ;
         $block.css('left',x1) ;
-        $block.css('color',color) ;
-        if (readonly) {
-            return ;
-        }else {
-           $txt.removeAttr('readonly') ;
-        }
+//        $block.css('color',color) ;
+//        if (readonly) {
+//            return ;
+//        }else {
+//           $txt.removeAttr('readonly') ;
+//        }
 
         var txtWidth = x2 - x1 ;
         var txtHeight = y2 - y1 ;
 
         $block.css('width',txtWidth) ;
         $block.css('height',txtHeight) ;
+
+        if (readonly) {
+            return ;
+        }
+
 
         $txt.removeAttr('hidden') ;
         $txt.attr("spellcheck","false") ;

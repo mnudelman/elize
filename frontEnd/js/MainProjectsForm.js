@@ -40,47 +40,55 @@ function MainProjectsForm() {
     /**
      * Отправить запрос.получить ответ
      */
-    this.queryGo = function(i) {
-        var geoLocation = paramSet.geoLocation ;
-        city = geoLocation.getCity() ;        // ближайший город, определённый по ip
-        var cityId = city['cityId'] ;
-        var cityName = city['cityName'] ;
-        var regionId = city['regionId'] ;
+    this.queryGo = function(noActionStepsFlag) {
+        var geoLocation = paramSet.geoLocation;
+        city = geoLocation.getCity();        // ближайший город, определённый по ip
+        var cityId = city['cityId'];
+        var cityName = city['cityName'];
+        var regionId = city['regionId'];
 
 
-
-        actionSteps = paramSet.actionSteps ;
-        var page =  (i === undefined) ? 0 : i  ;
-        queryResult = {} ;
+        actionSteps = paramSet.actionSteps;
+        var page = 0;
+        queryResult = {};
         var goVect = {
-            'operation' : 'mainProjects',
-            'query' : currentQuery,
-            'page' : i,
-            'cityId' : (cityId === undefined) ? '77' : cityId,
-            'cityName' :(cityName === undefined) ? 'Москва' : cityName,
-            'regionId' : (regionId === undefined) ? '77' : regionId,
-            'successful' : false
-        } ;
+            'operation': 'mainProjects',
+            'query': currentQuery,
+            'page': 0,
+            'cityId': (cityId === undefined) ? '77' : cityId,
+            'cityName': (cityName === undefined) ? 'Москва' : cityName,
+            'regionId': (regionId === undefined) ? '77' : regionId,
+            'successful': false
+        };
 
-        ajax.setData(goVect) ;
-        ajax.setRequestFunc(function(answ){       // callback  для результата
+        ajax.setData(goVect);
+        ajax.setRequestFunc(function (answ) {       // callback  для результата
             if (answ['successful'] == true) {
-                queryResult = answ['results'] ;
-                if (isRedirectQuery()) {        // перенаправить запрос далее
-                    actionSteps.addStep('mainProjects','continue') ;
-                }else {
-                    actionSteps.addStep('mainProjects','prepare',responseShow) ; // фиксируем готовность к выводу
+                queryResult = answ['results'];
+                if (noActionStepsFlag) {
+                    responseShow();
+                } else {
+                    if (isRedirectQuery()) {        // перенаправить запрос далее
+                        actionSteps.addStep('mainProjects', 'continue');
+                    } else {
+                        actionSteps.addStep('mainProjects', 'prepare', responseShow); // фиксируем готовность к выводу
+                    }
                 }
- //                responseShow() ;
-            }else {
+                //                responseShow() ;
+            } else {
                 var message = answ['message'];
-                actionSteps.addStep('mainProjects','break',ajax.errorMessage,message) ; // фиксируем ошибку
+                if (noActionStepsFlag) {
+                    ajax.errorMessage(message);
+                } else {
+                    actionSteps.addStep('mainProjects', 'break', ajax.errorMessage, message); // фиксируем ошибку
+                }
+
 //                ajax.errorMessage(message) ;
-                exit() ;
+                exit();
             }
-        }) ;
-        ajax.go() ;
-    } ;
+        });
+        ajax.go();
+    };
     /**
      * прервать выполнение
      * возврат в точку, заданную callStack

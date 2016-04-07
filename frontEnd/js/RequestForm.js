@@ -1,8 +1,10 @@
 /**
  * форма редактирования описателя запроса
+ * используется для редактирования структуры запроса
  */
 function RequestForm() {
     var ajax ;                //  объект обмена с сервером
+    var callStack;                      // стек вызовов
     var nodeTypes = {};       // типы узлов в смысле jstree
     var typesNames = {};       // имена типов
     var conceptSet = {} ;     // возможные значения узла типа concept
@@ -21,6 +23,7 @@ function RequestForm() {
      */
     this.init = function() {       // Загрузка описания
         ajax = new AjaxRequest() ;
+        callStack = paramSet.callStack ;
         conceptSet = {
             'question_concept' : ['why','where','when'],
             'subject_concept'  : ['user']
@@ -105,12 +108,18 @@ function RequestForm() {
      * редактировать описание
      */
     this.requestEdit = function () {
-
+        callStack.pushItem('requestForm',reshow) ;
         $('#addForm').attr('hidden', 'hidden');
            requestTreeInit() ;     // инициализация дерева
            commandSet() ;          // командные кнопки
 
     };
+    /**
+     * точка возврата
+     */
+    var reshow = function() {
+        $('#globalResult').attr('hidden','hidden') ;
+    } ;
     var  commandSet = function() {
         $treeSaveBt.button() ;
         $treeSaveBt.off('click') ;
