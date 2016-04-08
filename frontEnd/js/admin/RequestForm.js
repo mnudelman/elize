@@ -5,6 +5,7 @@
 function RequestForm() {
     var ajax ;                //  объект обмена с сервером
     var callStack;                      // стек вызовов
+    var logger ;              // сообщения
     var nodeTypes = {};       // типы узлов в смысле jstree
     var typesNames = {};       // имена типов
     var conceptSet = {} ;     // возможные значения узла типа concept
@@ -103,6 +104,8 @@ function RequestForm() {
         scrollBackground.init() ;
         var backgroundImg = paramSet.backgroundImage ;
         backgroundImg.init() ;
+        var logger = paramSet.logger ;
+        logger.init() ;
     };
     /**
      * редактировать описание

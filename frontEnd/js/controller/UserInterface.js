@@ -10,6 +10,7 @@ function UserInterface() {
     var callStack;                      // стек вызовов
     var placeholder ;                   // имитатор placeholder
     var actionSteps ;                   // отслеживание шагов действия
+    var logger ;                        // отладочные сообщения
     var geoLocation ;                   // ближайший город
     var stamp = {} ;                    // планка - ввод запроса
     var $stamp = $('#stamp') ;
@@ -23,6 +24,8 @@ function UserInterface() {
     var _this = this ;
     //-----------------------------------//
     this.init = function() {
+        logger = paramSet.logger ;
+        logger.init() ;
         geoLocation = paramSet.geoLocation ;
         geoLocation.init() ;
         actionSteps = paramSet.actionSteps ;

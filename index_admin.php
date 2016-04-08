@@ -31,43 +31,55 @@ $dirStyle = './frontEnd/styles';
     <script type="text/javascript" src="<?= $dirAutoResize; ?>/autoResize.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 
-    <script language="javascript" src="<?= $dirJs; ?>/MainScript.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/ParamSet.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/AjaxExecutor.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/RequestForm.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/RequestGoForm.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/ResponseForm.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/MainProjectsForm.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/PhilosophyForm.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/PhilosophyFormAttr.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/NodeEditForm.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/BackgroundImg.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/ScrollBackground.js"></script>
-    <script language="javascript" src="<?= $dirJs; ?>/AddSignalsTable.js"></script>
+    <?php
+    include_once __DIR__ . '/jsScripts.php';
+    ?>
 
-    <script type="text/javascript" src="<?= $dirJs; ?>/SmokeClouds.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/CircularMotion.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/UserInterface.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/RequestGo.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/AjaxRequest.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/Messages.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/MagicNormalPictures.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/CentralCircleText.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/CallStack.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/Placeholder.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/AddSignalComment.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/ActionSteps.js"></script>
-    <script type="text/javascript" src="<?= $dirJs; ?>/GeoLocation.js"></script>
+<!-- ajax - Взаимодействие с БД-->
+    <script language="javascript" src="<?= $dirJs; ?>/ajax/AjaxExecutor.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/ajax/AjaxRequest.js"></script>
+<!--admin - редактирование структуры запроса -->
+    <script language="javascript" src="<?= $dirJs; ?>/admin/RequestForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/admin/RequestGoForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/admin/NodeEditForm.js"></script>
+<!-requests - объекты выполнения запросов -->
+    <script type="text/javascript" src="<?= $dirJs; ?>/requests/RequestGo.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/requests/ResponseForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/requests/MainProjectsForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/requests/PhilosophyForm.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/requests/PhilosophyFormAttr.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/requests/AddSignalsTable.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/requests/GeoLocation.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/requests/AddSignalComment.js"></script>
 
-    <script language="javascript" src="<?= $dirJs; ?>/start.js"></script>
+<!--show - вывод изображения -->
+    <script language="javascript" src="<?= $dirJs; ?>/show/BackgroundImg.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/show/ScrollBackground.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/show/SmokeClouds.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/show/CircularMotion.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/show/MagicNormalPictures.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/show/CentralCircleText.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/show/Placeholder.js"></script>
+
+<!--service - технологические объекты -->
+    <script type="text/javascript" src="<?= $dirJs; ?>/service/Messages.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/service/CallStack.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/service/ActionSteps.js"></script>
+    <script type="text/javascript" src="<?= $dirJs; ?>/service/Logger.js"></script>
+
+<!--controller - запуск и контроллер -->
+    <script type="text/javascript" src="<?= $dirJs; ?>/controller/UserInterface.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/controller/MainScript.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/controller/ParamSet.js"></script>
+    <script language="javascript" src="<?= $dirJs; ?>/controller/start.js"></script>
 </head>
 
 <body>
-<div id="dbError" hidden="hidden" class="dbError">
-    <button id="closeErrorMessages">закрыть</button>
-    <h3>Ошибка обмена данными с сервером</h3>
-
-    <div id="dbErrorData"></div>
+<div id="logger" hidden="hidden" class="logger">
+    <button id="closeLoggerMessages">закрыть</button> &nbsp;&nbsp;&nbsp;
+    <button id="stopLoggerMessages">прервать вывод</button> &nbsp;&nbsp;&nbsp;
+    <button id="clearLoggerMessages">очистить вывод</button>
+    <div id="loggerData"></div>
 </div>
 <div id="inviteInfo">
     <strong>Вы можете редактировать структуру запроса и проверять его на примерах </strong>
@@ -131,7 +143,7 @@ $dirStyle = './frontEnd/styles';
 
             </label>
             <button id="requestGoBt">go</button>
-            <button id="debugEmptyBt">debugEmpty</button>
+<!--            <button id="debugEmptyBt">debugEmpty</button>-->
         </div>
         <br>
 

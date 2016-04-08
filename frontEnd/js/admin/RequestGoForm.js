@@ -34,19 +34,19 @@ function RequestGoForm() {
         $buttonGo.on('click',requestTypeGo) ;
 
 
-        $buttonDebugEmpty.button() ;
-        $buttonDebugEmpty.css('border-radius',20) ;
-        $buttonDebugEmpty.css('position','absolute') ;
-        $buttonDebugEmpty.position({
-            my : "right center",
-            at : "left+500 top+120",
-            of : "#requestGoDialog"
-        }) ;
-        $buttonDebugEmpty.on('click',function() {
-            $('#dbError').empty() ;
-            $('#resultBlockPhilosophy').empty() ;
-            $('#centralCircle').empty() ;
-        }) ;
+        //$buttonDebugEmpty.button() ;
+        //$buttonDebugEmpty.css('border-radius',20) ;
+        //$buttonDebugEmpty.css('position','absolute') ;
+        //$buttonDebugEmpty.position({
+        //    my : "right center",
+        //    at : "left+500 top+120",
+        //    of : "#requestGoDialog"
+        //}) ;
+        //$buttonDebugEmpty.on('click',function() {
+        //    $('#dbError').empty() ;
+        //    $('#resultBlockPhilosophy').empty() ;
+        //    $('#centralCircle').empty() ;
+        //}) ;
 
 
 

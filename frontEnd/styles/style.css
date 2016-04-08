@@ -1,15 +1,17 @@
 body{
     background-color:#f2f1f0; /*e8e38f ; /*c8c59a ; /*#7a796a ;  #F2EEA7;*/
 }
-/** ошибки обмена через ajax**/
-.dbError {
+/** отладка **/
+.logger {
     position:absolute;
     z-index: 100 ;
     /*top:0;left:0;*/
     /*width:100%;*/
-    left:5% ;
+    left:50% ;
     height:95%;
-    width:90% ;
+    width:50% ;
     overflow:auto;
+    /*overflow-x:visible;*/
+    /*resize: horizontal;*/
     background-color: #add8e6
 }

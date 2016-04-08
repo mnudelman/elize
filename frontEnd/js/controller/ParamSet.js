@@ -25,6 +25,7 @@ function ParamSet() {
     this.placeholder ;         // объект-имитатор placeholder
     this.actionSteps ;         // отслеживание шагов действия
     this.geoLocation ;        // определение ближайшего города
+    this.logger ;              // вывод сообщений по уровню
     //-------------------------------------------------//
     this.user = {
         login : 'guest',
@@ -71,6 +72,7 @@ function ParamSet() {
         _this.placeholder = new Placeholder() ;
         _this.actionSteps = new ActionSteps() ;
         _this.geoLocation  = new GeoLocation() ;        // определение ближайшего города
+        _this.logger = new Logger() ;
 //
 
 

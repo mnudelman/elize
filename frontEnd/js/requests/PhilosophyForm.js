@@ -15,6 +15,7 @@ function PhilosophyForm() {
     var actionSteps ;          // отслеживание шагов выполнения
     var addSignalComment ;
     var callStack ;       // стек вызовов
+    var logger;           // сообщения отладки
     var ajax ;
     var formAttr ;        // объект - атрибуты формы
     var currentPhrase = '' ;          // текущая фраза
@@ -38,6 +39,7 @@ function PhilosophyForm() {
     var _this = this ;
     //----------------------------------//
     this.init = function() {
+        logger = paramSet.logger ;
         actionSteps = paramSet.actionSteps ;
         callStack = paramSet.callStack ;
         backgroundImg = paramSet.backgroundImage ; // объект - компоненты изображения
@@ -125,7 +127,7 @@ function PhilosophyForm() {
        formShowFlag = true ;
        scrollGoFlag = false ;
         currentPhrase = '' ;
-
+        logger.message('queryGo()','точка входа queryGo','philosophy','debug') ;
        callStack.pushItem('philosophy',_this.reshow) ;  // фиксируем метод-продолжение
 
       responseShow() ;
@@ -160,6 +162,7 @@ function PhilosophyForm() {
      */
     this.reshow = function() {
         scrollGoFlag = false ;
+        logger.message('reshow()','точка входа reshow()','philosophy','debug') ;
         showItems() ;
     } ;
 

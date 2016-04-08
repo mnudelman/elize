@@ -25,7 +25,7 @@ function MainScript() {
             $tabs.draggable();
             requestForm.init();       // нач установка
             requestGoForm.init();
-            philosophyForm.init();
+//            philosophyForm.init();
             requestForm.requestEdit();
         }else {
 

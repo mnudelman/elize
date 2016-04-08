@@ -1,23 +1,19 @@
 /**
  * в обоих запросах к БД результат возвращается в виде JSON-обекта  data
+ *
  */
 function AjaxExecutor(ajaxUrl) {
    var requestData = false ;                 // результат запроса
    var ajaxComplete = false ;
-   var debugFlag =  false ;                   // отладка запроса
+   var debugFlag =  true ; // false ;                   // отладка запроса
     var currentUrl = ajaxUrl ;
     var successDefault = function(data,textStatus) {
  //       alert('successDefault:status-'+textStatus+' ; hostAnswer:'+data) ;
    } ;
     var errorDefault = function(event, XMLHttpRequest, ajaxOptions, thrownError) {
         var responseText = event.responseText ; // html - page
-        $('#dbErrorData').empty() ;
-        $('#dbErrorData').append(responseText) ;    // здесь будут необработанные php-ошибки
-        $('#dbError').removeAttr('hidden') ;
-        $('#closeErrorMessages').off('click') ;
-        $('#closeErrorMessages').click(function(){
-            $('#dbError').attr('hidden','hidden') ;
-        }) ;
+        var logger = paramSet.logger ;
+        logger.message(responseText,'ошибка обмена с БД','ajaxExecutor','error') ;
     } ;
     var completeDefault = function() {
         ajaxComplete = true ;
@@ -28,7 +24,10 @@ function AjaxExecutor(ajaxUrl) {
             sendObj,
             function(data,textStatus) {
                 if ( false == data['successful'] ) {
-                    parseError(data,0) ;
+//                    parseError(data,0) ;
+                    logger.message(
+                        data,'не удачный обмен с БД','ajaxExecutor','warning') ;
+
                 } else {
                     requestData = data;
                 }
@@ -41,6 +40,7 @@ function AjaxExecutor(ajaxUrl) {
         currentUrl = url ;
     } ;
     this.postData = function(sendData,ownMessage) {
+        var logger = paramSet.logger ;
         ajaxComplete = false ;
         requestData = false ;
         $.post(
@@ -48,11 +48,15 @@ function AjaxExecutor(ajaxUrl) {
             sendData,
             function(data) {
                 if (debugFlag) {
-                    parseError(data, 0);
+//                    parseError(data, 0);
+                    logger.message(data,'обмен с БД','ajaxExecutor','debug') ;
+
                 }
                 if (false == data['successful'] && !ownMessage) {
                     if (!debugFlag) {
-                        parseError(data, 0);
+//                        parseError(data, 0);
+                        logger.message(
+                            data,'не удачный обмен с БД','ajaxExecutor','warning') ;
                     }
                 } else {
                     requestData = data;
@@ -72,11 +76,14 @@ function AjaxExecutor(ajaxUrl) {
            sendData,
             function(data) {
                 if (debugFlag) {
-                    parseError(data, 0);
+//                    parseError(data, 0);
+                    logger.message(data,'обмен с БД','ajaxExecutor','debug') ;
                 }
                 if (false == data['successful'] && !ownMessage) {
                     if (!debugFlag) {
-                        parseError(data, 0);
+//                        parseError(data, 0);
+                        logger.message(
+                            data,'не удачный обмен с БД','ajaxExecutor','warning') ;
                     }
                 } else {
                     requestData = data;
