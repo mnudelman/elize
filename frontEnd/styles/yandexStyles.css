@@ -1,17 +1,13 @@
+/**
+классы для вывода результата запроса к yandex или mnogonado.net
+**/
+
 a {
     color : #6a2e02;
     font-family:roboto , 'Times New Roman', Times, serif;
     font-size:18px ;
-    /*outline: none; */
      }
-/*a:focus { outline: none; }*/
-/*.title { color: #FF3300;}*/
-
 img {border:0}
-
-/*p {margin:16px}*/
-
-
 form {margin:0;padding:0;display:inline}
 .box {
     /*background:#fff;*/
@@ -19,15 +15,6 @@ form {margin:0;padding:0;display:inline}
     font-family:roboto , 'Times New Roman', Times, serif;
     font-size : 14px ;
     color : #6a2e02;
-
-    /*border:0px solid #ccc;*/
-    /*border-radius: 4px;*/
-    /*-moz-border-radius: 4px;*/
-    /*-khtml-border-radius: 4px;*/
-    /*-webkit-border-radius: 4px;*/
-    /*box-shadow:0 0 4px #CCC;*/
-    /*-moz-box-shadow:0 0 4px #CCC;*/
-    /*-webkit-box-shadow:0 0 4px #CCC*/
 }
 .data {
     margin-top: 8px;
@@ -39,20 +26,10 @@ form {margin:0;padding:0;display:inline}
 .data ul li{
     font-size:14px;
     color : #6a2e02;
-    /*padding:8px;*/
     margin-bottom: 6px;
-    /*margin-left: 10% ; *//*40px; */
     margin-right: 10%
 }
-/*.data ul li a{*/
-    /*display:block;*/
-    /*text-indent:8px;*/
-    /*font-size:1.2em;*/
-/*}*/
 .data ul li a.host{
-    /*color:#999;*/
-    /*font-size:0.6em;*/
-    /*display:inline;*/
     padding-left:8px;
 }
 
@@ -73,15 +50,3 @@ form {margin:0;padding:0;display:inline}
     font-size:18px ;
     color : #6a2e02;
 }
-/*.passages {*/
-    /*padding:0;*/
-    /*margin:0;*/
-
-/*}*/
-/*.passages  li{*/
-    /*list-style:none;*/
-    /*border: 0 !important;*/
-    /*padding-left: 0;*/
-    /*margin-left: 0;*/
-    /*margin-top: 0;*/
-/*}*/

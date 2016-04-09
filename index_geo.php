@@ -39,6 +39,7 @@ $dirStyle = './styles';
 </head>
 <body>
 <script>
+    //  тест на опреление широты, долготы по ip-адресу
     ymaps.ready(function(){
         ymaps.geolocation.get({
             provider: 'yandex'

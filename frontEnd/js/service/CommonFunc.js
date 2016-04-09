@@ -11,9 +11,8 @@ function CommonFunc() {
      * @param Lev    - уровень вложенности объекта. Определяет отступ при выводе
      * @returns {boolean}
      */
-    this.parseText = function($block,textObj,Lev) {
-        if (level == 0) {
-        }
+    this.parseText = function($block,textObj,level) {
+        level = (level === undefined) ? 0 : level ;
         var simpleType = ['number','boolean','string','undefined'] ;
         var tab = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp' ;
         var indent ='' ;
@@ -30,11 +29,12 @@ function CommonFunc() {
         for (var key in textObj) {
             $block.append(indent+'<strong>'+key+':</strong>'+br) ;
             var value = textObj[key] ;
-            _this.parseText(value,level+1) ;      // продолжение разбора
+            _this.parseText($block,value,level+1) ;      // продолжение разбора
         }
         if (level == 0) {
         }
         return true ;
     } ;
+
 
 }

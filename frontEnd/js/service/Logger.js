@@ -7,6 +7,7 @@
  * уровень stop блокирует вывод сообщений
  */
 function Logger() {
+    var commonFunc ;    // общие функции
     var currentLevel = {} ;
     var message ;
     var $loggerDiv =$('#logger') ;
@@ -31,13 +32,13 @@ function Logger() {
             e: ERROR_LEVEL,
             s: STOP_LEVEL
         } ;
-        currentLevel =  ERROR_LEVEL ; //
+        currentLevel =  DEBUG_LEVEL ; //
         targets = [
            'ajaxExecutor'
 //            'philosophy'
         ] ;
         loggerDivInit() ;
-
+        commonFunc = paramSet.commonFunc ;
     } ;
     /**
      * блок вывода сообщений
@@ -123,32 +124,6 @@ function Logger() {
             $loggerDataDiv.append(levelText) ;
         }
         $loggerDataDiv.append('<br>') ;
-        parseText(text,0) ;
+        commonFunc.parseText($loggerDataDiv,text) ;
     };
-    var parseText = function(textObj,level) {
-        if (level == 0) {
-        }
-        var simpleType = ['number','boolean','string','undefined'] ;
-        var tab = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp' ;
-        var indent ='' ;
-        var br = '<br>' ;
-
-        for (var  i = 0; i < level ; i++) {
-            indent += tab ;
-        }
-        var currentType = (typeof textObj) ;
-        if (simpleType.indexOf(currentType) >= 0) {
-            $loggerDataDiv.append(indent+textObj+br) ;
-            return true ;
-        }
-        for (var key in textObj) {
-            $loggerDataDiv.append(indent+'<strong>'+key+':</strong>'+br) ;
-            var value = textObj[key] ;
-            parseText(value,level+1) ;
-        }
-        if (level == 0) {
-        }
-        return true ;
-
-    }
  }
