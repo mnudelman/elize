@@ -135,7 +135,7 @@ function RequestGoForm() {
             requestTypes = requestGo.getRequestTypes() ;
             treeBuild() ;
             requestTypeShow() ;  // таблица типов
-        });
+        }, noActionStepsFlag);
     } ;
    /**
      * строится дерево вида:

@@ -75,10 +75,10 @@ function AjaxRequest(sendDataObject,overtimeFunc,requestFunc) {
      * вызывается при незаданном callback
      */
     this.defaultOverTime = function() {
-        var waitTime = TIME_DELAY * MAX_STEPS ;
+        var waitTime = Math.round((TIME_DELAY * MAX_STEPS)/1000) ;
         var message ='Запрос прерван.' + '<br>' +
         'превышено время ожидания ответа от сервера ' + '<br>' +
-        'max время: '+ waitTime + ' mSec' ;
+        'max время: '+ waitTime + ' сек' ;
         var msg = new Messages() ;
         msg.showMessage(message) ;
     } ;

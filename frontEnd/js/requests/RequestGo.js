@@ -22,8 +22,11 @@ function RequestGo() {
     /**
      * запрос на определение типа
      * @param auto - true - сразу запуск на выполнение
+     * @param callback  -  при нормальном определении типа
+     * @param noActionStepsFlag -  без пошагового разбиения действия
      */
-    this.requestExecute = function(auto,callback) {
+    this.requestExecute = function(auto,callback,noActionStepsFlag) {
+        noActionStepsFlag = (noActionStepsFlag === undefined) ? false : noActionStepsFlag ;
         actionSteps = paramSet.actionSteps ;
         resultNodes = {} ;
         answReady = false ;
@@ -49,16 +52,27 @@ function RequestGo() {
                     _this.automaticallyGo() ;
                 }
             }else {
+                var message = 'Ошибка определения типа запроса';
                 if (answ !== false) {
                     var message = answ['message'];
-                  actionSteps.addStep('requestType','break',ajax.errorMessage,message) ;
+//                  actionSteps.addStep('requestType','break',ajax.errorMessage,message) ;
 
 //                    ajax.errorMessage(message) ;
                 }
-
+                if (noActionStepsFlag){
+                    ajax.errorMessage(message) ;
+                } else {
+                    actionSteps.addStep('requestType','break',ajax.errorMessage,message) ;
+                }
+                exit();
             }
         }) ;
         ajax.go() ;
+    } ;
+    var exit = function() {
+        var callStack = paramSet.callStack ;
+        callStack.currentGo() ;
+
     } ;
     /**
      * проверяет завершение запроса
