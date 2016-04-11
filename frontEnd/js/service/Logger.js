@@ -32,7 +32,7 @@ function Logger() {
             e: ERROR_LEVEL,
             s: STOP_LEVEL
         } ;
-        currentLevel =  DEBUG_LEVEL ; //
+        currentLevel =  ERROR_LEVEL ; //
         targets = [
            'ajaxExecutor'
 //            'philosophy'

@@ -200,10 +200,11 @@ function PhilosophyForm() {
 
                 }
                 if (noActionStepsFlag) {           // без разбиения на шаги
-                    actionSteps.addStep('philosophy', 'break', ajax.errorMessage, message);
+                    ajax.errorMessage( message) ;
                 }else {
-                    exit();
+                    actionSteps.addStep('philosophy', 'break', ajax.errorMessage, message);
                 }
+                exit();
             }
         }) ;
         ajax.go() ;
